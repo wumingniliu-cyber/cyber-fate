@@ -35,7 +35,7 @@ except ImportError as e:
 # ==============================================================================
 # 🌌 [ CORE 01 ] 宇宙物理引擎与全局配置
 # ==============================================================================
-VERSION = "KARMA_OS_V36.0_GOD_MODE"
+VERSION = "KARMA_OS_V1.0_GOD_MODE"
 COPYRIGHT = "无名逆流"
 SYS_NAME = "量子命理 | 赛博算命终端"
 
@@ -800,3 +800,4 @@ render_html(f"""
     <div class="copyright-niliu">© 2026 版权归属 · <b style="font-family:'Orbitron', sans-serif; letter-spacing: 4px;">{COPYRIGHT}</b></div>
 </div>
 """)
+
