@@ -2,43 +2,71 @@ import streamlit as st
 import streamlit.components.v1 as components
 import random
 import time
-import math
 import hashlib
 import json
 from datetime import datetime, time as dt_time
-import numpy as np
-import plotly.graph_objects as go
-from lunar_python import Solar
+
+# ==============================================================================
+# 🛡️ [ CORE 00 ] 智能自检防爆装甲 (杜绝满屏红字报错)
+# ==============================================================================
+try:
+    import numpy as np
+    import plotly.graph_objects as go
+    from lunar_python import Solar
+except ImportError:
+    st.set_page_config(page_title="系统环境异常", page_icon="🚨", layout="centered")
+    st.error("🚨 **致命环境缺失：云端服务器缺少核心算力引擎！**")
+    st.warning("""
+    **请按以下步骤立刻修复：**
+    1. 回到您的 GitHub 仓库，点击 **Add file** -> **Create new file**。
+    2. 文件名 **必须准确无误地** 命名为：`requirements.txt`
+    3. 在文件内容中，粘贴以下 4 行代码：
+    ```text
+    streamlit
+    lunar-python
+    plotly
+    numpy
+    ```
+    4. 点击绿色的 **Commit changes** 保存。
+    5. 回到当前网页，点击右下角 **Manage app** -> 右上角 **三个点 (⋮)** -> **Reboot app**。
+    等待 1 分钟，奇迹就会发生！
+    """)
+    st.stop() # 强行拦截，防止后续代码继续报错
 
 # ==============================================================================
 # 🌌 [ CORE 01 ] 宇宙物理引擎与全局配置
 # ==============================================================================
-VERSION = "KARMA_OS_V33.0_GOD_MODE"
+VERSION = "KARMA_OS_V34.0_GOD_MODE"
 COPYRIGHT = "无名逆流"
 SYS_NAME = "量子命理 | 赛博算命终端"
 
-# 宽屏布局，为响应式瀑布流提供极致空间
 st.set_page_config(page_title=SYS_NAME, page_icon="☯", layout="wide", initial_sidebar_state="collapsed")
 
+def render_html(html_str):
+    """物理级防爆渲染器：无情剥离所有前置空格，抹杀 Markdown 代码块误伤"""
+    cleaned = '\n'.join([line.lstrip() for line in html_str.split('\n')])
+    st.markdown(cleaned, unsafe_allow_html=True)
+
 # ==============================================================================
-# 🎨 [ CORE 02 ] 赛博修仙 UI 底座 (绝对顶格防爆版，杜绝代码裸奔)
+# 🎨 [ CORE 02 ] 赛博修仙 UI 底座 (修复黑屏塌缩 Bug)
 # ==============================================================================
-st.markdown("""
+render_html("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Orbitron:wght@400;500;700;900&family=Fira+Code:wght@400;600&display=swap');
 
 :root { color-scheme: dark; }
-
 [data-testid="stHeader"], [data-testid="stToolbar"], footer { display: none !important; }
 .block-container { padding-top: 2.5rem !important; padding-bottom: 4rem !important; max-width: 1200px !important; overflow-x: hidden; }
 
 /* 锁死深渊暗黑背景 */
 html, body, .stApp { background-color: #020408 !important; font-family: 'Noto Sans SC', sans-serif !important; color: #e2e8f0 !important; }
-[data-testid="stAppViewContainer"]::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 30%, rgba(0, 243, 255, 0.05) 0%, rgba(2, 4, 8, 1) 80%); pointer-events: none; z-index: 0; }
-[data-testid="stAppViewContainer"]::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(0, 243, 255, 0.02), transparent, rgba(0, 243, 255, 0.02)); background-size: 100% 3px, 3px 100%; z-index: 99999; pointer-events: none; opacity: 0.7; }
 
-/* 文本与进度条兜底 */
-.stMarkdown, p, span, h2, h3, h4, li, div, label { color: #f8fafc !important; z-index: 2; position: relative; }
+/* 视差背景网格 (修复 Z-index 塌缩黑屏的罪魁祸首) */
+[data-testid="stAppViewContainer"]::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 30%, rgba(0, 243, 255, 0.05) 0%, rgba(2, 4, 8, 1) 80%); pointer-events: none; z-index: -2; }
+[data-testid="stAppViewContainer"]::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(0, 243, 255, 0.02), transparent, rgba(0, 243, 255, 0.02)); background-size: 100% 3px, 3px 100%; z-index: -1; pointer-events: none; opacity: 0.7; }
+
+/* 保护原生组件字色 */
+.stMarkdown, p, span, h2, h3, h4, li, label { color: #f8fafc !important; }
 [data-testid="stProgress"] > div > div > div { background: linear-gradient(90deg, #00f3ff, #a855f7) !important; box-shadow: 0 0 15px rgba(0,243,255,0.8); }
 
 /* 硬件加速全息跑马灯 */
@@ -100,7 +128,7 @@ div[data-testid="stDownloadButton"] > button p { color: #a855f7 !important; font
 div[data-testid="stDownloadButton"] > button:hover { background: rgba(168, 85, 247, 0.15) !important; box-shadow: 0 0 30px rgba(168, 85, 247, 0.5) !important; transform: scale(1.02) !important; border-color: #00f3ff !important; border-left-color: #00f3ff !important; }
 div[data-testid="stDownloadButton"] > button:hover p { color: #00f3ff !important; text-shadow: 0 0 10px #00f3ff;}
 
-/* 🌟 版权呼吸灯 (无名逆流专属) */
+/* 🌟 版权呼吸灯 (无名逆流唯一标识) */
 .copyright-niliu { display: inline-block; padding: 12px 35px; border-radius: 50px; font-size: 13px; font-family: "Noto Sans SC", sans-serif; letter-spacing: 2px; color: #00f3ff; font-weight: 900; background: rgba(0,243,255,0.05); border: 1px solid rgba(0,243,255,0.3); animation: neon-breathe 2.5s infinite alternate; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(0,243,255,0.2); margin-top: 20px;}
 .copyright-niliu:hover { transform: scale(1.05); box-shadow: 0 0 35px rgba(0,243,255,0.8), inset 0 0 15px rgba(0,243,255,0.5); border-color: #00f3ff; text-shadow: 0 0 15px #00f3ff; cursor: crosshair;}
 @keyframes neon-breathe { 0% { box-shadow: 0 0 10px rgba(0,243,255,0.1), inset 0 0 5px rgba(0,243,255,0.1); border-color: rgba(0,243,255,0.2); text-shadow: none; } 100% { box-shadow: 0 0 25px rgba(0,243,255,0.6), inset 0 0 15px rgba(0,243,255,0.2); border-color: rgba(0,243,255,0.7); text-shadow: 0 0 10px #00f3ff; } }
@@ -118,22 +146,22 @@ div[data-testid="stDownloadButton"] > button:hover p { color: #00f3ff !important
     div[data-testid="stColumns"] > div { margin-bottom: 20px; } 
 }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 # ==============================================================================
 # 📊 [ CORE 03 ] 宇宙大盘跑马灯
 # ==============================================================================
-st.markdown("""
+render_html("""
 <div class="ticker-wrap"><div class="ticker">
-    <span>KARMA-OS: V33.0 SECURE <b class="up">▲ONLINE</b></span>
+    <span>KARMA-OS: V34.0 SECURE <b class="up">▲ONLINE</b></span>
     <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
     <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
     <span>SYS-RISK: FIVE ELEMENTS BALANCED <b class="up">▲SECURE</b></span>
     <span>MARKET-ALPHA: 10-YEAR TREND <b class="down">▼COMPUTING</b></span>
     <span>DAO-PROTOCOL: SMART CONTRACT <b class="up">▲MINTED</b></span>
-    <span>KARMA-OS: V33.0 SECURE <b class="up">▲ONLINE</b></span>
+    <span>KARMA-OS: V34.0 SECURE <b class="up">▲ONLINE</b></span>
 </div></div>
-""", unsafe_allow_html=True)
+""")
 
 def trigger_supernova():
     html_str = ""
@@ -143,7 +171,7 @@ def trigger_supernova():
         ty = random.uniform(200, 800) * math.sin(random.uniform(0, 2 * math.pi))
         text = random.choice(vocab)
         html_str += f'<div class="firework-center" style="--tx:{tx}px; --ty:{ty}px; --s:{random.uniform(1.0, 3.5)}; --rot:{random.randint(-360, 360)}deg; animation-delay:{random.uniform(0, 0.2)}s; font-size:{random.randint(14, 24)}px;">{text}</div>'
-    st.markdown(html_str, unsafe_allow_html=True)
+    render_html(html_str)
 
 def generate_alpha_curve(seed_hash):
     rng = np.random.RandomState(int(seed_hash[:8], 16))
@@ -157,21 +185,19 @@ def generate_alpha_curve(seed_hash):
 # ==============================================================================
 # 🗃️ [ CORE 04 ] 万字玄学大厂字典：天干元神与十神算力矩阵
 # ==============================================================================
-# 🚨 极其关键：补齐所有属性，坚决杜绝 KeyError
 DAY_MASTER_DICT = {
     "甲": {"role": "硅基巨树 / 系统架构师", "desc": "天生具备宏大的底层系统构建能力，性格直爽且极度抗压。在混乱的局势中，你是能够扛起从0到1重构秩序的绝对开拓者。", "color": "#10b981", "element": "木", "tier": "UR", "evolution_path": ["L1 架构幼苗", "L2 核心骨干", "L3 苍天建木"], "ultimate_evolution": "【苍天建木】执掌三界底层协议的创世神", "black_swan": "过于刚硬，遇强则折。在遭遇系统级降维打击时，容易宁折不弯导致全面宕机。", "patch": "引入「水」属性的柔性冗余算法，学会在逆境中挂起进程，等待重启时机。"},
     "乙": {"role": "量子藤蔓 / 网络渗透者", "desc": "拥有极其敏锐的嗅觉与恐怖的适应力。能在毫无资源的夹缝中疯狂生长，是天生的社交网络捕手与暗网渗透专家。", "color": "#34d399", "element": "木", "tier": "SSR", "evolution_path": ["L1 寄生节点", "L2 渗透猎手", "L3 噬星魔藤"], "ultimate_evolution": "【噬星魔藤】寄生并控制全网资源的暗影君王", "black_swan": "极度依赖宿主资源。一旦核心宿主（平台/领导）断网，容易失去独立运行能力。", "patch": "建立分布式的多宿主挂载协议，将风险分散至全网各个边缘节点。"},
-    "丙": {"role": "核聚耀阳 / 爆裂狂战士", "desc": "充满着极具感染力的核聚变爆发力，气场全开。只要你在线，就是团队中照亮一切、输出最高绝对算力的发光核心。", "color": "#f43f5e", "element": "火", "tier": "UR", "evolution_path": ["L1 点火程序", "L2 核聚变堆", "L3 恒星引擎"], "ultimate_evolution": "【恒星引擎】照亮并驱动整个纪元的绝对算力", "black_swan": "全功率输出容易导致自身内核熔毁，且光芒太盛极易引来全网黑客的集中攻击。", "patch": "强制加装「土」属性散热散热栅栏，学会在波谷期进入低功耗待机模式。"},
+    "丙": {"role": "核聚耀阳 / 爆裂狂战士", "desc": "充满着极具感染力的核聚变爆发力，气场全开。只要你在线，就是团队中照亮一切、输出最高绝对算力的发光核心。", "color": "#f43f5e", "element": "火", "tier": "UR", "evolution_path": ["L1 点火程序", "L2 核聚变堆", "L3 恒星引擎"], "ultimate_evolution": "【恒星引擎】照亮并驱动整个纪元的绝对算力", "black_swan": "全功率输出容易导致自身内核熔毁，且光芒太盛极易引来全网黑客的集中攻击。", "patch": "强制加装「土」属性散热栅栏，学会在波谷期进入低功耗待机模式。"},
     "丁": {"role": "幽网霓虹 / 精神引导者", "desc": "洞察人心的夜行者，思维细腻到极致。擅长在最灰暗、最迷茫的业务地带，为团队提供精准的情绪价值与破局方向。", "color": "#fb923c", "element": "火", "tier": "SSR", "evolution_path": ["L1 寻路信标", "L2 精神图腾", "L3 灵魂织网者"], "ultimate_evolution": "【灵魂织网者】操控全网心智与情绪的网络幽灵", "black_swan": "能量波动极不稳定，在狂风骤雨的市场洗牌中，容易被一波带走断网。", "patch": "寻找强大的「甲」属性巨树作为遮风挡雨的物理服务器，安心在后台推演。"},
     "戊": {"role": "绝对防火墙 / 秩序守护神", "desc": "稳如泰山，物理级断网的防御力。你是极其靠谱的信用节点，是所有疯狂的创新业务背后，那道最坚不可摧的安全底线。", "color": "#d97706", "element": "土", "tier": "UR", "evolution_path": ["L1 承载沙盒", "L2 巨石阵列", "L3 盖亚装甲"], "ultimate_evolution": "【盖亚装甲】承载万物因果的绝对零度壁垒", "black_swan": "系统过于庞大笨重，在面临极其敏捷的突发迭代需求时，极易卡死在旧有循环中。", "patch": "定期主动清理内存缓存，接纳「甲/乙」属性的破坏性创新，强行打破死锁。"},
-    "己": {"role": "主板息壤 / 资源吞噬者", "desc": "拥有海纳百川的包容力，擅长无缝整合一切零散资源与冗余数据。你是将天马行空的狂想转化为具体落地的超强执行中枢。", "color": "#f59e0b", "element": "土", "tier": "SSR", "evolution_path": ["L1 容错冗余", "L2 资源枢纽", "L3 创世息壤"], "ultimate_evolution": "【创世息壤】孕育下一个数字生态文明的温床", "black_swan": "什么进程都想接，极易导致系统超载崩溃，被无数无效的数据垃圾填满内存。", "patch": "立刻编写无情的 Garbage Collection (垃圾回收) 脚本，学会拒绝无效的并发请求。"},
+    "己": {"role": "主板息壤 / 资源吞噬者", "desc": "拥有海纳百川的包容力，擅长无缝整合一切零散资源与冗余数据。你是将天马行空的狂想转化为具体落地的超强执行中枢。", "color": "#f59e0b", "element": "土", "tier": "SSR", "evolution_path": ["L1 容错冗余", "L2 资源枢纽", "L3 创世息壤"], "ultimate_evolution": "【创世息壤】孕育下一个数字生态文明的温床", "black_swan": "什么进程都想接，极易导致系统超载崩溃，被无数无效的数据垃圾填满内存。", "patch": "立刻编写无情的垃圾回收(GC)脚本，学会拒绝无效的并发请求。"},
     "庚": {"role": "冷血代码 / 裁决执行官", "desc": "杀伐果断，对低效与冗余代码零容忍。天生自带威严，是无情推进业务进度、斩断一切无效社交与羁绊的风控大闸。", "color": "#cbd5e1", "element": "金", "tier": "UR", "evolution_path": ["L1 肃清脚本", "L2 风控铁腕", "L3 审判之剑"], "ultimate_evolution": "【审判之剑】斩断一切因果循环的终极裁决", "black_swan": "戾气过重，容易在团队中引发不可逆的物理级破坏，导致整个业务链条彻底断裂。", "patch": "必须要经受「火」属性的高温熔炼与淬火，才能把狂暴的杀气转化为极致的利刃。"},
     "辛": {"role": "纳米精工 / 极致重构者", "desc": "永远在追求完美与极致的代码质感，自带极高的审美溢价与贵气。你是能在粗糙的草台中，打磨出顶尖跨时代产品的核心枢纽。", "color": "#f8fafc", "element": "金", "tier": "SSR", "evolution_path": ["L1 精密协议", "L2 审美巅峰", "L3 量子纠缠体"], "ultimate_evolution": "【量子纠缠体】超越物质形态的究极艺术代码", "black_swan": "极度脆弱且傲娇。一旦环境稍微不达标，或者遇到粗暴的野蛮人，就会当场崩溃罢工。", "patch": "需要极度纯净的「水」属性来淘洗保护，千万不要让自己卷入肮脏的底层泥潭博弈。"},
     "壬": {"role": "深网狂潮 / 降维破局者", "desc": "思维极其开阔奔放，极度厌恶陈规陋习，从来不按套路出牌。你能在瞬息万变的市场中，凭借直觉掀起降维打击的颠覆浪潮。", "color": "#3b82f6", "element": "水", "tier": "UR", "evolution_path": ["L1 数据暗流", "L2 倾覆巨浪", "L3 渊海归墟"], "ultimate_evolution": "【渊海归墟】吞噬所有时间与空间的终极黑洞", "black_swan": "过于放纵自己的算力，如同脱缰的野马，最终引发洪水滔天，反噬自身的根基。", "patch": "必须引入极度严苛的「戊」土级风控大坝，强行给自己的疯狂创意设定红线。"},
     "癸": {"role": "暗流算法 / 幽灵谋略家", "desc": "极其聪慧且隐秘不发，习惯在幕后推演全局。擅长通过无声的谋略、博弈和信息差，兵不血刃地达成最终目的。", "color": "#60a5fa", "element": "水", "tier": "SSR", "evolution_path": ["L1 隐形爬虫", "L2 渗透迷雾", "L3 命运主宰"], "ultimate_evolution": "【命运主宰】在第四维度拨动因果之线的神明", "black_swan": "心思过重，经常陷入无限循环的逻辑死胡同，算计太多反而错失了最直白的红利。", "patch": "走到阳光下，接受「丙」火的正向照射，用最简单的阳谋去击碎所有复杂的阴谋。"}
 }
 
-# 十神外挂技能库
 SHEN_SKILLS = {
     "七杀": "零日漏洞爆破 (Lv.Max)", "正官": "底层协议锚定 (Lv.Max)", 
     "偏印": "逆向工程解构 (Lv.Max)", "正印": "系统灾备兜底 (Lv.Max)",
@@ -180,7 +206,13 @@ SHEN_SKILLS = {
     "食神": "感官体验降维 (Lv.Max)", "伤官": "范式秩序破坏 (Lv.Max)"
 }
 
-# 🤝 动态协同算法
+mbti_details = {
+    "INTJ": {"role": "架构师"}, "INTP": {"role": "极客"}, "ISTJ": {"role": "风控官"}, "ESTJ": {"role": "统帅"},
+    "INFJ": {"role": "先知"}, "INFP": {"role": "粘合剂"}, "ENTJ": {"role": "领军人"}, "ENTP": {"role": "破局者"},
+    "ENFJ": {"role": "枢纽"}, "ENFP": {"role": "布道师"}, "ISFJ": {"role": "永动机"}, "ESFJ": {"role": "连接器"},
+    "ISTP": {"role": "清道夫"}, "ISFP": {"role": "重构官"}, "ESTP": {"role": "猎手"}, "ESFP": {"role": "信标"}
+}
+
 def calculate_synergy(hash1, target_stem):
     rng_syn = np.random.RandomState(int(hash1[:6], 16) + sum(ord(c) for c in target_stem))
     score = rng_syn.randint(65, 99)
@@ -198,12 +230,12 @@ if 'calculated' not in st.session_state:
     st.session_state.anim_played = False
 
 if not st.session_state.calculated:
-    st.markdown("""
+    render_html("""
     <div style="max-width: 650px; margin: 0 auto;">
         <div style="text-align: center; margin-bottom: 20px;">
             <div style="color:#00f3ff; font-family:'Orbitron', monospace; font-size:14px; letter-spacing:8px; margin-bottom:10px;">KARMA OS FRAMEWORK</div>
             <h1 class="hero-title" data-text="全息命盘推演终端">全息命盘推演终端</h1><br>
-            <div style="color:#f43f5e; font-family:'Orbitron', sans-serif; font-size:13px; font-weight:700; letter-spacing:6px; margin-bottom:30px;">DESTINY ENGINE V33.0</div>
+            <div style="color:#f43f5e; font-family:'Orbitron', sans-serif; font-size:13px; font-weight:700; letter-spacing:6px; margin-bottom:30px;">DESTINY ENGINE V34.0</div>
         </div>
         
         <div class="terminal-container">
@@ -218,10 +250,10 @@ if not st.session_state.calculated:
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
     
     with st.form(key="destiny_form", border=False):
-        st.markdown("<div style='color:#00f3ff; font-family:\"Orbitron\", sans-serif; font-size:13px; font-weight:bold; margin-bottom:15px; text-align:center;'>▼ 注入先天元神降临坐标 ▼</div>", unsafe_allow_html=True)
+        render_html("<div style='color:#00f3ff; font-family:\"Orbitron\", sans-serif; font-size:13px; font-weight:bold; margin-bottom:15px; text-align:center;'>▼ 注入先天元神降临坐标 ▼</div>")
         
         user_name = st.text_input("赛博代号 (昵称/姓名)", placeholder="例如：Neo / 银手", value="")
         gender = st.selectbox("载体形态 (性别)", ["乾造 (男)", "坤造 (女)"])
@@ -232,7 +264,7 @@ if not st.session_state.calculated:
         with col2:
             birth_time = st.time_input("降临时辰 (精确时间)", value=dt_time(12, 00))
         
-        st.markdown("<br>", unsafe_allow_html=True)
+        render_html("<br>")
         submit_btn = st.form_submit_button("▶ 连接宇宙算力，推演天机", type="primary", use_container_width=True)
 
         if submit_btn:
@@ -267,7 +299,7 @@ if not st.session_state.calculated:
                 "birth_time_str": str(birth_time)[:5]
             }
             
-            st.markdown("<div style='max-width: 650px; margin: 0 auto;'><h2 class='hero-title' data-text='[ DECODING KARMA... ]' style='font-size:28px !important; margin-top:20px; text-align:center; display:block;'>[ DECODING KARMA... ]</h2></div>", unsafe_allow_html=True)
+            render_html("<div style='max-width: 650px; margin: 0 auto;'><h2 class='hero-title' data-text='[ DECODING KARMA... ]' style='font-size:28px !important; margin-top:20px; text-align:center; display:block;'>[ DECODING KARMA... ]</h2></div>")
             mint_box = st.empty()
             h_logs = ""
             for _ in range(12):
@@ -279,17 +311,14 @@ if not st.session_state.calculated:
             st.rerun()
 
 # ==============================================================================
-# 🌟 [ CORE 06 ] 全息大屏展示 (六大瀑布流模块)
+# 🌟 [ CORE 06 ] 全息大屏展示 (全量变量前置提升，杜绝 NameError)
 # ==============================================================================
 else:
     if not st.session_state.anim_played: 
         trigger_supernova()
         st.session_state.anim_played = True
 
-    # --------------------------------------------------------------------------
-    # 🚨 绝对物理防爆区：全量变量提前计算提升 (Variable Hoisting) 
-    # 杜绝任何 UI 渲染中断导致的 NameError 
-    # --------------------------------------------------------------------------
+    # 1. 数据安全提取
     data = st.session_state.bazi_data
     dm_info = DAY_MASTER_DICT.get(data['day_master'], DAY_MASTER_DICT["甲"])
     bazi_arr = data['bazi_str'].split(' ')
@@ -299,10 +328,10 @@ else:
     contract_addr = "0x" + hashlib.sha256(f"karma_dao_{token_id}".encode()).hexdigest()[:38]
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    # 运势走势预计算
+    # 2. 气运走势推演
     years_k, fortunes_k = generate_alpha_curve(hash_code)
 
-    # 黄金搭档判定
+    # 3. 最佳搭档算法提取
     rng_partner = random.Random(int(hash_code[:8], 16))
     wx_list = ["金", "木", "水", "火", "土"]
     my_element = dm_info["element"]
@@ -310,7 +339,6 @@ else:
         wx_list.remove(my_element)
     partner_element = rng_partner.choice(wx_list)
     
-    # 搜寻最佳天干搭档
     best_partner_stem = ""
     best_score = 0
     for stem, info in DAY_MASTER_DICT.items():
@@ -319,12 +347,10 @@ else:
             best_score = sc
             best_partner_stem = f"{stem} ({info['role']})"
 
-    # 五行能量阵列预计算
+    # 4. 熵增风控预警计算
     wx_scores = data['wx_scores']
     wx_keys = list(wx_scores.keys())
     wx_vals = list(wx_scores.values())
-    
-    # 赛博精神病阈值 (走火入魔) 计算
     max_wx = max(wx_vals) if wx_vals else 0
     entropy_score = int(min(99, (max_wx / 50.0) * 100))
     if entropy_score > 75: 
@@ -334,34 +360,35 @@ else:
     else: 
         e_tag, e_color, r_desc = "五行极度平稳，可抗任意暴击", "#10b981", "您的系统架构堪称完美，拥有极强的抗打击与自愈恢复能力。"
 
-    # HTML 样式预组装
+    # 5. UI HTML 缓存组装
     tags_html_web = "".join([f"<span style='background:rgba(0, 243, 255, 0.1); color:#00f3ff !important; border:1px solid rgba(0,243,255,0.4); padding:6px 14px; border-radius:6px; font-size:13px; font-weight:900; margin:4px; display:inline-block;'>{t}</span>" for t in [dm_info['element'] + "属性", dm_info['tier'] + "级节点", "天机验证"]])
     skills_html_web = "".join([f"<span class='skill-badge'>{s}</span>" for s in data['skills']])
 
     # =========================================================================
-    # 📱 模块渲染开始 (严格遵守流式布局)
+    # 📱 模块渲染开始 (严格瀑布流布局)
     # =========================================================================
     
     # 💠 [模块 I]：链上确权凭证
-    st.markdown("<div class='module-title'>💠 模块 I：天机链上确权</div>", unsafe_allow_html=True)
-    st.markdown(f"""
+    render_html("<div class='module-title'>💠 模块 I：天机链上确权</div>")
+    render_html(f"""
     <div style="background: linear-gradient(135deg, rgba(0,243,255,0.05), rgba(5,5,10,0.9)); border: 1px solid #00f3ff; border-radius: 8px; padding: 15px 25px; margin-bottom: 25px; font-family: 'Orbitron', monospace; box-shadow: 0 0 20px rgba(0,243,255,0.15);">
         <div style="color: #00f3ff; font-size: 14px; font-weight: bold; border-bottom: 1px dashed #00f3ff; padding-bottom: 10px; margin-bottom: 12px; display:flex; align-items:center;">
-            <span style="font-size:20px; margin-right:10px;">🏅</span> <span>DESTINY SOULBOUND TOKEN (SBT) MINTED [ V 33.0 ]</span>
+            <span style="font-size:20px; margin-right:10px;">🏅</span> <span>DESTINY SOULBOUND TOKEN (SBT) MINTED [ V 34.0 ]</span>
         </div>
         <div style="font-size: 12px; color: #94a3b8; line-height: 1.8; display:flex; flex-wrap: wrap; justify-content: space-between; gap: 10px;">
-            <div><div><span style="color:#e2e8f0;">BLOCK HEIGHT:</span> V33-{(int(time.time()) % 1000000):06d}</div><div><span style="color:#e2e8f0;">CONTRACT:</span> {contract_addr[:20]}...</div></div>
+            <div><div><span style="color:#e2e8f0;">BLOCK HEIGHT:</span> V34-{(int(time.time()) % 1000000):06d}</div><div><span style="color:#e2e8f0;">CONTRACT:</span> {contract_addr[:20]}...</div></div>
             <div style="text-align: left;"><div><span style="color:#e2e8f0;">TOKEN ID:</span> #{token_id}</div><div><span style="color:#e2e8f0;">TIMESTAMP:</span> {current_time_str}</div></div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-    # 🧬 [模块 II & III]：核心架构与运势沙盘 (响应式布局)
+    # 🧬 [模块 II & III]：核心架构与运势沙盘
     col_card_l, col_card_r = st.columns([1.2, 1], gap="large")
 
     with col_card_l:
-        st.markdown("<div class='module-title' style='margin-top: 0;'>🧬 模块 II：八字底层源码</div>", unsafe_allow_html=True)
-        st.markdown(f"""
+        render_html("<div class='module-title' style='margin-top: 0;'>🧬 模块 II：八字底层源码</div>")
+        
+        render_html(f"""
         <div class="result-card">
             <div class="tier-badge" style="background:{dm_info['color']}; box-shadow:0 0 25px {dm_info['color']}99;">{dm_info['tier']}</div>
             <div style="color:#f43f5e; font-size:12px; letter-spacing:6px; font-family:'Orbitron'; margin-bottom:20px; font-weight:bold;">/// EIGHT CHARACTERS DECRYPTED ///</div>
@@ -388,32 +415,33 @@ else:
                 <div style="font-size:14px; color:#cbd5e1; line-height:1.6; background:rgba(255,255,255,0.03); padding:15px; border-radius:8px; text-align:left;">{dm_info['desc']}</div>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with col_card_r:
-        st.markdown("<div class='module-title' style='margin-top: 0;'>🤝 模块 III：外挂算力技能树</div>", unsafe_allow_html=True)
-        st.markdown("<div style='font-size:14px; color:#94a3b8; margin-bottom:15px; line-height:1.6;'>基于您的四柱十神排布，系统已提取您的先天外挂核心技能点：</div>", unsafe_allow_html=True)
+        render_html("<div class='module-title' style='margin-top: 0;'>🤝 模块 III：外挂算力技能树</div>")
+        render_html("<div style='font-size:14px; color:#94a3b8; margin-bottom:15px; line-height:1.6;'>基于您的四柱十神排布，系统已提取您的先天外挂核心技能点：</div>")
         
-        st.markdown(f"""
+        render_html(f"""
         <div style="background: rgba(244,63,94,0.05); border: 1px solid rgba(244,63,94,0.3); border-radius: 8px; padding: 25px; margin-bottom: 25px; text-align:center;">
             <div style="color: #f43f5e; font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 2px; margin-bottom: 15px;">[ INNATE SKILL TREE ]</div>
             <div style="line-height: 2.2;">{skills_html_web}</div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
         
-        st.markdown("<h5 style='color:#10b981; margin-top:20px; margin-bottom:10px;'>💡 破局黄金搭档建议：</h5>", unsafe_allow_html=True)
-        st.markdown(f"""
+        render_html("<h5 style='color:#10b981; margin-top:20px; margin-bottom:10px;'>💡 破局黄金搭档建议：</h5>")
+        
+        render_html(f"""
         <div style='background: rgba(16,185,129,0.1); border-left:4px solid #10b981; padding:20px; border-radius:4px; font-size:14px; color:#e2e8f0; line-height: 1.6;'>
             您是强大的 <b style='color:{dm_info['color']};'>{my_element}</b> 属性元神。<br>在进行人生高危业务攻坚时，建议挂载拥有强 <b style='color:#10b981; font-size:16px;'>{partner_element}</b> 属性的队友作为副驾驶，以平衡系统的整体熵增。
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     # 🕸️ [模块 IV]：算力雷达与大运K线
-    st.markdown("<div class='module-title'>🕸️ 模块 IV：五行算力雷达与大运 K 线</div>", unsafe_allow_html=True)
+    render_html("<div class='module-title'>🕸️ 模块 IV：五行算力雷达与大运 K 线</div>")
     col_mid_l, col_mid_r = st.columns([1, 1.1], gap="large")
     
     with col_mid_l:
-        st.markdown("<div style='text-align:center; color:#00f3ff; font-weight:bold; margin-bottom:10px; font-family:Orbitron;'>/// WUXING RADAR MATRIX</div>", unsafe_allow_html=True)
+        render_html("<div style='text-align:center; color:#00f3ff; font-weight:bold; margin-bottom:10px; font-family:Orbitron;'>/// WUXING RADAR MATRIX</div>")
         
         fig_radar = go.Figure()
         fig_radar.add_trace(go.Scatterpolar(
@@ -428,7 +456,7 @@ else:
             ), 
             showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=40, r=40, t=20, b=20), height=320
         )
-        st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False}, theme=None)
+        st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False})
         
         wx_colors = {'金': '#e2e8f0', '木': '#10b981', '水': '#3b82f6', '火': '#f43f5e', '土': '#f59e0b'}
         bars_html = '<div style="background:rgba(0,0,0,0.5); padding:20px; border-radius:8px; border:1px solid rgba(0,243,255,0.2);">'
@@ -443,11 +471,11 @@ else:
             </div>
             '''
         bars_html += '</div>'
-        st.markdown(bars_html, unsafe_allow_html=True)
+        render_html(bars_html)
 
     with col_mid_r:
-        st.markdown("<div style='text-align:center; color:#f43f5e; font-weight:bold; margin-bottom:10px; font-family:Orbitron;'>/// 10-YEAR ALPHA FORTUNE</div>", unsafe_allow_html=True)
-        st.markdown("<div style='text-align:center; font-size:14px; color:#e2e8f0; margin-bottom:10px;'>基于先天代码推演未来十年气运走势：</div>", unsafe_allow_html=True)
+        render_html("<div style='text-align:center; color:#f43f5e; font-weight:bold; margin-bottom:10px; font-family:Orbitron;'>/// 10-YEAR ALPHA FORTUNE</div>")
+        render_html("<div style='text-align:center; font-size:14px; color:#e2e8f0; margin-bottom:10px;'>基于先天代码推演未来十年气运走势：</div>")
         
         fig_trend = go.Figure()
         fig_trend.add_trace(go.Scatter(
@@ -462,43 +490,43 @@ else:
             xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)', tickfont=dict(color='#94a3b8')), 
             yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)', title='Alpha 气运净值', tickfont=dict(color='#94a3b8'))
         )
-        st.plotly_chart(fig_trend, use_container_width=True, config={'displayModeBar': False}, theme=None)
+        st.plotly_chart(fig_trend, use_container_width=True, config={'displayModeBar': False})
         
-        st.markdown(f"""
+        render_html(f"""
         <div style="background: rgba(255,0,60,0.1); border-left: 4px solid #ff003c; padding: 20px; margin-top: 20px; border-radius: 0 8px 8px 0;">
             <div style="font-size:11px; color:#ff003c; font-family:'Orbitron'; margin-bottom:8px; letter-spacing:1px; font-weight:bold;">/// DESTINY WARNING ///</div>
             <div style="font-size:14px; color:#fff; line-height:1.6; margin-bottom:10px;">在气运波峰期大胆加满杠杆出击；在波谷期必须开启防御协议，严守底线，切忌越界套利。</div>
             <div style="font-size:12px; color:#94a3b8;">系统测算您的五行熵增阀值为：<b style="color:{e_color}; font-size:14px;">{entropy_score}% ({e_tag})</b></div>
             <div style="font-size:11px; color:#64748b; margin-top:5px;">{r_desc}</div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     # 🗄️ [模块 V]：算力深潜控制台
-    st.markdown("<div class='module-title'>🗄️ 模块 V：极客深潜控制台 (DEEP DIVE)</div>", unsafe_allow_html=True)
-    st.markdown("<div style='text-align:right; font-size:12px; color:#94a3b8; margin-bottom:10px; opacity:0.8;'>👉 手机端可左右滑动切换 Tabs 面板</div>", unsafe_allow_html=True)
+    render_html("<div class='module-title'>🗄️ 模块 V：极客深潜控制台 (DEEP DIVE)</div>")
+    render_html("<div style='text-align:right; font-size:12px; color:#94a3b8; margin-bottom:10px; opacity:0.8;'>👉 手机端可左右滑动切换 Tabs 面板</div>")
     
     t_syn, t_3d, t_sol = st.tabs(["🤝 异体节点并网沙盘", "🌌 3D 能量坐标图", "💻 智能合约源码"])
     
     with t_syn:
-        st.markdown("<div style='text-align:center; color:#a855f7; font-weight:bold; margin-bottom:10px; margin-top:15px; font-family:Orbitron;'>/// TEAM SYNERGY SIMULATOR</div>", unsafe_allow_html=True)
-        st.markdown("<div style='font-size:13px; color:#94a3b8; margin-bottom:15px; text-align:center;'>输入团队成员/道侣的天干元神，强制校验物理并网匹配度：</div>", unsafe_allow_html=True)
+        render_html("<div style='text-align:center; color:#a855f7; font-weight:bold; margin-bottom:10px; margin-top:15px; font-family:Orbitron;'>/// TEAM SYNERGY SIMULATOR</div>")
+        render_html("<div style='font-size:13px; color:#94a3b8; margin-bottom:15px; text-align:center;'>输入团队成员/道侣的天干元神，强制校验物理并网匹配度：</div>")
         options_list = list(DAY_MASTER_DICT.keys())
         format_func = lambda x: f"{x} ({DAY_MASTER_DICT[x]['element']}属性) - {DAY_MASTER_DICT[x]['role']}"
         pmbti = st.selectbox("🎯 挂载目标协作节点:", options=options_list, index=0, format_func=format_func, label_visibility="collapsed")
         
         sc, sd = calculate_synergy(hash_code, pmbti)
         
-        st.markdown(f"""
+        render_html(f"""
         <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.5); padding: 30px; border-radius: 12px; margin-top:10px; text-align:center; box-shadow: 0 0 30px rgba(168,85,247,0.15);">
             <div style="font-family:'Orbitron', sans-serif; color:#a855f7; font-size:14px; font-weight:bold; margin-bottom:15px; letter-spacing: 3px;">[ SYNERGY MATCH RATE ]</div>
-            <div style="font-family:'Orbitron', sans-serif; font-size:65px; font-weight:900; color:#fff; text-shadow:0 0 35px rgba(168,85,247,0.8); margin-bottom:20px;">{sc}%</div>
+            <div class="synergy-score" style="font-family:'Orbitron', sans-serif; font-size:65px; font-weight:900; color:#fff; text-shadow:0 0 35px rgba(168,85,247,0.8); margin-bottom:20px;">{sc}%</div>
             <div style="color:#e2e8f0; font-size:15px; font-weight:bold; line-height:1.7;">{sd}</div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with t_3d:
-        st.markdown("<div style='text-align:center; color:#00f3ff; font-weight:bold; margin-bottom:10px; margin-top:15px; font-family:Orbitron;'>/// 3D ENERGY TOPOLOGY MAP</div>", unsafe_allow_html=True)
-        st.markdown("<div style='font-size:13px; color:#94a3b8; margin-bottom:10px; text-align:center;'>降维映射至三维空间 (支持鼠标/触控 360° 拖拽)。背景点阵为全网众生数据节点。</div>", unsafe_allow_html=True)
+        render_html("<div style='text-align:center; color:#00f3ff; font-weight:bold; margin-bottom:10px; margin-top:15px; font-family:Orbitron;'>/// 3D ENERGY TOPOLOGY MAP</div>")
+        render_html("<div style='font-size:13px; color:#94a3b8; margin-bottom:10px; text-align:center;'>降维映射至三维空间 (支持鼠标/触控 360° 拖拽)。背景点阵为全网众生数据节点。</div>")
         rng_3d = np.random.RandomState(int(hash_code[:6], 16))
         x_v = data['wx_scores'].get('金', 20)
         y_v = data['wx_scores'].get('木', 20)
@@ -507,22 +535,22 @@ else:
         f3d.add_trace(go.Scatter3d(x=rng_3d.randint(0,60,size=150), y=rng_3d.randint(0,60,size=150), z=rng_3d.randint(0,60,size=150), mode='markers', marker=dict(size=4, color='#334155', opacity=0.6), name='全网众生节点'))
         f3d.add_trace(go.Scatter3d(x=[x_v], y=[y_v], z=[z_v], mode='markers+text', text=[data['day_master']], textposition="top center", marker=dict(size=18, color=dm_info['color'], symbol='diamond', line=dict(color='#fff', width=2)), textfont=dict(color=dm_info['color'], size=20, family="Noto Sans SC", weight="bold"), name='你的元神系位'))
         f3d.update_layout(scene=dict(xaxis_title='金属性算力', yaxis_title='木属性算力', zaxis_title='水属性算力', xaxis=dict(backgroundcolor="#020617", gridcolor="#1e293b"), yaxis=dict(backgroundcolor="#020617", gridcolor="#1e293b"), zaxis=dict(backgroundcolor="#020617", gridcolor="#1e293b")), paper_bgcolor='rgba(0,0,0,0)', margin=dict(l=0, r=0, t=0, b=0), height=400, showlegend=False)
-        st.plotly_chart(f3d, use_container_width=True, config={'displayModeBar': False}, theme=None)
+        st.plotly_chart(f3d, use_container_width=True, config={'displayModeBar': False})
 
     with t_sol:
-        st.markdown("<div style='text-align:center; color:#10b981; font-weight:bold; margin-bottom:10px; margin-top:15px; font-family:Orbitron;'>/// SOLIDITY SMART CONTRACT MINT LOG</div>", unsafe_allow_html=True)
-        st.markdown("<div style='font-size:12px; color:#94a3b8; margin-bottom:10px; text-align:center;'>系统已自动将您的八字编译为不可篡改的 ERC721 智能合约源码。</div>", unsafe_allow_html=True)
-        code_block = f"""// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\nimport "@karma-os/contracts/token/ERC721.sol";\n\ncontract Karma_Destiny_Registry_V33 is ERC721 {{\n    struct SoulProfile {{\n        string bazi_code;\n        string day_master;\n        string primary_element;\n    }}\n    \n    mapping(uint256 => SoulProfile) public souls;\n    \n    constructor() ERC721("KARMA_DESTINY", "SOUL") {{}}\n\n    // =====================================\n    // SYSTEM MINT LOG \n    // MINTED_TO: {data['name']}\n    // BLOCK_HEIGHT: {block_height}\n    // CONTRACT_ADDR: {contract_addr}\n    // =====================================\n    \n    function executeMint() public {{\n        uint256 tokenId = {token_id};\n        souls[tokenId] = SoulProfile("{data['bazi_str']}", "{data['day_master']}", "{dm_info['element']}");\n        _mint(msg.sender, tokenId);\n    }}\n}}"""
+        render_html("<div style='text-align:center; color:#10b981; font-weight:bold; margin-bottom:10px; margin-top:15px; font-family:Orbitron;'>/// SOLIDITY SMART CONTRACT MINT LOG</div>")
+        render_html("<div style='font-size:12px; color:#94a3b8; margin-bottom:10px; text-align:center;'>系统已自动将您的八字编译为不可篡改的 ERC721 智能合约源码。</div>")
+        code_block = f"""// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\nimport "@karma-os/contracts/token/ERC721.sol";\n\ncontract Karma_Destiny_Registry_V31 is ERC721 {{\n    struct SoulProfile {{\n        string bazi_code;\n        string day_master;\n        string primary_element;\n    }}\n    \n    mapping(uint256 => SoulProfile) public souls;\n    \n    constructor() ERC721("KARMA_DESTINY", "SOUL") {{}}\n\n    // =====================================\n    // SYSTEM MINT LOG \n    // MINTED_TO: {data['name']}\n    // BLOCK_HEIGHT: {block_height}\n    // CONTRACT_ADDR: {contract_addr}\n    // =====================================\n    \n    function executeMint() public {{\n        uint256 tokenId = {token_id};\n        souls[tokenId] = SoulProfile("{data['bazi_str']}", "{data['day_master']}", "{dm_info['element']}");\n        _mint(msg.sender, tokenId);\n    }}\n}}"""
         st.markdown('<div data-testid="stCodeBlock">', unsafe_allow_html=True)
         st.code(code_block, language="solidity")
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 📥 [模块 VI]：资产提取与分享终端 (终极深渊解析卡片)
-    st.markdown("<div class='module-title'>📥 模块 VI：全息资产提取终端</div>", unsafe_allow_html=True)
+    # 📥 [模块 VI]：资产提取与分享终端
+    render_html("<div class='module-title'>📥 模块 VI：全息资产提取终端</div>")
     t_img, t_txt, t_json = st.tabs(["📸 视觉海报 (长按/右键保存)", "📜 万字深度解析档案 (强力推荐)", "💾 极客 JSON 底包"])
 
     with t_img:
-        st.markdown("<div style='font-size:13px; color:#10b981; margin-bottom:10px; text-align:center;'>系统已启用最高优先级【防死锁渲染引擎】压制高清海报，请等待 2 秒...</div>", unsafe_allow_html=True)
+        render_html("<div style='font-size:13px; color:#10b981; margin-bottom:10px; text-align:center;'>系统已启用最高优先级【防死锁渲染引擎】压制高清海报，请等待 2 秒...</div>")
         
         tags_html_poster = "".join([f"<span style='background:rgba(244,63,94,0.15); border:1px solid rgba(244,63,94,0.6); padding:4px 8px; border-radius:4px; font-size:11px; color:#ffe4e6; font-weight:bold; margin:3px; display:inline-block;'>{s}</span>" for s in data['skills']])
         wx_colors = {'金': '#e2e8f0', '木': '#10b981', '水': '#3b82f6', '火': '#f43f5e', '土': '#f59e0b'}
@@ -531,7 +559,7 @@ else:
         for k, v in data['wx_scores'].items():
             wx_bars_html += f'''<div class="stat-row"><span style="color:#e2e8f0; width:30px;">{k}</span><div class="sbc"><div class="sbf" style="width:{v}%; background:{wx_colors[k]}; box-shadow: 0 0 8px {wx_colors[k]}"></div></div><span style="color:#94a3b8; width:35px; text-align:right;">{v}%</span></div>'''
 
-        # 🚨 终极安全 HTML 海报引擎：绝对顶格，不留任何隐患
+        # 🚨 终极安全 HTML 海报引擎：绝对顶格，重置 box-sizing 防手机白边
         HTML_POSTER = f"""
 <!DOCTYPE html>
 <html>
@@ -540,9 +568,10 @@ else:
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-body {{ margin: 0; display: flex; flex-direction: column; align-items: center; background-color: transparent !important; font-family: 'Noto Sans SC', sans-serif; user-select: none; padding: 10px 0; color: #ffffff; overflow-x: hidden; }}
-#render-target {{ position: absolute; top: -9999px; left: -9999px; z-index: -100; pointer-events: none; }}
-#capture-box {{ width: 340px; background-color: #010308; padding: 30px 20px; border-radius: 12px; border: 1px solid rgba(0, 243, 255, 0.5); box-shadow: 0 0 40px rgba(0, 243, 255, 0.2); position: relative; overflow: hidden; color: #fff; box-sizing: border-box; margin: 0 auto; }}
+* {{ box-sizing: border-box; }}
+body {{ margin: 0; padding: 0; display: flex; justify-content: center; background-color: transparent !important; font-family: 'Noto Sans SC', sans-serif; user-select: none; color: #ffffff; overflow: hidden; }}
+#render-target {{ position: absolute; top: -9999px; left: -9999px; z-index: -100; pointer-events: none; margin: 0; padding: 0; }}
+#capture-box {{ width: 340px; background-color: #010308; padding: 30px 20px; border-radius: 12px; border: 1px solid rgba(0, 243, 255, 0.5); position: relative; overflow: hidden; color: #fff; margin: 0; }}
 .cyber-grid {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(0deg, rgba(0,243,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,243,255,0.03) 1px, transparent 1px); background-size: 20px 20px; z-index: 0; pointer-events:none;}}
 .top-glow {{ position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(90deg, transparent, #00f3ff, transparent); z-index: 1; }}
 .ct {{ position: relative; z-index: 2; }}
@@ -558,11 +587,11 @@ body {{ margin: 0; display: flex; flex-direction: column; align-items: center; b
 .dm-title {{ font-size: 10px; color: #f43f5e; font-family: 'Orbitron'; margin-bottom: 5px; letter-spacing: 1px; font-weight:bold;}}
 .dm-val {{ font-size: 16px; font-weight: bold; color: {dm_info['color']}; text-shadow: 0 0 10px {dm_info['color']};}}
 .ft {{ text-align: center; color: #64748b; font-family: 'Orbitron'; font-size: 9px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); line-height: 1.6; margin-top: 10px;}}
-#ui {{ font-family: 'Orbitron'; color: #00f3ff; font-size: 13px; text-align: center; padding: 40px; animation: p 1s infinite alternate; letter-spacing: 2px; font-weight:bold;}}
+#ui {{ font-family: 'Orbitron'; color: #00f3ff; font-size: 13px; text-align: center; padding: 40px; animation: p 1s infinite alternate; letter-spacing: 2px; font-weight:bold; width: 100%;}}
 @keyframes p {{ 0% {{ opacity: 1; text-shadow: 0 0 10px #00f3ff; }} 100% {{ opacity: 0.4; }} }}
-#img {{ display: none; width: 100%; max-width: 340px; height: auto; border-radius: 12px; border: 1px solid rgba(0,243,255,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.8); margin: 0 auto; box-sizing: border-box;}}
+#img {{ display: none; width: 100%; max-width: 340px; height: auto; border-radius: 12px; border: 1px solid rgba(0,243,255,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.8); margin: 10px auto; box-sizing: border-box;}}
 .ht {{ display: none; background: rgba(0,243,255,0.1); border: 1px solid #00f3ff; padding: 15px; border-radius: 8px; font-size: 13px; color: #fff; text-align: center; margin: 20px auto 0 auto; width: 100%; max-width: 340px; box-sizing: border-box; text-shadow: 0 0 5px rgba(0,0,0,0.8); line-height: 1.6;}}
-.stat-row {{ display: flex; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: bold; justify-content: space-between; }}
+.stat-row {{ display: flex; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: bold; justify-content: space-between; width: 100%; }}
 .stat-row:last-child {{ margin-bottom: 0; }}
 .sbc {{ background: rgba(255,255,255,0.05); border-radius: 3px; height: 6px; width: 160px; position: relative; overflow: hidden; margin: 0 8px; border: 1px solid rgba(255,255,255,0.1);}}
 .sbf {{ position: absolute; left: 0; top: 0; height: 100%; border-radius: 3px;}}
@@ -574,7 +603,7 @@ body {{ margin: 0; display: flex; flex-direction: column; align-items: center; b
         <div class="cyber-grid"></div><div class="top-glow"></div>
         <div class="ct">
             <div class="hd">
-                <div class="logo-title">KARMA OS V1.0</div>
+                <div class="logo-title">KARMA OS V32.0</div>
                 <div class="logo-sub">全 息 命 盘 终 端</div>
             </div>
             
@@ -607,9 +636,11 @@ body {{ margin: 0; display: flex; flex-direction: column; align-items: center; b
     </div>
 </div>
 
-<div id="ui">[ GENERATING HOLOGRAPHIC POSTER... ]</div>
-<img id="result-img" alt="Cyber Bazi Card" title="长按保存或分享" />
-<div id="hint" class="ht"><span style="font-size:18px;">✅</span> <b>全息命盘压制完成！</b><br><span style="color:#00f3ff;">👆 手机端请 <b>长按上方图片</b> 保存至相册</span></div>
+<div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <div id="ui">[ GENERATING HOLOGRAPHIC POSTER... ]</div>
+    <img id="result-img" alt="Cyber Bazi Card" title="长按保存或分享" />
+    <div id="hint" class="ht"><span style="font-size:18px;">✅</span> <b>全息海报强力渲染完成！</b><br><span style="color:#00f3ff;">👆 手机端请 <b>长按上方图片</b> 保存发圈</span></div>
+</div>
 
 <script>
 const executeRender = () => {{
@@ -635,6 +666,7 @@ const executeRender = () => {{
                     rt.style.transform = 'none';
                     rt.style.opacity = '1';
                     rt.style.zIndex = '1';
+                    rt.style.margin = '0 auto';
                 }}
             }}
         }}).then(canvas => {{ 
@@ -650,7 +682,6 @@ const executeRender = () => {{
     }}, 1500); 
 }};
 
-// 强力兜底：无论 load 事件是否触发，2秒后强制执行截图
 if (document.readyState === 'complete') {{
     executeRender();
 }} else {{
@@ -663,9 +694,9 @@ if (document.readyState === 'complete') {{
 """
         components.html(HTML_POSTER, height=850)
 
-    # 🚀 极致强化：万字级深度命格解析卡片 (完全兑现可复制下载需求)
+    # 🚀 极致强化：万字级深度命格解析卡片
     with t_txt:
-        st.markdown("<div style='font-size:14px; color:#10b981; margin-bottom:10px; margin-top:10px; font-weight:bold;'>系统已为您生成专属的【深度命格鉴定报告】。您可以点击代码框右上角一键复制，或直接下载保存为本地档案。</div>", unsafe_allow_html=True)
+        render_html("<div style='font-size:14px; color:#10b981; margin-bottom:10px; margin-top:10px; font-weight:bold;'>系统已为您生成专属的【深度命格鉴定报告】。您可以点击代码框右上角一键复制，或直接下载保存为本地档案。</div>")
         
         detailed_card = f"""=======================================================
 ███████╗██████╗ ███████╗    ██████╗ ███████╗███████╗████████╗
@@ -720,12 +751,10 @@ if (document.readyState === 'complete') {{
 POWERED BY LUNAR DESTINY ENGINE | © {COPYRIGHT}
 ======================================================="""
         
-        # 恢复原生 st.code 提供极其丝滑的一键 Copy
         st.markdown('<div data-testid="stCodeBlock">', unsafe_allow_html=True)
         st.code(detailed_card, language="markdown")
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # 增加一键原生下载功能
         st.download_button(
             label="📥 下载深度命格机密报告 (.txt)",
             data=detailed_card,
@@ -735,7 +764,7 @@ POWERED BY LUNAR DESTINY ENGINE | © {COPYRIGHT}
         )
 
     with t_json:
-        st.markdown("<div style='font-size:13px; color:#94a3b8; margin-bottom:15px; margin-top:10px;'>💾 极客视角：导出您的先天八字 JSON 结构树底包：</div>", unsafe_allow_html=True)
+        render_html("<div style='font-size:13px; color:#94a3b8; margin-bottom:15px; margin-top:10px;'>💾 极客视角：导出您的先天八字 JSON 结构树底包：</div>")
         export_data = {
             "version": VERSION,
             "node_alias": data['name'],
@@ -762,7 +791,7 @@ POWERED BY LUNAR DESTINY ENGINE | © {COPYRIGHT}
         st.download_button(label="📥 提取原始 JSON 命盘档案", data=json_str, file_name=f"DESTINY_{data['hash_id'][:6]}.json", mime="application/json", use_container_width=True)
 
     # 底部重启按钮
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    render_html("<br><br>")
     col_btm_l, col_btm_m, col_btm_r = st.columns([1, 2, 1])
     with col_btm_m:
         if st.button("⏏ 弹出磁盘并重启终端 (SYS_REBOOT)", type="primary", use_container_width=True):
@@ -772,9 +801,10 @@ POWERED BY LUNAR DESTINY ENGINE | © {COPYRIGHT}
 # =========================================================================
 # 🛑 [ CORE 07 ] 赛博呼吸专属版权区
 # =========================================================================
-st.markdown(f"""
+render_html(f"""
 <div style="text-align:center; margin-top:60px; margin-bottom:40px; position:relative; z-index:10;">
-    <div style="color:#ffd700 !important; font-family:'Orbitron', monospace; font-size:10px; opacity:0.3; letter-spacing:6px; margin-bottom:8px;">POWERED BY LUNAR ENGINE</div>
+    <div style="color:#00f3ff !important; font-family:'Orbitron', monospace; font-size:10px; opacity:0.3; letter-spacing:6px; margin-bottom:8px;">POWERED BY LUNAR ENGINE</div>
+    <div style="color:#00f3ff !important; font-family:'Orbitron', monospace; font-size:10px; opacity:0.2; letter-spacing:3px; margin-bottom:30px;">SYSTEM VERSION: {VERSION}</div>
     <div class="copyright-niliu">© 2026 版权归属 · <b style="font-family:'Orbitron', sans-serif; letter-spacing: 4px;">{COPYRIGHT}</b></div>
 </div>
-""", unsafe_allow_html=True)
+""")
