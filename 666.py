@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import random
 import time
-import math    # 🚨 就是少了这一行，导致了严重的黑屏事故！已补齐！
+import math
 import hashlib
 import json
 from datetime import datetime, time as dt_time
@@ -16,27 +16,26 @@ try:
     from lunar_python import Solar
 except ImportError as e:
     st.set_page_config(page_title="系统环境异常", page_icon="🚨", layout="centered")
-    st.error(f"🚨 **致命环境缺失：云端服务器缺少核心算力引擎！**\n\n缺少模块: `{e.name}`")
+    st.error(f"🚨 **致命环境缺失：云端服务器缺少核心算力引擎！**\n\n系统找不到模块: `{e.name}`")
     st.warning("""
     **请按以下步骤立刻修复（只需 1 分钟）：**
-    1. 回到您的 GitHub 仓库，点击 **Add file** -> **Create new file**。
-    2. 文件名 **必须准确无误地** 命名为：`requirements.txt`
-    3. 在文件内容中，粘贴以下 4 行代码：
+    1. 回到您的 GitHub 仓库，确保和 `666.py` 同一个地方有一个文件叫 `requirements.txt`。
+    2. 里面必须包含这 4 行字（不能有错别字）：
     ```text
     streamlit
     lunar-python
     plotly
     numpy
     ```
-    4. 点击绿色的 **Commit changes** 保存。
-    5. 回到当前网页，点击右下角 **Manage app** -> 右上角 **三个点 (⋮)** -> **Reboot app**。
+    3. 回到当前网页，点击右下角 **Manage app** -> 右上角 **三个点 (⋮)** -> **Reboot app**。
+    等待 1 分钟服务器重启安装插件即可！
     """)
-    st.stop() # 强行拦截，防止后续代码继续报错黑屏
+    st.stop() # 拦截代码继续往下执行
 
 # ==============================================================================
 # 🌌 [ CORE 01 ] 宇宙物理引擎与全局配置
 # ==============================================================================
-VERSION = "KARMA_OS_V35.0_GOD_MODE"
+VERSION = "KARMA_OS_V36.0_GOD_MODE"
 COPYRIGHT = "无名逆流"
 SYS_NAME = "量子命理 | 赛博算命终端"
 
@@ -48,7 +47,7 @@ def render_html(html_str):
     st.markdown(cleaned, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🎨 [ CORE 02 ] 赛博修仙 UI 底座 (修复黑屏塌缩 Bug)
+# 🎨 [ CORE 02 ] 赛博修仙 UI 底座
 # ==============================================================================
 render_html("""
 <style>
@@ -153,13 +152,13 @@ div[data-testid="stDownloadButton"] > button:hover p { color: #00f3ff !important
 # ==============================================================================
 render_html("""
 <div class="ticker-wrap"><div class="ticker">
-    <span>KARMA-OS: V35.0 SECURE <b class="up">▲ONLINE</b></span>
+    <span>KARMA-OS: V36.0 SECURE <b class="up">▲ONLINE</b></span>
     <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
     <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
     <span>SYS-RISK: FIVE ELEMENTS BALANCED <b class="up">▲SECURE</b></span>
     <span>MARKET-ALPHA: 10-YEAR TREND <b class="down">▼COMPUTING</b></span>
     <span>DAO-PROTOCOL: SMART CONTRACT <b class="up">▲MINTED</b></span>
-    <span>KARMA-OS: V35.0 SECURE <b class="up">▲ONLINE</b></span>
+    <span>KARMA-OS: V36.0 SECURE <b class="up">▲ONLINE</b></span>
 </div></div>
 """)
 
@@ -167,7 +166,6 @@ def trigger_supernova():
     html_str = ""
     vocab = ["KARMA", "DAO", "HASH", "DESTINY", "SYNC", "OS", "MINT"]
     for _ in range(40): 
-        # 🚨 这里的 math.cos 终于找到了它的爸爸 (import math)
         tx = random.uniform(200, 800) * math.cos(random.uniform(0, 2 * math.pi))
         ty = random.uniform(200, 800) * math.sin(random.uniform(0, 2 * math.pi))
         text = random.choice(vocab)
@@ -229,7 +227,7 @@ if not st.session_state.calculated:
         <div style="text-align: center; margin-bottom: 20px;">
             <div style="color:#00f3ff; font-family:'Orbitron', monospace; font-size:14px; letter-spacing:8px; margin-bottom:10px;">KARMA OS FRAMEWORK</div>
             <h1 class="hero-title" data-text="全息命盘推演终端">全息命盘推演终端</h1><br>
-            <div style="color:#f43f5e; font-family:'Orbitron', sans-serif; font-size:13px; font-weight:700; letter-spacing:6px; margin-bottom:30px;">DESTINY ENGINE V35.0</div>
+            <div style="color:#f43f5e; font-family:'Orbitron', sans-serif; font-size:13px; font-weight:700; letter-spacing:6px; margin-bottom:30px;">DESTINY ENGINE V36.0</div>
         </div>
         
         <div class="terminal-container">
@@ -305,7 +303,7 @@ if not st.session_state.calculated:
             st.rerun()
 
 # ==============================================================================
-# 🌟 [ CORE 06 ] 全息大屏展示 (全量变量前置提升)
+# 🌟 [ CORE 06 ] 全息大屏展示 (全量变量前置提升，杜绝 NameError)
 # ==============================================================================
 else:
     if not st.session_state.anim_played: 
@@ -321,6 +319,9 @@ else:
     token_id = int(hash_code[:8], 16)
     contract_addr = "0x" + hashlib.sha256(f"karma_dao_{token_id}".encode()).hexdigest()[:38]
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+    
+    # 🚨 终极防爆：在上一版丢失的 block_height，在这里强势归位！
+    block_height = f"V36-{(int(time.time()) % 1000000):06d}"
 
     # 2. 气运走势推演
     years_k, fortunes_k = generate_alpha_curve(hash_code)
@@ -359,7 +360,7 @@ else:
     skills_html_web = "".join([f"<span class='skill-badge'>{s}</span>" for s in data['skills']])
 
     # =========================================================================
-    # 📱 模块渲染开始
+    # 📱 模块渲染开始 (严格瀑布流布局)
     # =========================================================================
     
     # 💠 [模块 I]：链上确权凭证
@@ -367,10 +368,10 @@ else:
     render_html(f"""
     <div style="background: linear-gradient(135deg, rgba(0,243,255,0.05), rgba(5,5,10,0.9)); border: 1px solid #00f3ff; border-radius: 8px; padding: 15px 25px; margin-bottom: 25px; font-family: 'Orbitron', monospace; box-shadow: 0 0 20px rgba(0,243,255,0.15);">
         <div style="color: #00f3ff; font-size: 14px; font-weight: bold; border-bottom: 1px dashed #00f3ff; padding-bottom: 10px; margin-bottom: 12px; display:flex; align-items:center;">
-            <span style="font-size:20px; margin-right:10px;">🏅</span> <span>DESTINY SOULBOUND TOKEN (SBT) MINTED [ V 35.0 ]</span>
+            <span style="font-size:20px; margin-right:10px;">🏅</span> <span>DESTINY SOULBOUND TOKEN (SBT) MINTED [ V 36.0 ]</span>
         </div>
         <div style="font-size: 12px; color: #94a3b8; line-height: 1.8; display:flex; flex-wrap: wrap; justify-content: space-between; gap: 10px;">
-            <div><div><span style="color:#e2e8f0;">BLOCK HEIGHT:</span> V35-{(int(time.time()) % 1000000):06d}</div><div><span style="color:#e2e8f0;">CONTRACT:</span> {contract_addr[:20]}...</div></div>
+            <div><div><span style="color:#e2e8f0;">BLOCK HEIGHT:</span> {block_height}</div><div><span style="color:#e2e8f0;">CONTRACT:</span> {contract_addr[:20]}...</div></div>
             <div style="text-align: left;"><div><span style="color:#e2e8f0;">TOKEN ID:</span> #{token_id}</div><div><span style="color:#e2e8f0;">TIMESTAMP:</span> {current_time_str}</div></div>
         </div>
     </div>
@@ -450,7 +451,7 @@ else:
             ), 
             showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=40, r=40, t=20, b=20), height=320
         )
-        st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False}, theme=None)
+        st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False})
         
         wx_colors = {'金': '#e2e8f0', '木': '#10b981', '水': '#3b82f6', '火': '#f43f5e', '土': '#f59e0b'}
         bars_html = '<div style="background:rgba(0,0,0,0.5); padding:20px; border-radius:8px; border:1px solid rgba(0,243,255,0.2);">'
@@ -484,7 +485,7 @@ else:
             xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)', tickfont=dict(color='#94a3b8')), 
             yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)', title='Alpha 气运净值', tickfont=dict(color='#94a3b8'))
         )
-        st.plotly_chart(fig_trend, use_container_width=True, config={'displayModeBar': False}, theme=None)
+        st.plotly_chart(fig_trend, use_container_width=True, config={'displayModeBar': False})
         
         render_html(f"""
         <div style="background: rgba(255,0,60,0.1); border-left: 4px solid #ff003c; padding: 20px; margin-top: 20px; border-radius: 0 8px 8px 0;">
@@ -529,12 +530,12 @@ else:
         f3d.add_trace(go.Scatter3d(x=rng_3d.randint(0,60,size=150), y=rng_3d.randint(0,60,size=150), z=rng_3d.randint(0,60,size=150), mode='markers', marker=dict(size=4, color='#334155', opacity=0.6), name='全网众生节点'))
         f3d.add_trace(go.Scatter3d(x=[x_v], y=[y_v], z=[z_v], mode='markers+text', text=[data['day_master']], textposition="top center", marker=dict(size=18, color=dm_info['color'], symbol='diamond', line=dict(color='#fff', width=2)), textfont=dict(color=dm_info['color'], size=20, family="Noto Sans SC", weight="bold"), name='你的元神系位'))
         f3d.update_layout(scene=dict(xaxis_title='金属性算力', yaxis_title='木属性算力', zaxis_title='水属性算力', xaxis=dict(backgroundcolor="#020617", gridcolor="#1e293b"), yaxis=dict(backgroundcolor="#020617", gridcolor="#1e293b"), zaxis=dict(backgroundcolor="#020617", gridcolor="#1e293b")), paper_bgcolor='rgba(0,0,0,0)', margin=dict(l=0, r=0, t=0, b=0), height=400, showlegend=False)
-        st.plotly_chart(f3d, use_container_width=True, config={'displayModeBar': False}, theme=None)
+        st.plotly_chart(f3d, use_container_width=True, config={'displayModeBar': False})
 
     with t_sol:
         render_html("<div style='text-align:center; color:#10b981; font-weight:bold; margin-bottom:10px; margin-top:15px; font-family:Orbitron;'>/// SOLIDITY SMART CONTRACT MINT LOG</div>")
         render_html("<div style='font-size:12px; color:#94a3b8; margin-bottom:10px; text-align:center;'>系统已自动将您的八字编译为不可篡改的 ERC721 智能合约源码。</div>")
-        code_block = f"""// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\nimport "@karma-os/contracts/token/ERC721.sol";\n\ncontract Karma_Destiny_Registry_V35 is ERC721 {{\n    struct SoulProfile {{\n        string bazi_code;\n        string day_master;\n        string primary_element;\n    }}\n    \n    mapping(uint256 => SoulProfile) public souls;\n    \n    constructor() ERC721("KARMA_DESTINY", "SOUL") {{}}\n\n    // =====================================\n    // SYSTEM MINT LOG \n    // MINTED_TO: {data['name']}\n    // BLOCK_HEIGHT: {block_height}\n    // CONTRACT_ADDR: {contract_addr}\n    // =====================================\n    \n    function executeMint() public {{\n        uint256 tokenId = {token_id};\n        souls[tokenId] = SoulProfile("{data['bazi_str']}", "{data['day_master']}", "{dm_info['element']}");\n        _mint(msg.sender, tokenId);\n    }}\n}}"""
+        code_block = f"""// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\nimport "@karma-os/contracts/token/ERC721.sol";\n\ncontract Karma_Destiny_Registry_V36 is ERC721 {{\n    struct SoulProfile {{\n        string bazi_code;\n        string day_master;\n        string primary_element;\n    }}\n    \n    mapping(uint256 => SoulProfile) public souls;\n    \n    constructor() ERC721("KARMA_DESTINY", "SOUL") {{}}\n\n    // =====================================\n    // SYSTEM MINT LOG \n    // MINTED_TO: {data['name']}\n    // BLOCK_HEIGHT: {block_height}\n    // CONTRACT_ADDR: {contract_addr}\n    // =====================================\n    \n    function executeMint() public {{\n        uint256 tokenId = {token_id};\n        souls[tokenId] = SoulProfile("{data['bazi_str']}", "{data['day_master']}", "{dm_info['element']}");\n        _mint(msg.sender, tokenId);\n    }}\n}}"""
         st.markdown('<div data-testid="stCodeBlock">', unsafe_allow_html=True)
         st.code(code_block, language="solidity")
         st.markdown('</div>', unsafe_allow_html=True)
@@ -594,7 +595,7 @@ body {{ margin: 0; display: flex; flex-direction: column; align-items: center; b
         <div class="cyber-grid"></div><div class="top-glow"></div>
         <div class="ct">
             <div class="hd">
-                <div class="logo-title">KARMA OS V35.0</div>
+                <div class="logo-title">KARMA OS V36.0</div>
                 <div class="logo-sub">全 息 命 盘 终 端</div>
             </div>
             
@@ -627,9 +628,11 @@ body {{ margin: 0; display: flex; flex-direction: column; align-items: center; b
     </div>
 </div>
 
-<div id="ui">[ GENERATING HOLOGRAPHIC POSTER... ]</div>
-<img id="result-img" alt="Cyber Bazi Card" title="长按保存或分享" />
-<div id="hint" class="ht"><span style="font-size:18px;">✅</span> <b>全息命盘压制完成！</b><br><span style="color:#00f3ff;">👆 手机端请 <b>长按上方图片</b> 保存发圈</span></div>
+<div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <div id="ui">[ GENERATING HOLOGRAPHIC POSTER... ]</div>
+    <img id="result-img" alt="Cyber Bazi Card" title="长按保存或分享" />
+    <div id="hint" class="ht"><span style="font-size:18px;">✅</span> <b>全息命盘压制完成！</b><br><span style="color:#00f3ff;">👆 手机端请 <b>长按上方图片</b> 保存发圈</span></div>
+</div>
 
 <script>
 const executeRender = () => {{
@@ -655,6 +658,7 @@ const executeRender = () => {{
                     rt.style.transform = 'none';
                     rt.style.opacity = '1';
                     rt.style.zIndex = '1';
+                    rt.style.margin = '0 auto';
                 }}
             }}
         }}).then(canvas => {{ 
@@ -670,7 +674,6 @@ const executeRender = () => {{
     }}, 1500); 
 }};
 
-// 强力兜底
 if (document.readyState === 'complete') {{
     executeRender();
 }} else {{
@@ -695,7 +698,7 @@ if (document.readyState === 'complete') {{
 ███████║██████╔╝███████╗    ██████╔╝███████╗███████║   ██║   
 ╚══════╝╚═════╝ ╚══════╝    ╚═════╝ ╚══════╝╚══════╝   ╚═╝   
 =======================================================
-【 KARMA-OS 量子命盘 · 深度鉴定报告 V35.0 】
+【 KARMA-OS 量子命盘 · 深度鉴定报告 V36.0 】
 
 [ 👤 节点基础信息 ]
 ▸ 物理标识：{data['name']}
@@ -791,8 +794,8 @@ POWERED BY LUNAR DESTINY ENGINE | © {COPYRIGHT}
 # 🛑 [ CORE 07 ] 赛博呼吸专属版权区
 # =========================================================================
 render_html(f"""
-<div style="text-align:center; margin-top:60px; margin-bottom:40px; position:relative; z-index:10;">
-    <div style="color:#00f3ff !important; font-family:'Orbitron', monospace; font-size:10px; opacity:0.3; letter-spacing:6px; margin-bottom:8px;">POWERED BY LUNAR KERNEL</div>
+<div style="text-align:center; margin-top:80px; margin-bottom:40px; position:relative; z-index:10;">
+    <div style="color:#00f3ff !important; font-family:'Orbitron', monospace; font-size:10px; opacity:0.3; letter-spacing:6px; margin-bottom:8px;">POWERED BY LUNAR ENGINE</div>
     <div style="color:#00f3ff !important; font-family:'Orbitron', monospace; font-size:10px; opacity:0.2; letter-spacing:3px; margin-bottom:30px;">SYSTEM VERSION: {VERSION}</div>
     <div class="copyright-niliu">© 2026 版权归属 · <b style="font-family:'Orbitron', sans-serif; letter-spacing: 4px;">{COPYRIGHT}</b></div>
 </div>
