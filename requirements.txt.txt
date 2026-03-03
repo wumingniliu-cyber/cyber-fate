@@ -1,4 +1,0 @@
-streamlit
-lunar-python
-plotly
-numpy
