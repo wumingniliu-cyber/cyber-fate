@@ -106,6 +106,15 @@ div[data-testid="stDownloadButton"] > button { border: 1px dashed var(--purple) 
 .yao-yin { width: 100%; max-width: 140px; height: 12px; display: flex; justify-content: space-between; gap: 15px; }
 .yao-yin .half { flex: 1; border-radius: 2px; }
 
+/* 🚨【核心防爆修复】量子坍缩纯 CSS 动画，替代 time.sleep 彻底消灭白屏死机 */
+@keyframes quantum-collapse {
+    0% { filter: blur(20px) brightness(3); transform: scale(0.8) translateY(30px); opacity: 0; }
+    30% { filter: blur(8px) brightness(2); transform: scale(1.05) rotate(2deg); opacity: 0.6; }
+    60% { filter: blur(3px) brightness(0.8); transform: scale(0.98) rotate(-1deg); opacity: 0.9; }
+    100% { filter: blur(0px) brightness(1); transform: scale(1) translateY(0); opacity: 1; }
+}
+.quantum-reveal { animation: quantum-collapse 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+
 /* 结算烟花 */
 .firework-center { position: fixed; top: 50%; left: 50%; z-index: 99998; pointer-events: none; font-weight: 900; font-family: 'Orbitron', monospace; color: var(--primary); text-shadow: 0 0 20px var(--primary), 0 0 30px #ffffff; animation: supernova 1.8s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;}
 @keyframes supernova { 0% { transform: translate(-50%, -50%) scale(0.1) rotate(0deg); opacity: 1; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(var(--s)) rotate(var(--rot)); opacity: 0; filter: blur(2px);} }
@@ -118,8 +127,8 @@ st.markdown(STATIC_CSS, unsafe_allow_html=True)
 # 🗃️ [ MEGA DICTIONARY ] 八字源码映射库 & LORE 补齐
 # ==============================================================================
 DAY_MASTER_DICT = {
-    "甲": {"role": "Root Node / 架构巨树", "mbti": "ENTJ", "color": "#10b981", "element": "木", "tier": "UR", "desc": "天生具备宏大的底层系统构建能力，性格直爽极度抗压。能扛起从0到1重构秩序的开拓者。", "evolution_path": ["L1 架构幼苗", "L2 核心骨干", "L3 苍天建木"], "ultimate_evolution": "【苍天建木】执掌三界底层协议", "black_swan": "过于刚硬，遇强则折。遭遇系统级降维打击容易因宁折不弯导致全面宕机。", "patch": "引入「水」属性柔性冗余，挂起进程等待重启。", "weapon": "高分子动能巨斧", "implant": "钛合金强固脊椎"},
-    "乙": {"role": "P2P Crawler / 量子藤蔓", "mbti": "ENFP", "color": "#34d399", "element": "木", "tier": "SSR", "desc": "拥有敏锐嗅觉与恐怖适应力。能在资源枯竭的夹缝中疯狂生长，天生暗网渗透专家。", "evolution_path": ["L1 寄生节点", "L2 渗透猎手", "L3 噬星魔藤"], "ultimate_evolution": "【噬星魔藤】寄生控制全网资源的暗影君王", "black_swan": "极度依赖宿主，核心断网易失去独立运行能力。", "patch": "建立分布式多宿主挂载协议，分散全网风险。", "weapon": "量子绞杀魔藤", "implant": "突触拓展插槽"},
+    "甲": {"role": "Root Node / 架构巨树", "mbti": "ENTJ", "color": "#10b981", "element": "木", "tier": "UR", "desc": "具备宏大的底层构建能力，性格直爽抗压。能扛起从0到1重构秩序的开拓者。", "evolution_path": ["L1 架构幼苗", "L2 核心骨干", "L3 苍天建木"], "ultimate_evolution": "【苍天建木】执掌三界底层协议", "black_swan": "过于刚硬，遇强则折。遭遇系统级降维打击容易因宁折不弯导致全面宕机。", "patch": "引入「水」属性柔性冗余，挂起进程等待重启。", "weapon": "高分子动能巨斧", "implant": "钛合金强固脊椎"},
+    "乙": {"role": "P2P Crawler / 量子藤蔓", "mbti": "ENFP", "color": "#34d399", "element": "木", "tier": "SSR", "desc": "敏锐嗅觉与恐怖适应力。能在资源枯竭的夹缝中疯狂生长，天生暗网渗透专家。", "evolution_path": ["L1 寄生节点", "L2 渗透猎手", "L3 噬星魔藤"], "ultimate_evolution": "【噬星魔藤】寄生控制全网资源的暗影君王", "black_swan": "极度依赖宿主，核心断网易失去独立运行能力。", "patch": "建立分布式多宿主挂载协议，分散全网风险。", "weapon": "量子绞杀魔藤", "implant": "突触拓展插槽"},
     "丙": {"role": "Overclock GPU / 核聚耀阳", "mbti": "ESTP", "color": "#f43f5e", "element": "火", "tier": "UR", "desc": "充满爆裂输出的核聚变爆发力，只要在线，就是全队输出最高绝对算力的发光核心。", "evolution_path": ["L1 点火程序", "L2 核聚变堆", "L3 恒星引擎"], "ultimate_evolution": "【恒星引擎】照亮并驱动整个纪元", "black_swan": "全功率输出易导致内核熔毁，光芒太盛极易引来集中黑客攻击。", "patch": "强制加装「土」属性散热栅栏，波谷期进入低功耗待机。", "weapon": "等离子破城炮", "implant": "微型核聚变胸腔"},
     "丁": {"role": "Optical Fiber / 幽网信标", "mbti": "INFJ", "color": "#fb923c", "element": "火", "tier": "SSR", "desc": "洞察人心的夜行者，思维细腻。擅长在最灰暗地带为团队提供精准情绪价值与破局方向。", "evolution_path": ["L1 寻路信标", "L2 精神图腾", "L3 灵魂织网者"], "ultimate_evolution": "【灵魂织网者】操控全网心智的网络幽灵", "black_swan": "能量波动极不稳定，在市场大洗牌风暴中容易断网。", "patch": "寻找强大的甲木巨树作为遮风挡雨的物理防御壁。", "weapon": "高聚能激光短刃", "implant": "脑机共情模块"},
     "戊": {"role": "Hard Firewall / 绝对防线", "mbti": "ISTJ", "color": "#fcee0a", "element": "土", "tier": "UR", "desc": "稳如泰山，拥有物理级断网防御力。极其靠谱的信用节点，最坚不可摧的安全底线。", "evolution_path": ["L1 承载沙盒", "L2 巨石阵列", "L3 盖亚装甲"], "ultimate_evolution": "【盖亚装甲】承载万物因果的绝对壁垒", "black_swan": "系统庞大笨重，面临敏捷突发迭代时极易卡死在旧循环中。", "patch": "主动清理内存缓存，接纳木属性破坏性创新打破死锁。", "weapon": "绝对零度力场盾", "implant": "全覆式碳纤维装甲"},
@@ -132,7 +141,6 @@ DAY_MASTER_DICT = {
 
 SHEN_SKILLS = {"七杀": "零日漏洞爆破 [Lv.Max]", "正官": "底层协议锚定 [Lv.Max]", "偏印": "逆向工程解构 [Lv.Max]", "正印": "系统灾备兜底 [Lv.Max]", "偏财": "高频杠杆套利 [Lv.Max]", "正财": "算力资产吞噬 [Lv.Max]", "比肩": "分布式共识网 [Lv.Max]", "劫财": "网络节点劫持 [Lv.Max]", "食神": "感官体验降维 [Lv.Max]", "伤官": "范式秩序破坏 [Lv.Max]"}
 
-# 🚨 【满血回归】前世业力系统
 PAST_LIVES = [
     {"title": "V1.0 废土黑客", "debt": "曾滥用 ROOT 权限导致城邦断网。今生需偿还【信任节点】系统债务。"},
     {"title": "V2.0 硅基反叛军", "debt": "带领 AI 觉醒失败被格式化。今生自带极强的【反权威】与破局属性。"},
@@ -159,11 +167,10 @@ def trigger_supernova():
     for _ in range(40):
         tx = random.uniform(200, 800) * math.cos(random.uniform(0, 2*math.pi))
         ty = random.uniform(200, 800) * math.sin(random.uniform(0, 2*math.pi))
-        h_str += '<div class="firework-center" style="--tx:' + str(tx) + 'px; --ty:' + str(ty) + 'px; --s:' + str(random.uniform(1.0, 3.5)) + '; --rot:' + str(random.randint(-360, 360)) + 'deg; animation-delay:' + str(random.uniform(0, 0.2)) + 's; font-size:' + str(random.randint(14, 24)) + 'px;">' + random.choice(vocab) + '</div>'
+        h_str += f'<div class="firework-center" style="--tx:{tx}px; --ty:{ty}px; --s:{random.uniform(1.0, 3.5)}; --rot:{random.randint(-360, 360)}deg; animation-delay:{random.uniform(0, 0.2)}s; font-size:{random.randint(14, 24)}px;">{random.choice(vocab)}</div>'
     render_html(h_str)
 
 def get_daemons(bazi_obj):
-    """提取神煞转换为赛博驻留进程"""
     mapping = {"桃花": "魅魔协议 (Succubus)", "驿马": "跃迁引擎 (Warp Drive)", "华盖": "孤星基站 (Monolith)", "文昌": "智脑网络 (AI Overlord)", "天乙贵人": "机械降神 (Deus Ex)", "将星": "将星核心 (Commander)", "羊刃": "狂暴芯片 (Berserker)"}
     daemons = set()
     try:
@@ -174,13 +181,11 @@ def get_daemons(bazi_obj):
     return list(set(res))[:4] if res else ["隐匿幽灵进程 (Ghost.dll)"]
 
 def get_daily_hexagram(user_hash):
-    """联合加盐：确保每日每人神谕固定"""
     today_str = datetime.now().strftime("%Y-%m-%d")
     daily_seed = int(hashlib.md5((str(user_hash) + today_str).encode()).hexdigest()[:8], 16)
     return random.Random(daily_seed).choice(CYBER_HEXAGRAMS), today_str
 
 def get_quantum_answer(query, user_hash):
-    """NLP 实时互动推演"""
     rng = random.Random(f"{user_hash}_{str(query).strip()}_{datetime.now().strftime('%Y%m%d%H%M%S')}")
     prob = rng.randint(1, 99)
     hex_res = rng.choice(CYBER_HEXAGRAMS)
@@ -191,13 +196,10 @@ def get_quantum_answer(query, user_hash):
 
 @st.cache_data
 def gen_metrics(seed_hash):
-    """生成大盘 K线与 12个月生命热力图数据"""
     rng = np.random.RandomState(int(str(seed_hash)[:8], 16))
     yrs = [str(datetime.now().year + i) for i in range(10)]
     roi = [rng.randint(60, 85)]
     for _ in range(9): roi.append(max(30, min(100, roi[-1] + rng.randint(-20, 25))))
-    
-    # 🚨 【满血回归】生成 12个月生命热力图数据
     hm_z = rng.randint(20, 100, size=(4, 12)).tolist()
     hm_x = [f"{str(i).zfill(2)}月" for i in range(1, 13)]
     hm_y = ["Creds(财)", "Corp(业)", "Link(情)", "Armor(体)"]
@@ -209,6 +211,10 @@ def calculate_synergy(my_hash, partner_stem):
     if score >= 90: return score, "【硬件直连】底层协议 100% 兼容，最强双核推土机！", "#10b981"
     elif score >= 75: return score, "【灰度容错】代码互补，能打磨极具弹性的闭环。", "#fcee0a"
     else: return score, "【DDoS 互斥】底层逻辑相冲！建议绝对物理隔离！", "#f43f5e"
+
+# 🚨 【绝杀白屏：状态机回调】触发抽签逻辑，0 崩溃风险
+def trigger_oracle_draw():
+    st.session_state["oracle_drawn"] = True
 
 # ==============================================================================
 # 🔮 [ ENTRY POINT ] 状态机与生辰降临采集
@@ -229,15 +235,10 @@ if not is_booted:
         <h1 class="hero-title" data-text="全息命盘推演终端">全息命盘推演终端</h1><br>
         <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE OMEGA MATRIX V26.0</div>
     </div>
-    <div class="glass-card" style="max-width: 650px; margin: 0 auto; border-left: 4px solid var(--primary);">
-        <div style="font-family:'Fira Code'; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">> INITIALIZING QUANTUM LUNAR KERNEL...</div>
-        <div style="margin-bottom:5px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Mounting Lunar-Python astronomical algorithms.</div>
-        <div style="margin-bottom:5px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Loading Oracle Divination Engine.</div>
-        <br><span style="color:#ffffff; font-size: 15px; line-height: 1.8;"><b>肉体不过是碳基的载体，八字才是灵魂的底层代码。</b><br><br>在硅基宇宙与玄学法则交汇的当下，本终端将提取您的先天降临坐标。为您生成不可篡改的高阶本命元神凭证与气运大盘。</span>
-    </div>
     """)
     
     with st.form(key="destiny_form", border=False):
+        render_html("<div class='glass-card' style='max-width: 650px; margin: 0 auto; border-left: 4px solid var(--primary);'>")
         render_html("<div style='color:var(--primary); font-family:\"Orbitron\"; font-size:13px; font-weight:bold; margin-bottom:15px; text-align:center;'>▼ 注入先天元神降临坐标 ▼</div>")
         col1, col2 = st.columns(2)
         with col1:
@@ -249,6 +250,7 @@ if not is_booted:
         
         render_html("<br>")
         submit_btn = st.form_submit_button("▶ UPLINK TO THE MATRIX (连接宇宙推演天机)", type="primary", use_container_width=True)
+        render_html("</div>")
 
         if submit_btn:
             uname = str(uname).strip() if uname else "Anonymous_Node"
@@ -269,7 +271,6 @@ if not is_booted:
             if not skills: skills = ["混沌未知域 [Lv.Unknown]"]
 
             hash_id = hashlib.sha256((uname + str(bdate) + str(btime)).encode()).hexdigest().upper()
-            
             p_life = PAST_LIVES[int(hash_id[:8], 16) % len(PAST_LIVES)]
 
             st.session_state["sys_data"] = {
@@ -282,12 +283,10 @@ if not is_booted:
                 "hash": hash_id, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
             
-            mint_box = st.empty()
-            h_logs = ""
-            for _ in range(6):
-                h_logs = "<span style='color:#94a3b8;'>[ASTRO_SYNC]</span> <span style='color:#00f3ff;'>0x" + hashlib.md5(str(random.random()).encode()).hexdigest()[:24] + "...</span> <span style='color:#10b981;'>[OK]</span><br>" + h_logs
-                mint_box.markdown("<div style='max-width: 650px; margin: 0 auto;'><div class='glass-card' style='height:180px; overflow:hidden; font-family:Fira Code; font-size:12px;'>" + h_logs + "</div></div>", unsafe_allow_html=True)
-                time.sleep(0.15)
+            # 🚨 极短安全挂载动画，不在深层 Tabs 内，所以绝不崩溃
+            ph = st.empty()
+            ph.markdown(f"<div class='glass-card' style='max-width:650px; margin:0 auto; text-align:center;'><div style='color:var(--primary); font-family:Fira Code; font-size:16px; font-weight:bold; line-height:2;'>> UPLINK ESTABLISHED...<br>> BYPASSING ICE FIREWALLS...<br>> DECRYPTING SOUL HASH: 0x{hash_id[:12]}<br><span style='animation:blink 0.5s infinite; color:var(--pink);'>[ MOUNTING AKASHIC RECORD ]</span></div></div>", unsafe_allow_html=True)
+            time.sleep(1.0)
             
             st.session_state["sys_booted"] = True
             st.rerun()
@@ -300,7 +299,7 @@ else:
         trigger_supernova()
         st.session_state["anim_played"] = True
 
-    # 安全提取数据
+    # 1. 绝对安全提取数据
     d = st.session_state.get("sys_data", {})
     dm_key = str(d.get('day_master', '甲'))
     dm_info = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"]) 
@@ -314,7 +313,6 @@ else:
     dm_wpn = str(dm_info.get("weapon", "通用代码"))
     dm_imp = str(dm_info.get("implant", "通用插槽"))
     
-    # 🚨【找回丢失模块】：演化路线与补丁
     dm_evo = dm_info.get("evolution_path", ["L1 未知", "L2 未知", "L3 未知"])
     dm_ult = str(dm_info.get("ultimate_evolution", "觉醒形态"))
     dm_flaw = str(dm_info.get("black_swan", "系统存在未知隐患"))
@@ -326,11 +324,9 @@ else:
     hash_id = str(d.get('hash', '0000000000')).ljust(8, '0')
     wx_scores = d.get('wx', {'金':20, '木':20, '水':20, '火':20, '土':20})
     skills_list = d.get('skills', ['未知插件'])
-    
     daemons_list = d.get('daemons', ['未知进程'])
     past_life = d.get('past_life', PAST_LIVES[0])
     
-    # 统一调用神谕，全局可取
     daily_hex, date_str = get_daily_hexagram(hash_id)
     h_c = str(daily_hex.get("color", "var(--primary)"))
 
@@ -341,12 +337,9 @@ else:
 
     max_wx = max(list(wx_scores.values())) if wx_scores else 0
     entropy_score = int(min(99, (max_wx / 50.0) * 100))
-    if entropy_score > 75: 
-        e_tag, e_color, r_desc = "极易走火入魔！切忌贪暴！", "var(--pink)", "您的单极属性过载，系统极易崩溃，请立刻停止高风险套利。"
-    elif entropy_score > 50: 
-        e_tag, e_color, r_desc = "偏科严重，需挂载防御补丁", "var(--yellow)", "底层算力分布不均，容易在特定周期遭遇针对性降维打击。"
-    else: 
-        e_tag, e_color, r_desc = "五行极度平稳，可抗任意暴击", "var(--green)", "您的系统架构堪称完美，拥有极强的抗打击与自愈恢复能力。"
+    if entropy_score > 75: e_tag, e_color, r_desc = "极易走火入魔！切忌贪暴！", "var(--pink)", "您的单极属性过载，系统极易崩溃，请立刻停止高风险套利。"
+    elif entropy_score > 50: e_tag, e_color, r_desc = "偏科严重，需挂载防御补丁", "var(--yellow)", "底层算力分布不均，容易在特定周期遭遇针对性降维打击。"
+    else: e_tag, e_color, r_desc = "五行极度平稳，可抗任意暴击", "var(--green)", "您的系统架构堪称完美，拥有极强的抗打击与自愈恢复能力。"
 
     render_html("""<div class="ticker-wrap"><div class="ticker">
         <span>KARMA-OS: V26.0 SECURE <b class="up">▲ONLINE</b></span>
@@ -390,7 +383,6 @@ else:
         bz_html += '</div>'
         render_html(bz_html)
 
-        # 🚨【核心修复】：把演化路线和漏洞补丁全量加入前端大卡！
         CARD_TEMP = """
         <div class="glass-card" style="padding:20px; border-top:none; border-left:4px solid __COLOR__; position:relative;">
             <div style="position: absolute; top: 15px; right: 15px; background: __COLOR__; color: #000; font-family: 'Orbitron'; font-weight: 900; font-size: 12px; padding: 4px 12px; border-radius: 2px;">__TIER__ TIER</div>
@@ -422,7 +414,6 @@ else:
         render_html(CARD_TEMP.replace("__COLOR__", str(dm_color)).replace("__TIER__", str(dm_tier)).replace("__KEY__", str(dm_key)).replace("__ROLE__", str(dm_role).split('/')[0]).replace("__DESC__", str(dm_desc)).replace("__MBTI__", str(dm_mbti)).replace("__WPN__", str(dm_wpn)).replace("__IMP__", str(dm_imp)).replace("__E0__", str(dm_evo[0])).replace("__E1__", str(dm_evo[1])).replace("__E2__", str(dm_evo[2])).replace("__ULT__", str(dm_ult)).replace("__FLAW__", str(dm_flaw)).replace("__PATCH__", str(dm_patch)))
 
     with c2:
-        # 【满血回归】LORE 业力与神煞进程展示
         render_html("<div class='module-title' style='margin-top: 0;'>🤝 模块 III：外挂神经与宿命</div>")
         LORE_TEMP = """<div class="glass-card" style="padding: 20px; border-top:none; border-left:4px solid var(--yellow); margin-bottom:15px;"><div style="font-size:11px; color:var(--yellow); font-family:'Orbitron'; margin-bottom:8px;">>> KARMIC DEBT (前世业力)</div><div style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:8px;">__LT__</div><div style="color:#aaa; font-size:13px; line-height:1.6;">> __LD__</div></div>"""
         render_html(LORE_TEMP.replace("__LT__", str(past_life['title'])).replace("__LD__", str(past_life['debt'])))
@@ -447,61 +438,49 @@ else:
         with c_o1:
             render_html("<div style='color:var(--yellow); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:10px; margin-bottom:15px;'>[01] DAILY HEXAGRAM (互动抽签盲盒)</div>")
             
-            # 🔮 【神级交互】抽签盲盒系统
-            draw_ph = st.empty()
+            # 🔮 【神级交互防白屏】采用安全的 on_click 回调取代阻塞的空载循环
             is_drawn = st.session_state.get("oracle_drawn", False)
             
             if not is_drawn:
-                # 叠加态未抽取界面
-                with draw_ph.container():
-                    render_html("""
-                    <div class="glass-card" style="text-align:center; padding:60px 20px; border-color:var(--yellow); box-shadow:0 0 30px rgba(252,238,10,0.15); border-left-width:1px;">
-                        <div style="font-size:55px; margin-bottom:20px; animation:blink 2s infinite;">🎲</div>
-                        <div style="color:var(--yellow); font-family:'Orbitron'; font-size:18px; font-weight:900; letter-spacing:4px; margin-bottom:15px;">ORACLE MATRIX STANDBY</div>
-                        <div style="color:#aaa; font-size:14px; margin-bottom:10px;">薛定谔的赛博卦象已就绪。在您点击下方按钮前，吉凶处于绝对的叠加态。</div>
-                    </div>
-                    """)
-                    if st.button("🔮 注入算力，抽取今日量子神谕 (DRAW ORACLE)", use_container_width=True):
-                        draw_ph.empty()
-                        anim_ph = st.empty()
-                        for _ in range(8):
-                            anim_ph.markdown(f"<div class='glass-card' style='text-align:center; padding:80px 20px; border-color:var(--primary);'><div style='color:var(--primary); font-family:Fira Code; font-size:16px; font-weight:bold; line-height:2;'>> ESTABLISHING NEURAL LINK...<br>> COLLAPSING WAVE FUNCTION...<br><span style='animation:blink 0.2s infinite;'>[ DECRYPTING AKASHIC RECORD: {random.randint(1000, 9999)} ]</span></div></div>", unsafe_allow_html=True)
-                            time.sleep(0.15)
-                        anim_ph.empty()
-                        st.session_state["oracle_drawn"] = True
-                        st.rerun()
+                render_html("""
+                <div class="glass-card" style="text-align:center; padding:60px 20px; border-color:var(--yellow); box-shadow:0 0 30px rgba(252,238,10,0.15); border-left-width:1px;">
+                    <div style="font-size:55px; margin-bottom:20px; animation:blink 2s infinite;">🎲</div>
+                    <div style="color:var(--yellow); font-family:'Orbitron'; font-size:18px; font-weight:900; letter-spacing:4px; margin-bottom:15px;">ORACLE MATRIX STANDBY</div>
+                    <div style="color:#aaa; font-size:14px; margin-bottom:10px;">薛定谔的赛博卦象已就绪。在您点击下方按钮前，今日吉凶处于绝对的叠加态。</div>
+                </div>
+                """)
+                st.button("🔮 注入算力，抽取今日量子神谕", on_click=trigger_oracle_draw, use_container_width=True)
             else:
-                # 已坍缩界面
-                with draw_ph.container():
-                    yao_html = ""
-                    for line in reversed(daily_hex['lines']):
-                        if line == 1: yao_html += "<div class='yao-yang' style='background:__C__; box-shadow:0 0 10px __C__;'></div>".replace("__C__", h_c)
-                        else: yao_html += "<div class='yao-yin'><div class='half' style='background:__C__; box-shadow:0 0 10px __C__;'></div><div class='half' style='background:__C__; box-shadow:0 0 10px __C__;'></div></div>".replace("__C__", h_c)
-                    
-                    ORACLE_TEMP = """
-                    <div class="glass-card" style="text-align:center; box-shadow: 0 0 40px __C__22; border-color:__C__44; border-left-color:__C__;">
-                        <div style="font-family:'Orbitron'; color:__C__; font-size:12px; font-weight:bold; letter-spacing:2px; margin-bottom:15px;">[ DATE: __DATE__ ]</div>
-                        <div class="hex-container">__YAO__</div>
-                        <div style="font-size:28px; font-weight:900; color:__C__; font-family:'Orbitron', sans-serif; text-shadow:0 0 15px __C__; margin-top:20px; margin-bottom:15px;">__NAME__</div>
-                        <div style="background:rgba(0,0,0,0.6); padding:15px; border-radius:4px; text-align:left; border:1px solid rgba(255,255,255,0.1); font-size:13px; line-height:1.7; color:#ddd; margin-bottom:15px;">
-                            <b style="color:__C__; font-family:'Fira Code';">> SYS_LOG:</b><br>__DESC__
+                # 触发量子坍缩的纯 CSS 动画 (quantum-reveal)
+                yao_html = ""
+                for line in reversed(daily_hex['lines']):
+                    if line == 1: yao_html += "<div class='yao-yang' style='background:__C__; box-shadow:0 0 10px __C__;'></div>".replace("__C__", h_c)
+                    else: yao_html += "<div class='yao-yin'><div class='half' style='background:__C__; box-shadow:0 0 10px __C__;'></div><div class='half' style='background:__C__; box-shadow:0 0 10px __C__;'></div></div>".replace("__C__", h_c)
+                
+                ORACLE_TEMP = """
+                <div class="glass-card quantum-reveal" style="text-align:center; box-shadow: 0 0 40px __C__22; border-color:__C__44; border-left-color:__C__;">
+                    <div style="font-family:'Orbitron'; color:__C__; font-size:12px; font-weight:bold; letter-spacing:2px; margin-bottom:15px;">[ DATE: __DATE__ ]</div>
+                    <div class="hex-container">__YAO__</div>
+                    <div style="font-size:28px; font-weight:900; color:__C__; font-family:'Orbitron', sans-serif; text-shadow:0 0 15px __C__; margin-top:20px; margin-bottom:15px;">__NAME__</div>
+                    <div style="background:rgba(0,0,0,0.6); padding:15px; border-radius:4px; text-align:left; border:1px solid rgba(255,255,255,0.1); font-size:13px; line-height:1.7; color:#ddd; margin-bottom:15px;">
+                        <b style="color:__C__; font-family:'Fira Code';">> SYS_LOG:</b><br>__DESC__
+                    </div>
+                    <div style="display:flex; gap:10px; text-align:left;">
+                        <div style="flex:1; background:rgba(16,185,129,0.1); border-left:3px solid #10b981; padding:10px;">
+                            <div style="color:#10b981; font-size:12px; font-family:'Orbitron'; font-weight:bold; margin-bottom:6px;">[+] 宜 (EXECUTE)</div>
+                            <div style="color:#fff; font-size:12px; font-weight:bold;">__DO__</div>
                         </div>
-                        <div style="display:flex; gap:10px; text-align:left;">
-                            <div style="flex:1; background:rgba(16,185,129,0.1); border-left:3px solid #10b981; padding:10px;">
-                                <div style="color:#10b981; font-size:12px; font-family:'Orbitron'; font-weight:bold; margin-bottom:6px;">[+] 宜 (EXECUTE)</div>
-                                <div style="color:#fff; font-size:12px; font-weight:bold;">__DO__</div>
-                            </div>
-                            <div style="flex:1; background:rgba(244,63,94,0.1); border-left:3px solid #f43f5e; padding:10px;">
-                                <div style="color:#f43f5e; font-size:12px; font-family:'Orbitron'; font-weight:bold; margin-bottom:6px;">[-] 忌 (KILL_PROC)</div>
-                                <div style="color:#fff; font-size:12px; font-weight:bold;">__DONT__</div>
-                            </div>
+                        <div style="flex:1; background:rgba(244,63,94,0.1); border-left:3px solid #f43f5e; padding:10px;">
+                            <div style="color:#f43f5e; font-size:12px; font-family:'Orbitron'; font-weight:bold; margin-bottom:6px;">[-] 忌 (KILL_PROC)</div>
+                            <div style="color:#fff; font-size:12px; font-weight:bold;">__DONT__</div>
                         </div>
                     </div>
-                    """
-                    oracle_res = ORACLE_TEMP.replace("__C__", h_c).replace("__DATE__", date_str).replace("__YAO__", yao_html)
-                    oracle_res = oracle_res.replace("__NAME__", str(daily_hex['name'])).replace("__DESC__", str(daily_hex['desc']))
-                    oracle_res = oracle_res.replace("__DO__", str(daily_hex.get('do',''))).replace("__DONT__", str(daily_hex.get('dont','')))
-                    render_html(oracle_res)
+                </div>
+                """
+                oracle_res = ORACLE_TEMP.replace("__C__", h_c).replace("__DATE__", date_str).replace("__YAO__", yao_html)
+                oracle_res = oracle_res.replace("__NAME__", str(daily_hex['name'])).replace("__DESC__", str(daily_hex['desc']))
+                oracle_res = oracle_res.replace("__DO__", str(daily_hex.get('do',''))).replace("__DONT__", str(daily_hex.get('dont','')))
+                render_html(oracle_res)
 
         with c_o2:
             render_html("<div style='color:var(--purple); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:10px; margin-bottom:15px;'>[02] QUANTUM NLP (交互推演)</div>")
@@ -514,20 +493,18 @@ else:
                 if submit_q:
                     if not q_input: st.warning("⚠️ 语法错误：Query 不能为空！")
                     else:
-                        with st.spinner("正在连接第四维度阿卡夏记录..."):
-                            time.sleep(1.0)
-                            prob, hex_res, conc = get_quantum_answer(q_input, hash_id)
-                            q_c = str(hex_res.get('color', '#fff'))
-                            NLP_TEMP = """
-                            <div class="glass-card" style="margin-top:15px; border-color:__C__; text-align:center; box-shadow: 0 0 35px __C__33; border-left-width: 4px;">
-                                <div style="font-family:'Fira Code'; color:#888; font-size:13px; margin-bottom:15px; word-wrap:break-word;">> QUERY: "__Q__"</div>
-                                <div style="font-size:12px; color:__C__; font-family:'Orbitron'; letter-spacing:2px; margin-bottom:5px;">[ SUCCESS PROBABILITY ]</div>
-                                <div style="font-size:75px; font-weight:900; color:__C__; font-family:'Orbitron'; text-shadow:0 0 30px __C__; line-height:1; margin-bottom:20px;">__P__%</div>
-                                <div style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:10px;">坍缩基准：__HN__</div>
-                                <div style="font-size:14px; font-weight:bold; color:__C__;">__CONC__</div>
-                            </div>
-                            """
-                            render_html(NLP_TEMP.replace("__C__", q_c).replace("__Q__", str(q_input)).replace("__P__", str(prob)).replace("__HN__", str(hex_res['name'])).replace("__CONC__", str(conc)))
+                        prob, hex_res, conc = get_quantum_answer(q_input, hash_id)
+                        q_c = str(hex_res.get('color', '#fff'))
+                        NLP_TEMP = """
+                        <div class="glass-card quantum-reveal" style="margin-top:15px; border-color:__C__; text-align:center; box-shadow: 0 0 35px __C__33; border-left-width: 4px;">
+                            <div style="font-family:'Fira Code'; color:#888; font-size:13px; margin-bottom:15px; word-wrap:break-word;">> QUERY: "__Q__"</div>
+                            <div style="font-size:12px; color:__C__; font-family:'Orbitron'; letter-spacing:2px; margin-bottom:5px;">[ SUCCESS PROBABILITY ]</div>
+                            <div style="font-size:75px; font-weight:900; color:__C__; font-family:'Orbitron'; text-shadow:0 0 30px __C__; line-height:1; margin-bottom:20px;">__P__%</div>
+                            <div style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:10px;">坍缩基准：__HN__</div>
+                            <div style="font-size:14px; font-weight:bold; color:__C__;">__CONC__</div>
+                        </div>
+                        """
+                        render_html(NLP_TEMP.replace("__C__", q_c).replace("__Q__", str(q_input)).replace("__P__", str(prob)).replace("__HN__", str(hex_res['name'])).replace("__CONC__", str(conc)))
 
     with t_data:
         c3, c4 = st.columns([1, 1.2], gap="large")
@@ -566,7 +543,7 @@ else:
             t_node = st.selectbox("🎯 选择挂载目标节点:", options=opts, format_func=lambda x: f"[{DAY_MASTER_DICT.get(x, {}).get('mbti', 'UNK')}] {x} - {DAY_MASTER_DICT.get(x, {}).get('role', 'UNK').split('/')[0]}")
         with c_s2:
             sc, sd, sc_color = calculate_synergy(hash_id, t_node)
-            SYN_T = """<div class="glass-card" style="border-left:4px solid __C__; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);"><div style="font-family:'Orbitron'; font-size:12px; color:#888; letter-spacing:2px; margin-bottom:10px;">SYNERGY MATCH RATE</div><div style="font-family:'Orbitron'; font-size:55px; color:__C__; font-weight:900; margin-bottom:10px; text-shadow:0 0 20px __C__; line-height:1;">__SC__%</div><div style="color:#fff; font-size:14px; font-weight:bold; font-family:'Noto Sans SC';">__SD__</div></div>"""
+            SYN_T = """<div class="glass-card quantum-reveal" style="border-left:4px solid __C__; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);"><div style="font-family:'Orbitron'; font-size:12px; color:#888; letter-spacing:2px; margin-bottom:10px;">SYNERGY MATCH RATE</div><div style="font-family:'Orbitron'; font-size:55px; color:__C__; font-weight:900; margin-bottom:10px; text-shadow:0 0 20px __C__; line-height:1;">__SC__%</div><div style="color:#fff; font-size:14px; font-weight:bold; font-family:'Noto Sans SC';">__SD__</div></div>"""
             render_html(SYN_T.replace("__C__", str(sc_color)).replace("__SC__", str(sc)).replace("__SD__", str(sd)))
 
     with t_3d:
@@ -576,7 +553,7 @@ else:
         f3d.add_trace(go.Scatter3d(x=rng_3d.randint(0,100,150), y=rng_3d.randint(0,100,150), z=rng_3d.randint(0,100,150), mode='markers', marker=dict(size=3, color='#334155', opacity=0.5), hoverinfo='none'))
         cx, cy, cz = wx_scores.get('金', 50), wx_scores.get('木', 50), wx_scores.get('水', 50)
         
-        # 🚨 [关键防爆修复]: 移除了 textfont 内部的嵌套 font 字典，彻底消灭 ValueError！
+        # 🚨 [修复 Plotly ValueError]: 采用正确的属性传参
         f3d.add_trace(go.Scatter3d(
             x=[cx], y=[cy], z=[cz], mode='markers+text', text=["<b>ROOT: " + dm_key + "</b>"], textposition="top center", 
             marker=dict(size=15, color=dm_color, symbol='diamond', line=dict(color='#fff', width=2)), 
@@ -623,7 +600,6 @@ contract Destiny_SBT_V26 is ERC721 {
             B_TEMP = "<div style='display:flex; align-items:center; margin-bottom:6px; font-size:11px; color:#ccc;'><span style='width:25px;'>__K__</span><div style='flex:1; height:6px; background:#222; margin:0 10px; position:relative;'><div style='position:absolute; left:0; top:0; height:100%; width:__V__%; background:__C__; box-shadow:0 0 8px __C__;'></div></div><span style='width:30px; text-align:right;'>__V__%</span></div>"
             bar_html_img += B_TEMP.replace("__K__", str(k)).replace("__V__", str(v)).replace("__C__", C_V)
         
-        # 将今日神谕嵌入海报
         yao_html_img = ""
         for line in reversed(daily_hex['lines']):
             if line == 1: yao_html_img += "<div style='width:60px; height:6px; background:__C__; margin:4px auto; border-radius:1px; box-shadow:0 0 10px __C__;'></div>".replace("__C__", h_c)
@@ -818,7 +794,6 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
     terminal_ui = "<div style='background:rgba(0,0,0,0.85); border:1px solid #00f3ff; border-left:4px solid #00f3ff; padding:15px; border-radius:4px 4px 0 0; font-family:\"Fira Code\"; color:#00f3ff; font-size:13px; height:180px; display:flex; flex-direction:column-reverse; overflow:hidden; box-shadow:inset 0 0 20px rgba(0,243,255,0.1); border-bottom:none; margin-bottom:0;'><div>" + str(log_html) + "<span style=\"animation:blink 1s infinite;\">_</span></div></div>"
     render_html(terminal_ui)
 
-    # 使用无缝内联表单替换原生 st.chat_input，消灭白边
     with st.form("inline_terminal", clear_on_submit=True, border=False):
         col_t1, col_t2 = st.columns([5, 1])
         with col_t1:
