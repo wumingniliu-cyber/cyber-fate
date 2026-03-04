@@ -22,7 +22,7 @@ except ImportError as e:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 宇宙物理引擎与安全状态机
 # ==============================================================================
-VERSION = "KARMA-OS V26.0 [THE OMEGA MATRIX]"
+VERSION = "KARMA-OS V1.0 [THE OMEGA MATRIX]"
 COPYRIGHT = "NIGHT CITY DAO"
 SYS_NAME = "量子命理 | 赛博神谕终端"
 
@@ -832,4 +832,5 @@ render_html('<div style="text-align:center; margin-top:30px; position:relative; 
     '<div style="color:var(--primary); font-family:\'Orbitron\', monospace; font-size:11px; opacity:0.5; letter-spacing:6px; margin-bottom:8px;">版权归属：无名逆流</div>' +
     '<div style="display:inline-block; padding:10px 30px; border-radius:50px; font-size:13px; font-family:\'Orbitron\'; letter-spacing:2px; color:var(--primary); font-weight:bold; background:rgba(0,243,255,0.05); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 15px rgba(0,243,255,0.1);">© 2026 ' + str(COPYRIGHT) + '</div>' +
 '</div>')
+
 
