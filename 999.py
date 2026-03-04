@@ -22,7 +22,7 @@ except ImportError as e:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 宇宙物理引擎与安全状态机
 # ==============================================================================
-VERSION = "KARMA-OS V20.0 [THE MATRIX REBORN]"
+VERSION = "KARMA-OS V22.0 [THE MATRIX REBORN]"
 COPYRIGHT = "NIGHT CITY DAO"
 SYS_NAME = "量子命理 | 赛博神谕终端"
 
@@ -51,7 +51,7 @@ html, body, .stApp { background-color: #020408 !important; font-family: 'Noto Sa
 ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; box-shadow: 0 0 10px var(--primary); }
 .block-container { max-width: 1200px !important; padding-top: 3.5rem !important; padding-bottom: 5rem !important; overflow-x: hidden; }
 
-/* 🚨 彻底隐藏导致白边的 Streamlit 底部原生悬浮区 */
+/* 🚨 彻底隐藏导致白边的 Streamlit 底部原生悬浮区，消灭视觉污染 */
 section[data-testid="stBottom"] { display: none !important; background: transparent !important; }
 div[data-testid="stBottomBlockContainer"] { display: none !important; background: transparent !important; }
 
@@ -78,9 +78,9 @@ div[data-testid="stBottomBlockContainer"] { display: none !important; background
 .glass-card:hover { border-color: rgba(0,243,255,0.8); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,1), inset 0 0 30px rgba(0,243,255,0.2); }
 .module-title { color: var(--primary) !important; border-left: 6px solid var(--primary); padding-left: 15px; font-weight: 900; margin-top: 40px; margin-bottom: 25px; letter-spacing: 2px; font-family: 'Orbitron', 'Noto Sans SC', sans-serif; font-size: 22px; text-shadow: 0 0 15px rgba(0,243,255,0.5); background: linear-gradient(90deg, rgba(0,243,255,0.15), transparent); padding-top: 8px; padding-bottom: 8px; border-radius: 4px; text-transform: uppercase;}
 
-/* 表单组件深度劫持 */
-div[data-testid="stForm"] { border: none !important; background: transparent !important;}
-div[data-testid="stTextInput"] input, div[data-testid="stDateInput"] input, div[data-testid="stTimeInput"] input { background-color: rgba(0, 0, 0, 0.8) !important; color: var(--primary) !important; font-family: 'Fira Code', monospace !important; border: 1px solid rgba(0,243,255,0.4) !important; border-radius: 4px !important; text-align: center; font-size: 16px !important; font-weight: bold !important; letter-spacing: 2px; height: 55px; transition: all 0.3s; }
+/* 表单组件劫持 */
+div[data-testid="stForm"] { border: none !important; background: transparent !important; padding: 0 !important;}
+div[data-testid="stTextInput"] input, div[data-testid="stDateInput"] input, div[data-testid="stTimeInput"] input { background-color: rgba(0, 0, 0, 0.8) !important; color: var(--primary) !important; font-family: 'Fira Code', monospace !important; border: 1px solid rgba(0,243,255,0.4) !important; border-radius: 4px !important; font-size: 16px !important; font-weight: bold !important; letter-spacing: 2px; height: 55px; transition: all 0.3s; text-align: center; }
 div[data-testid="stTextInput"] input:focus { border-color: var(--purple) !important; box-shadow: 0 0 20px rgba(168,85,247,0.4), inset 0 0 10px rgba(168,85,247,0.2) !important; transform: scale(1.02); }
 div[data-baseweb="select"] > div { background-color: rgba(0,0,0,0.8) !important; border: 1px solid rgba(0,243,255,0.4) !important; color: var(--primary) !important; border-radius: 4px !important; height: 55px; }
 
@@ -153,7 +153,8 @@ def trigger_supernova():
         h_str += '<div class="firework-center" style="--tx:' + str(tx) + 'px; --ty:' + str(ty) + 'px; --s:' + str(random.uniform(1.0, 3.5)) + '; --rot:' + str(random.randint(-360, 360)) + 'deg; animation-delay:' + str(random.uniform(0, 0.2)) + 's; font-size:' + str(random.randint(14, 24)) + 'px;">' + random.choice(vocab) + '</div>'
     render_html(h_str)
 
-def get_daily_oracle(user_hash):
+# 🚨【修复关键点】纠正函数名拼写错误，统一为 get_daily_hexagram
+def get_daily_hexagram(user_hash):
     """联合加盐：确保每日每人神谕固定"""
     today_str = datetime.now().strftime("%Y-%m-%d")
     daily_seed = int(hashlib.md5((str(user_hash) + today_str).encode()).hexdigest()[:8], 16)
@@ -191,7 +192,7 @@ is_booted = st.session_state.get("sys_booted", False)
 
 if not is_booted:
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V20.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V22.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
         <span>MARKET-ALPHA: 10-YEAR TREND <b class="down">▼COMPUTING</b></span>
@@ -201,7 +202,7 @@ if not is_booted:
     <div style="text-align: center; margin-bottom: 30px; margin-top:20px;">
         <div style="color:var(--neon-cyan); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:8px; margin-bottom:10px;">KARMA OS FRAMEWORK</div>
         <h1 class="hero-title" data-text="全息命盘推演终端">全息命盘推演终端</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE MATRIX REBORN V20.0</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE MATRIX REBORN V22.0</div>
     </div>
     <div class="glass-card" style="max-width: 650px; margin: 0 auto; border-left: 4px solid var(--primary);">
         <div style="font-family:'Fira Code'; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">> INITIALIZING QUANTUM LUNAR KERNEL...</div>
@@ -271,6 +272,7 @@ else:
         trigger_supernova()
         st.session_state["anim_played"] = True
 
+    # 安全提取数据
     d = st.session_state.get("sys_data", {})
     dm_key = str(d.get('day_master', '甲'))
     dm_info = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"]) 
@@ -278,7 +280,6 @@ else:
     dm_role = str(dm_info.get("role", "未知节点"))
     dm_desc = str(dm_info.get("desc", "..."))
     dm_color = str(dm_info.get("color", "#00f3ff"))
-    dm_element = str(dm_info.get("element", "未知"))
     dm_tier = str(dm_info.get("tier", "SSR"))
     dm_mbti = str(dm_info.get("mbti", "UNK"))
     dm_wpn = str(dm_info.get("weapon", "通用代码"))
@@ -295,9 +296,13 @@ else:
     wx_scores = d.get('wx', {'金':20, '木':20, '水':20, '火':20, '土':20})
     skills_list = d.get('skills', ['未知插件'])
     
+    # 🚨【全局计算提升】将每日神谕的计算提前，确保所有 Tabs 都能无死角调用！
+    daily_hex, date_str = get_daily_hexagram(hash_id)
+    h_c = str(daily_hex.get("color", "var(--primary)"))
+
     token_id = int(hash_id[:8], 16)
     contract_addr = "0x" + hashlib.sha256(f"karma_dao_{token_id}".encode()).hexdigest()[:38]
-    block_height = f"V20-{(int(time.time()) % 1000000):06d}"
+    block_height = f"V22-{(int(time.time()) % 1000000):06d}"
     yrs, trend = generate_alpha_curve(hash_id)
 
     max_wx = max(list(wx_scores.values())) if wx_scores else 0
@@ -310,7 +315,7 @@ else:
         e_tag, e_color, r_desc = "五行极度平稳，可抗任意暴击", "var(--green)", "您的系统架构堪称完美，拥有极强的抗打击与自愈恢复能力。"
 
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V20.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V22.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
         <span>SYS-RISK: FIREWALL ACTIVE <b class="up">▲SECURE</b></span>
@@ -388,9 +393,6 @@ else:
             render_html("<div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:10px; margin-bottom:15px;'>[01] DAILY HEXAGRAM (每日一卦)</div>")
             render_html("<div style='font-size:13px; color:#aaa; margin-bottom:15px; line-height:1.6;'>基于您的灵魂 Hash 与时间戳抽取。<b>今日内绝对锁定，不会更改。</b></div>")
             
-            daily_hex, date_str = get_daily_hexagram(hash_id)
-            h_c = str(daily_hex.get("color", "var(--primary)"))
-            
             yao_html = ""
             for line in reversed(daily_hex['lines']):
                 if line == 1: yao_html += "<div class='yao-yang' style='background:__C__; box-shadow:0 0 10px __C__;'></div>".replace("__C__", h_c)
@@ -423,7 +425,7 @@ else:
 
         with c_o2:
             render_html("<div style='color:var(--purple); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:10px; margin-bottom:15px;'>[02] QUANTUM NLP (交互神谕)</div>")
-            render_html("<div style='font-size:13px; color:#aaa; margin-bottom:25px; line-height:1.7;'>向阿卡夏主脑提出一个具体的进程请求。系统将通过你的哈希进行<b>实时真随机坍缩运算</b>。</div>")
+            render_html("<div style='font-size:13px; color:#aaa; margin-bottom:25px; line-height:1.7;'>向阿卡夏主脑提出一个具体的现实请求。系统将通过你的哈希进行<b>实时真随机坍缩运算</b>。</div>")
             
             with st.form(key="nlp_oracle", clear_on_submit=False, border=False):
                 q_input = st.text_input("📝 输入待推演的现实请求 (Query)：", placeholder="e.g. 我今天能收到满意的 Offer 吗？", label_visibility="collapsed")
@@ -497,7 +499,7 @@ else:
 pragma solidity ^0.8.20;
 import "@karma-os/contracts/token/ERC721.sol";
 
-contract Destiny_SBT_V20 is ERC721 {
+contract Destiny_SBT_V22 is ERC721 {
     // ==========================================
     // > MINT_TARGET : __NAME__
     // > HASH_ID     : 0x__HASH__
@@ -556,7 +558,7 @@ contract Destiny_SBT_V20 is ERC721 {
         
         <div id="hide-box"><div id="poster">
             <div class="grid"></div><div class="content">
-                <div class="h1">KARMA OS_V20</div><div class="h2">DESTINY PROFILE</div>
+                <div class="h1">KARMA OS_V22</div><div class="h2">DESTINY PROFILE</div>
                 <div style="text-align:center; font-size:20px; font-weight:900; margin-bottom:15px; letter-spacing:1px;">[__NAME__] · __GENDER__</div>
                 <div class="bz-row">
                     <div class="bz-c"><div class="bz-t">__Y__</div><div class="bz-b">YEAR</div></div>
@@ -611,7 +613,7 @@ contract Destiny_SBT_V20 is ERC721 {
     with t_txt:
         render_html("<div style='font-size:13px; color:#aaa; margin-top:10px; margin-bottom:15px;'>您专属的万字级【深度机密报告】。所有核心属性 100% 揭露，可直接下载本地档案。</div>")
         TXT_TEMP = """=======================================================
-[ KARMA-OS V20.0 ] 量子命盘 · 深度绝密档案 (THE MATRIX REBORN)
+[ KARMA-OS V22.0 ] 量子命盘 · 深度绝密档案 (THE MATRIX REBORN)
 =======================================================
 
 >> 1. 节点基础信息 (IDENTITY)
@@ -710,7 +712,7 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
         st.markdown(ascii_res)
 
     # =========================================================================
-    # ⌨️ [ TERMINAL ] 内联黑客终端 (✅ 彻底解决底部白条 Bug)
+    # ⌨️ [ TERMINAL ] 内联黑客终端 (✅ 彻底隔离原生组件，告别白边)
     # =========================================================================
     st.markdown("---")
     render_html("<div class='module-title' style='margin-bottom:15px;'>⌨️ 模块 VI：交互式终端命令</div>")
@@ -720,7 +722,7 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
     terminal_ui = "<div style='background:rgba(0,0,0,0.85); border:1px solid #00f3ff; border-left:4px solid #00f3ff; padding:15px; border-radius:4px 4px 0 0; font-family:\"Fira Code\"; color:#00f3ff; font-size:13px; height:180px; display:flex; flex-direction:column-reverse; overflow:hidden; box-shadow:inset 0 0 20px rgba(0,243,255,0.1); border-bottom:none; margin-bottom:0;'><div>" + str(log_html) + "<span style=\"animation:blink 1s infinite;\">_</span></div></div>"
     render_html(terminal_ui)
 
-    # 🚀 使用内联 st.form 重构终端输入框，彻底告别悬浮白底
+    # 🚀 采用无缝内联表单替换恶心的原生 chat_input
     with st.form("inline_terminal", clear_on_submit=True, border=False):
         col_t1, col_t2 = st.columns([5, 1])
         with col_t1:
