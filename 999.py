@@ -22,13 +22,13 @@ except ImportError as e:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 宇宙物理引擎与安全状态机
 # ==============================================================================
-VERSION = "KARMA-OS V26.0 [THE OMEGA MATRIX]"
+VERSION = "KARMA-OS V1.0 [THE TRUE OMEGA]"
 COPYRIGHT = "NIGHT CITY DAO"
 SYS_NAME = "量子命理 | 赛博神谕终端"
 
 st.set_page_config(page_title=SYS_NAME, page_icon="🧿", layout="wide", initial_sidebar_state="collapsed")
 
-# 🚨 状态机初始化 (新增 oracle_drawn 抽签状态)
+# 🚨 状态机全量初始化 (确保热重载绝不报错)
 if "sys_booted" not in st.session_state: st.session_state["sys_booted"] = False
 if "sys_data" not in st.session_state: st.session_state["sys_data"] = {}
 if "term_logs" not in st.session_state: st.session_state["term_logs"] = ["> SYS_KERNEL READY. AWAITING COMMAND..."]
@@ -100,20 +100,19 @@ div[data-testid="stCodeBlock"] > div { background-color: #030305 !important; bor
 div[data-testid="stCodeBlock"] pre, div[data-testid="stCodeBlock"] code { font-family: 'Fira Code', monospace !important; color: var(--green) !important; line-height:1.6 !important;}
 div[data-testid="stDownloadButton"] > button { border: 1px dashed var(--purple) !important; border-left: 4px solid var(--purple) !important; height: 55px; }
 
-/* 赛博阴阳爻 UI (每日一卦专属) */
+/* 赛博阴阳爻 UI */
 .hex-container { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 20px 0; }
 .yao-yang { width: 100%; max-width: 140px; height: 12px; border-radius: 2px; }
 .yao-yin { width: 100%; max-width: 140px; height: 12px; display: flex; justify-content: space-between; gap: 15px; }
 .yao-yin .half { flex: 1; border-radius: 2px; }
 
-/* 🚨【核心防爆修复】量子坍缩纯 CSS 动画，替代 time.sleep 彻底消灭白屏死机 */
+/* 🚨 极其安全的量子坍缩动画 (彻底抛弃导致白屏的 blur 属性) */
 @keyframes quantum-collapse {
-    0% { filter: blur(20px) brightness(3); transform: scale(0.8) translateY(30px); opacity: 0; }
-    30% { filter: blur(8px) brightness(2); transform: scale(1.05) rotate(2deg); opacity: 0.6; }
-    60% { filter: blur(3px) brightness(0.8); transform: scale(0.98) rotate(-1deg); opacity: 0.9; }
-    100% { filter: blur(0px) brightness(1); transform: scale(1) translateY(0); opacity: 1; }
+    0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+    50% { transform: scale(1.02); opacity: 0.8; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
 }
-.quantum-reveal { animation: quantum-collapse 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+.quantum-reveal { animation: quantum-collapse 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
 
 /* 结算烟花 */
 .firework-center { position: fixed; top: 50%; left: 50%; z-index: 99998; pointer-events: none; font-weight: 900; font-family: 'Orbitron', monospace; color: var(--primary); text-shadow: 0 0 20px var(--primary), 0 0 30px #ffffff; animation: supernova 1.8s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;}
@@ -124,7 +123,7 @@ div[data-testid="stDownloadButton"] > button { border: 1px dashed var(--purple) 
 st.markdown(STATIC_CSS, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🗃️ [ MEGA DICTIONARY ] 八字源码映射库 & LORE 补齐
+# 🗃️ [ MEGA DICTIONARY ] 八字源码映射库 & LORE 满血归位
 # ==============================================================================
 DAY_MASTER_DICT = {
     "甲": {"role": "Root Node / 架构巨树", "mbti": "ENTJ", "color": "#10b981", "element": "木", "tier": "UR", "desc": "具备宏大的底层构建能力，性格直爽抗压。能扛起从0到1重构秩序的开拓者。", "evolution_path": ["L1 架构幼苗", "L2 核心骨干", "L3 苍天建木"], "ultimate_evolution": "【苍天建木】执掌三界底层协议", "black_swan": "过于刚硬，遇强则折。遭遇系统级降维打击容易因宁折不弯导致全面宕机。", "patch": "引入「水」属性柔性冗余，挂起进程等待重启。", "weapon": "高分子动能巨斧", "implant": "钛合金强固脊椎"},
@@ -212,7 +211,7 @@ def calculate_synergy(my_hash, partner_stem):
     elif score >= 75: return score, "【灰度容错】代码互补，能打磨极具弹性的闭环。", "#fcee0a"
     else: return score, "【DDoS 互斥】底层逻辑相冲！建议绝对物理隔离！", "#f43f5e"
 
-# 🚨 【绝杀白屏：状态机回调】触发抽签逻辑，0 崩溃风险
+# 🚨 【彻底防白屏方案】采用 Streamlit 原生状态回调，无阻塞极速渲染
 def trigger_oracle_draw():
     st.session_state["oracle_drawn"] = True
 
@@ -223,73 +222,89 @@ is_booted = st.session_state.get("sys_booted", False)
 
 if not is_booted:
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V26.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V30.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
         <span>MARKET-ALPHA: 10-YEAR TREND <b class="down">▼COMPUTING</b></span>
     </div></div>""")
 
     render_html("""
-    <div style="text-align: center; margin-bottom: 30px; margin-top:20px;">
+    <div style="text-align: center; margin-bottom: 25px; margin-top:20px;">
         <div style="color:var(--neon-cyan); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:8px; margin-bottom:10px;">KARMA OS FRAMEWORK</div>
         <h1 class="hero-title" data-text="全息命盘推演终端">全息命盘推演终端</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE OMEGA MATRIX V26.0</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE TRUE OMEGA V30.0</div>
     </div>
     """)
     
-    with st.form(key="destiny_form", border=False):
-        render_html("<div class='glass-card' style='max-width: 650px; margin: 0 auto; border-left: 4px solid var(--primary);'>")
-        render_html("<div style='color:var(--primary); font-family:\"Orbitron\"; font-size:13px; font-weight:bold; margin-bottom:15px; text-align:center;'>▼ 注入先天元神降临坐标 ▼</div>")
-        col1, col2 = st.columns(2)
-        with col1:
-            uname = st.text_input("赛博代号 [HANDLE]", placeholder="例如：Neo / 银手", max_chars=16)
-            bdate = st.date_input("降临历法 [COMPILE_DATE]", min_value=datetime(1900, 1, 1), max_value=datetime(2030, 12, 31), value=datetime(1999, 9, 9))
-        with col2:
-            ugender = st.selectbox("载体形态 [CHASSIS]", ["乾造 (男)", "坤造 (女)"])
-            btime = st.time_input("降临时辰 [BOOT_TIME]", value=dt_time(12, 00))
+    # 🚨【修复】首页世界观文案霸气回归，采用最稳妥的容器层级
+    render_html("""
+    <div class="glass-card" style="max-width: 680px; margin: 0 auto 30px auto; border-left: 4px solid var(--primary); padding: 35px;">
+        <div style="font-family:'Fira Code'; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:16px;">> INITIALIZING QUANTUM KERNEL...</div>
+        <div style="margin-bottom:5px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Mounting Lunar-Python algorithms.</div>
+        <div style="margin-bottom:5px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Loading Oracle Divination Engine.</div>
+        <div style="margin-bottom:20px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Bypassing timeline distortion logic.</div>
         
-        render_html("<br>")
-        submit_btn = st.form_submit_button("▶ UPLINK TO THE MATRIX (连接宇宙推演天机)", type="primary", use_container_width=True)
-        render_html("</div>")
+        <div style="color:#e2e8f0; font-size: 15px; line-height: 1.8; border-top: 1px dashed rgba(0,243,255,0.2); padding-top: 20px;">
+            <span style="color:var(--primary); font-size: 18px; font-weight:900; letter-spacing: 2px;">“肉体不过是脆弱的碳基载体，<br>八字才是你灵魂不灭的底层源码。”</span><br><br>
+            在硅基宇宙与玄学法则交汇的当下，本终端将提取您的物理降临坐标，通过星体引力与历法哈希进行逆向编译。<br><br>
+            系统将为您生成不可篡改的 <span style="color:var(--primary); font-weight:bold;">高阶本命元神凭证</span>、<span style="color:var(--purple); font-weight:bold;">前世业力档案</span> 与 <span style="color:var(--pink); font-weight:bold;">全息气运大盘</span>。
+        </div>
+    </div>
+    """)
+    
+    # 避免表单宽度过大影响美观
+    _, col_form, _ = st.columns([1, 2.5, 1])
+    with col_form:
+        with st.form(key="destiny_form", border=False):
+            render_html("<div style='color:var(--purple); font-family:\"Orbitron\"; font-size:14px; font-weight:bold; margin-bottom:20px; text-align:center; letter-spacing:2px;'>▼ 注入先天元神降临坐标 ▼</div>")
+            col1, col2 = st.columns(2)
+            with col1:
+                uname = st.text_input("赛博代号 [HANDLE]", placeholder="例如：Neo / 银手", max_chars=16)
+                bdate = st.date_input("降临历法 [COMPILE_DATE]", min_value=datetime(1900, 1, 1), max_value=datetime(2030, 12, 31), value=datetime(1999, 9, 9))
+            with col2:
+                ugender = st.selectbox("载体形态 [CHASSIS]", ["乾造 (男)", "坤造 (女)"])
+                btime = st.time_input("降临时辰 [BOOT_TIME]", value=dt_time(12, 00))
+            
+            render_html("<br>")
+            submit_btn = st.form_submit_button("▶ UPLINK TO THE MATRIX (连接宇宙推演天机)", type="primary", use_container_width=True)
 
-        if submit_btn:
-            uname = str(uname).strip() if uname else "Anonymous_Node"
-            solar = Solar.fromYmdHms(bdate.year, bdate.month, bdate.day, btime.hour, btime.minute, 0)
-            lunar = solar.getLunar()
-            bazi = lunar.getEightChar()
-            
-            wx_str = str(bazi.getYearWuXing()) + str(bazi.getMonthWuXing()) + str(bazi.getDayWuXing()) + str(bazi.getTimeWuXing())
-            wx_counts = {'金':0, '木':0, '水':0, '火':0, '土':0}
-            for char in wx_str: 
-                if char in wx_counts: wx_counts[char] += 1
-            tot = sum(wx_counts.values()) or 1
-            wx_scores = {k: int((v/tot)*100) for k, v in wx_counts.items()}
-            
-            skills = []
-            for sg in [bazi.getYearShiShenGan(), bazi.getMonthShiShenGan(), bazi.getTimeShiShenGan()]:
-                if sg in SHEN_SKILLS and SHEN_SKILLS[sg] not in skills: skills.append(SHEN_SKILLS[sg])
-            if not skills: skills = ["混沌未知域 [Lv.Unknown]"]
+    if submit_btn:
+        uname = str(uname).strip() if uname else "Anonymous_Node"
+        solar = Solar.fromYmdHms(bdate.year, bdate.month, bdate.day, btime.hour, btime.minute, 0)
+        lunar = solar.getLunar()
+        bazi = lunar.getEightChar()
+        
+        wx_str = str(bazi.getYearWuXing()) + str(bazi.getMonthWuXing()) + str(bazi.getDayWuXing()) + str(bazi.getTimeWuXing())
+        wx_counts = {'金':0, '木':0, '水':0, '火':0, '土':0}
+        for char in wx_str: 
+            if char in wx_counts: wx_counts[char] += 1
+        tot = sum(wx_counts.values()) or 1
+        wx_scores = {k: int((v/tot)*100) for k, v in wx_counts.items()}
+        
+        skills = []
+        for sg in [bazi.getYearShiShenGan(), bazi.getMonthShiShenGan(), bazi.getTimeShiShenGan()]:
+            if sg in SHEN_SKILLS and SHEN_SKILLS[sg] not in skills: skills.append(SHEN_SKILLS[sg])
+        if not skills: skills = ["混沌未知域 [Lv.Unknown]"]
 
-            hash_id = hashlib.sha256((uname + str(bdate) + str(btime)).encode()).hexdigest().upper()
-            p_life = PAST_LIVES[int(hash_id[:8], 16) % len(PAST_LIVES)]
+        hash_id = hashlib.sha256((uname + str(bdate) + str(btime)).encode()).hexdigest().upper()
+        p_life = PAST_LIVES[int(hash_id[:8], 16) % len(PAST_LIVES)]
 
-            st.session_state["sys_data"] = {
-                "name": uname, "gender": str(ugender).split(" ")[0],
-                "bazi_arr": [bazi.getYearGan()+bazi.getYearZhi(), bazi.getMonthGan()+bazi.getMonthZhi(), bazi.getDayGan()+bazi.getDayZhi(), bazi.getTimeGan()+bazi.getTimeZhi()],
-                "day_master": str(bazi.getDayGan()),
-                "daemons": get_daemons(bazi),
-                "past_life": p_life,
-                "wx": wx_scores, "skills": skills,
-                "hash": hash_id, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            
-            # 🚨 极短安全挂载动画，不在深层 Tabs 内，所以绝不崩溃
-            ph = st.empty()
-            ph.markdown(f"<div class='glass-card' style='max-width:650px; margin:0 auto; text-align:center;'><div style='color:var(--primary); font-family:Fira Code; font-size:16px; font-weight:bold; line-height:2;'>> UPLINK ESTABLISHED...<br>> BYPASSING ICE FIREWALLS...<br>> DECRYPTING SOUL HASH: 0x{hash_id[:12]}<br><span style='animation:blink 0.5s infinite; color:var(--pink);'>[ MOUNTING AKASHIC RECORD ]</span></div></div>", unsafe_allow_html=True)
-            time.sleep(1.0)
-            
-            st.session_state["sys_booted"] = True
-            st.rerun()
+        st.session_state["sys_data"] = {
+            "name": uname, "gender": str(ugender).split(" ")[0],
+            "bazi_arr": [bazi.getYearGan()+bazi.getYearZhi(), bazi.getMonthGan()+bazi.getMonthZhi(), bazi.getDayGan()+bazi.getDayZhi(), bazi.getTimeGan()+bazi.getTimeZhi()],
+            "day_master": str(bazi.getDayGan()),
+            "daemons": get_daemons(bazi),
+            "past_life": p_life,
+            "wx": wx_scores, "skills": skills,
+            "hash": hash_id, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        
+        ph = st.empty()
+        ph.markdown(f"<div class='glass-card' style='max-width:650px; margin:0 auto; text-align:center;'><div style='color:var(--primary); font-family:Fira Code; font-size:16px; font-weight:bold; line-height:2;'>> UPLINK ESTABLISHED...<br>> BYPASSING ICE FIREWALLS...<br>> DECRYPTING SOUL HASH: 0x{hash_id[:12]}<br><span style='animation:blink 0.5s infinite; color:var(--pink);'>[ MOUNTING AKASHIC RECORD ]</span></div></div>", unsafe_allow_html=True)
+        time.sleep(1.0)
+        
+        st.session_state["sys_booted"] = True
+        st.rerun()
 
 # ==============================================================================
 # 🌟 [ CORE 05 ] 全息大屏展示
@@ -332,7 +347,7 @@ else:
 
     token_id = int(hash_id[:8], 16)
     contract_addr = "0x" + hashlib.sha256(f"karma_dao_{token_id}".encode()).hexdigest()[:38]
-    block_height = f"V26-{(int(time.time()) % 1000000):06d}"
+    block_height = f"V30-{(int(time.time()) % 1000000):06d}"
     yrs, trend, hm_x, hm_y, hm_z = gen_metrics(hash_id)
 
     max_wx = max(list(wx_scores.values())) if wx_scores else 0
@@ -342,7 +357,7 @@ else:
     else: e_tag, e_color, r_desc = "五行极度平稳，可抗任意暴击", "var(--green)", "您的系统架构堪称完美，拥有极强的抗打击与自愈恢复能力。"
 
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V26.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V30.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
         <span>SYS-RISK: FIREWALL ACTIVE <b class="up">▲SECURE</b></span>
@@ -428,7 +443,7 @@ else:
         WARN_TEMP = """<div style="background: rgba(255,0,124,0.05); border-left: 4px solid var(--pink); padding: 18px; border-radius: 0 6px 6px 0; margin-top:15px;"><div style="font-size:11px; color:var(--pink); font-family:'Orbitron'; margin-bottom:8px; letter-spacing:1px; font-weight:bold;">/// DESTINY WARNING ///</div><div style="font-size:13px; color:#94a3b8; margin-bottom:8px;">系统测算五行熵增阀值为：<b style="color:__COLOR__; font-size:16px;">__SCORE__%</b></div><div style="font-size:14px; color:__COLOR__; font-weight:bold; margin-bottom:5px;">[ __TAG__ ]</div><div style="font-size:12px; color:#cbd5e1; line-height:1.6;">__DESC__</div></div>"""
         render_html(WARN_TEMP.replace("__COLOR__", str(e_color)).replace("__SCORE__", str(entropy_score)).replace("__TAG__", str(e_tag)).replace("__DESC__", str(r_desc)))
 
-    # 🗄️ [ 模块 IV ]：极客深潜控制台 (🚀 交互式抽签神谕诞生)
+    # 🗄️ [ 模块 IV ]：极客深潜控制台 
     render_html("<div class='module-title'>🗄️ 模块 IV：极客深潜控制台 (DEEP DIVE)</div>")
     
     t_oracle, t_data, t_syn, t_3d, t_sol = st.tabs(["🀄 每日神谕 (ORACLE)", "📊 大盘雷达 (DATA)", "🤝 赛博合盘 (SYNERGY)", "🌌 3D星图 (MAP)", "💻 智能合约 (WEB3)"])
@@ -438,7 +453,6 @@ else:
         with c_o1:
             render_html("<div style='color:var(--yellow); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:10px; margin-bottom:15px;'>[01] DAILY HEXAGRAM (互动抽签盲盒)</div>")
             
-            # 🔮 【神级交互防白屏】采用安全的 on_click 回调取代阻塞的空载循环
             is_drawn = st.session_state.get("oracle_drawn", False)
             
             if not is_drawn:
@@ -446,12 +460,12 @@ else:
                 <div class="glass-card" style="text-align:center; padding:60px 20px; border-color:var(--yellow); box-shadow:0 0 30px rgba(252,238,10,0.15); border-left-width:1px;">
                     <div style="font-size:55px; margin-bottom:20px; animation:blink 2s infinite;">🎲</div>
                     <div style="color:var(--yellow); font-family:'Orbitron'; font-size:18px; font-weight:900; letter-spacing:4px; margin-bottom:15px;">ORACLE MATRIX STANDBY</div>
-                    <div style="color:#aaa; font-size:14px; margin-bottom:10px;">薛定谔的赛博卦象已就绪。在您点击下方按钮前，今日吉凶处于绝对的叠加态。</div>
+                    <div style="color:#aaa; font-size:14px; margin-bottom:10px;">薛定谔的赛博卦象已就绪。在点击下方按钮前，今日吉凶处于绝对的叠加态。</div>
                 </div>
                 """)
+                # 🚨 极速防白屏设计：原生 on_click 回调取代耗时渲染
                 st.button("🔮 注入算力，抽取今日量子神谕", on_click=trigger_oracle_draw, use_container_width=True)
             else:
-                # 触发量子坍缩的纯 CSS 动画 (quantum-reveal)
                 yao_html = ""
                 for line in reversed(daily_hex['lines']):
                     if line == 1: yao_html += "<div class='yao-yang' style='background:__C__; box-shadow:0 0 10px __C__;'></div>".replace("__C__", h_c)
@@ -529,7 +543,6 @@ else:
             f_10y.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=240, margin=dict(t=10, b=20, l=10, r=10), xaxis=dict(gridcolor='rgba(255,255,255,0.05)', tickfont=dict(color='#888', family='Fira Code')), yaxis=dict(gridcolor='rgba(255,255,255,0.05)', tickfont=dict(color='#888', family='Fira Code'), title="Alpha 净值"))
             st.plotly_chart(f_10y, use_container_width=True, config={'displayModeBar': False})
             
-            # 🚨【满血回归】12个月生命热力图
             render_html("<div style='font-size:11px; color:#00f3ff; font-family:Orbitron; margin-bottom:5px; text-align:center;'>/// 12-MONTH HEATMAP ///</div>")
             fig2 = go.Figure(data=go.Heatmap(z=hm_z, x=hm_x, y=hm_y, colorscale="Turbo", showscale=False))
             fig2.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=180, margin=dict(t=10, b=10, l=60, r=10), xaxis=dict(tickfont=dict(family='Orbitron', color='#00f3ff', size=10)), yaxis=dict(tickfont=dict(family='Orbitron', color='#fff', size=11)))
@@ -553,7 +566,6 @@ else:
         f3d.add_trace(go.Scatter3d(x=rng_3d.randint(0,100,150), y=rng_3d.randint(0,100,150), z=rng_3d.randint(0,100,150), mode='markers', marker=dict(size=3, color='#334155', opacity=0.5), hoverinfo='none'))
         cx, cy, cz = wx_scores.get('金', 50), wx_scores.get('木', 50), wx_scores.get('水', 50)
         
-        # 🚨 [修复 Plotly ValueError]: 采用正确的属性传参
         f3d.add_trace(go.Scatter3d(
             x=[cx], y=[cy], z=[cz], mode='markers+text', text=["<b>ROOT: " + dm_key + "</b>"], textposition="top center", 
             marker=dict(size=15, color=dm_color, symbol='diamond', line=dict(color='#fff', width=2)), 
@@ -569,7 +581,7 @@ else:
 pragma solidity ^0.8.20;
 import "@karma-os/contracts/token/ERC721.sol";
 
-contract Destiny_SBT_V26 is ERC721 {
+contract Destiny_SBT_V30 is ERC721 {
     // ==========================================
     // > MINT_TARGET : __NAME__
     // > HASH_ID     : 0x__HASH__
@@ -627,7 +639,7 @@ contract Destiny_SBT_V26 is ERC721 {
         
         <div id="hide-box"><div id="poster">
             <div class="grid"></div><div class="content">
-                <div class="h1">KARMA OS_V26</div><div class="h2">THE OMEGA MATRIX</div>
+                <div class="h1">KARMA OS_V30</div><div class="h2">THE OMEGA MATRIX</div>
                 <div style="text-align:center; font-size:20px; font-weight:900; margin-bottom:15px; letter-spacing:1px;">[__NAME__] · __GENDER__</div>
                 <div class="bz-row">
                     <div class="bz-c"><div class="bz-t">__Y__</div><div class="bz-b">YEAR</div></div>
@@ -682,7 +694,7 @@ contract Destiny_SBT_V26 is ERC721 {
     with t_txt:
         render_html("<div style='font-size:13px; color:#aaa; margin-top:10px; margin-bottom:15px;'>您专属的万字级【深度机密报告】。新增了前世系统与神煞进程揭露。</div>")
         TXT_TEMP = """=======================================================
-[ KARMA-OS V26.0 ] 量子命盘 · 深度绝密档案 (THE OMEGA MATRIX)
+[ KARMA-OS V30.0 ] 量子命盘 · 深度绝密档案 (THE TRUE OMEGA)
 =======================================================
 
 >> 1. 节点基础信息 (IDENTITY)
@@ -784,14 +796,14 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
         st.markdown(ascii_res)
 
     # =========================================================================
-    # ⌨️ [ TERMINAL ] 内联黑客终端 (彻底隔离原生组件，告别白边)
+    # ⌨️ [ TERMINAL ] 内联黑客终端
     # =========================================================================
     st.markdown("---")
-    render_html("<div class='module-title' style='margin-bottom:15px;'>⌨️ 模块 VI：交互式终端命令</div>")
+    render_html("<div style='max-width: 650px; margin: 0 auto;'><div class='module-title' style='margin-bottom:15px;'>⌨️ 模块 VI：极客终端</div></div>")
     
     current_logs = st.session_state.get("term_logs", ["> SYS_KERNEL READY. AWAITING COMMAND..."])
     log_html = "<br>".join(current_logs[-6:]) if current_logs else "> AWAITING COMMAND..."
-    terminal_ui = "<div style='background:rgba(0,0,0,0.85); border:1px solid #00f3ff; border-left:4px solid #00f3ff; padding:15px; border-radius:4px 4px 0 0; font-family:\"Fira Code\"; color:#00f3ff; font-size:13px; height:180px; display:flex; flex-direction:column-reverse; overflow:hidden; box-shadow:inset 0 0 20px rgba(0,243,255,0.1); border-bottom:none; margin-bottom:0;'><div>" + str(log_html) + "<span style=\"animation:blink 1s infinite;\">_</span></div></div>"
+    terminal_ui = "<div style='max-width: 650px; margin: 0 auto; background:rgba(0,0,0,0.85); border:1px solid #00f3ff; border-left:4px solid #00f3ff; padding:15px; border-radius:4px 4px 0 0; font-family:\"Fira Code\"; color:#00f3ff; font-size:13px; height:180px; display:flex; flex-direction:column-reverse; overflow:hidden; box-shadow:inset 0 0 20px rgba(0,243,255,0.1); border-bottom:none; margin-bottom:0;'><div>" + str(log_html) + "<span style=\"animation:blink 1s infinite;\">_</span></div></div>"
     render_html(terminal_ui)
 
     with st.form("inline_terminal", clear_on_submit=True, border=False):
@@ -799,7 +811,7 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
         with col_t1:
             cmd_input = st.text_input("CMD", label_visibility="collapsed", placeholder="> 输入终端指令按回车 (如: /help, /ping)...")
         with col_t2:
-            sub_cmd = st.form_submit_button("⏎ EXECUTE", use_container_width=True)
+            sub_cmd = st.form_submit_button("⏎", use_container_width=True)
             
         if sub_cmd and cmd_input:
             cmd_str = str(cmd_input).strip()
