@@ -232,7 +232,7 @@ if not is_booted:
     <div style="text-align: center; margin-bottom: 25px; margin-top:20px;">
         <div style="color:var(--neon-cyan); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:8px; margin-bottom:10px;">KARMA OS FRAMEWORK</div>
         <h1 class="hero-title" data-text="全息命盘推演终端">全息命盘推演终端</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE TRUE OMEGA V30.0</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE TRUE OMEGA V1.0</div>
     </div>
     """)
     
