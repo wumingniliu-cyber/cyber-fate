@@ -22,13 +22,13 @@ except ImportError as e:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 宇宙物理引擎与安全状态机
 # ==============================================================================
-VERSION = "KARMA-OS V99.0 [ABSOLUTE ZERO]"
+VERSION = "KARMA-OS V20.0 [THE MATRIX REBORN]"
 COPYRIGHT = "NIGHT CITY DAO"
 SYS_NAME = "量子命理 | 赛博神谕终端"
 
 st.set_page_config(page_title=SYS_NAME, page_icon="🧿", layout="wide", initial_sidebar_state="collapsed")
 
-# 🚨 终极防爆：全量初始化，摒弃一切点语法，确保云端热重载绝对不报错
+# 🚨 终极防爆：全量初始化，确保云端热重载绝对不报错
 if "sys_booted" not in st.session_state: st.session_state["sys_booted"] = False
 if "sys_data" not in st.session_state: st.session_state["sys_data"] = {}
 if "term_logs" not in st.session_state: st.session_state["term_logs"] = ["> SYS_KERNEL READY. AWAITING COMMAND..."]
@@ -38,7 +38,7 @@ def render_html(html_str):
     st.markdown('\n'.join([line.lstrip() for line in str(html_str).split('\n')]), unsafe_allow_html=True)
 
 # ==============================================================================
-# 🎨 [ CSS ENGINE ] 静态层隔离注入 (UI 质感满血拉满)
+# 🎨 [ CSS ENGINE ] 静态层隔离注入 (完美消除底部白边与浮动组件)
 # ==============================================================================
 STATIC_CSS = """
 <style>
@@ -50,6 +50,10 @@ html, body, .stApp { background-color: #020408 !important; font-family: 'Noto Sa
 ::-webkit-scrollbar { width: 6px; background: #000; }
 ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; box-shadow: 0 0 10px var(--primary); }
 .block-container { max-width: 1200px !important; padding-top: 3.5rem !important; padding-bottom: 5rem !important; overflow-x: hidden; }
+
+/* 🚨 彻底隐藏导致白边的 Streamlit 底部原生悬浮区 */
+section[data-testid="stBottom"] { display: none !important; background: transparent !important; }
+div[data-testid="stBottomBlockContainer"] { display: none !important; background: transparent !important; }
 
 /* 视差背景网格与 CRT */
 .stApp::before { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px); background-size: 100% 3px, 40px 40px; z-index: -1; pointer-events: none; }
@@ -69,8 +73,8 @@ html, body, .stApp { background-color: #020408 !important; font-family: 'Noto Sa
 @keyframes glitch-1 { 0% { clip-path: inset(20% 0 80% 0); } 20% { clip-path: inset(60% 0 10% 0); } 40% { clip-path: inset(40% 0 50% 0); } 60% { clip-path: inset(80% 0 5% 0); } 80% { clip-path: inset(10% 0 70% 0); } 100% { clip-path: inset(30% 0 20% 0); } }
 @keyframes glitch-2 { 0% { clip-path: inset(10% 0 60% 0); } 20% { clip-path: inset(30% 0 20% 0); } 40% { clip-path: inset(70% 0 10% 0); } 60% { clip-path: inset(20% 0 50% 0); } 80% { clip-path: inset(90% 0 5% 0); } 100% { clip-path: inset(50% 0 30% 0); } }
 
-/* 玻璃拟态大卡 - 加入 3D 上浮悬停动画 */
-.glass-card { background: rgba(5, 8, 14, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(0,243,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,243,255,0.05); padding: 25px; border-radius: 8px; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+/* 玻璃拟态大卡 */
+.glass-card { background: rgba(5, 8, 14, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(0,243,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,243,255,0.05); padding: 25px; border-radius: 8px; margin-bottom: 20px; transition: all 0.4s ease;}
 .glass-card:hover { border-color: rgba(0,243,255,0.8); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,1), inset 0 0 30px rgba(0,243,255,0.2); }
 .module-title { color: var(--primary) !important; border-left: 6px solid var(--primary); padding-left: 15px; font-weight: 900; margin-top: 40px; margin-bottom: 25px; letter-spacing: 2px; font-family: 'Orbitron', 'Noto Sans SC', sans-serif; font-size: 22px; text-shadow: 0 0 15px rgba(0,243,255,0.5); background: linear-gradient(90deg, rgba(0,243,255,0.15), transparent); padding-top: 8px; padding-bottom: 8px; border-radius: 4px; text-transform: uppercase;}
 
@@ -81,7 +85,7 @@ div[data-testid="stTextInput"] input:focus { border-color: var(--purple) !import
 div[data-baseweb="select"] > div { background-color: rgba(0,0,0,0.8) !important; border: 1px solid rgba(0,243,255,0.4) !important; color: var(--primary) !important; border-radius: 4px !important; height: 55px; }
 
 /* 交互按钮 */
-div.stButton > button { background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,15,20,0.9) 100%) !important; border: 1px solid rgba(0, 243, 255, 0.4) !important; border-left: 4px solid var(--primary) !important; border-radius: 4px !important; min-height: 60px !important; width: 100% !important; transition: all 0.3s ease !important; clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); }
+div.stButton > button { background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,15,20,0.9) 100%) !important; border: 1px solid rgba(0, 243, 255, 0.4) !important; border-left: 4px solid var(--primary) !important; border-radius: 4px !important; min-height: 55px !important; width: 100% !important; transition: all 0.3s ease !important; clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); }
 div.stButton > button p { color: #ffffff !important; font-size: 16px !important; font-weight: bold !important; letter-spacing: 2px !important; font-family: 'Orbitron', sans-serif !important; }
 div.stButton > button:hover { border-color: var(--primary) !important; box-shadow: 0 0 25px rgba(0,243,255,0.3) !important; transform: translateY(-2px); }
 div.stButton > button[data-testid="baseButton-primary"] { background: linear-gradient(90deg, #ff007c, #a855f7) !important; border: none !important; box-shadow: 0 0 20px rgba(255,0,124,0.5) !important;}
@@ -95,18 +99,22 @@ div[data-testid="stCodeBlock"] > div { background-color: #030305 !important; bor
 div[data-testid="stCodeBlock"] pre, div[data-testid="stCodeBlock"] code { font-family: 'Fira Code', monospace !important; color: var(--green) !important; line-height:1.6 !important;}
 div[data-testid="stDownloadButton"] > button { border: 1px dashed var(--purple) !important; border-left: 4px solid var(--purple) !important; height: 55px; }
 
-/* 结算开场烟花 */
+/* 赛博阴阳爻 UI (每日一卦专属) */
+.hex-container { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 20px 0; }
+.yao-yang { width: 100%; max-width: 140px; height: 12px; border-radius: 2px; }
+.yao-yin { width: 100%; max-width: 140px; height: 12px; display: flex; justify-content: space-between; gap: 15px; }
+.yao-yin .half { flex: 1; border-radius: 2px; }
+
+/* 结算烟花 */
 .firework-center { position: fixed; top: 50%; left: 50%; z-index: 99998; pointer-events: none; font-weight: 900; font-family: 'Orbitron', monospace; color: var(--primary); text-shadow: 0 0 20px var(--primary), 0 0 30px #ffffff; animation: supernova 1.8s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;}
 @keyframes supernova { 0% { transform: translate(-50%, -50%) scale(0.1) rotate(0deg); opacity: 1; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(var(--s)) rotate(var(--rot)); opacity: 0; filter: blur(2px);} }
-div[data-testid="stChatInput"] { background: rgba(0,0,0,0.95) !important; border: 1px solid var(--primary) !important; border-radius: 0 !important; box-shadow: 0 0 20px rgba(0,243,255,0.2) !important;}
-div[data-testid="stChatInput"] textarea { color: var(--primary) !important; font-family: 'Fira Code' !important; font-weight: bold; }
 @keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.3;} }
 </style>
 """
 st.markdown(STATIC_CSS, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🗃️ [ MEGA DICTIONARY ] 八字源码映射库 (原版文案 100% 满血复原)
+# 🗃️ [ MEGA DICTIONARY ] 八字源码映射库 & 每日神谕系统
 # ==============================================================================
 DAY_MASTER_DICT = {
     "甲": {"role": "Root Node / 架构巨树", "mbti": "ENTJ", "color": "#10b981", "element": "木", "tier": "UR", "desc": "天生具备宏大的底层系统构建能力，性格直爽极度抗压。能扛起从0到1重构秩序的开拓者。", "evolution_path": ["L1 架构幼苗", "L2 核心骨干", "L3 苍天建木"], "ultimate_evolution": "【苍天建木】执掌三界底层协议", "black_swan": "过于刚硬，遇强则折。遭遇系统级降维打击容易因宁折不弯导致全面宕机。", "patch": "引入「水」属性柔性冗余，挂起进程等待重启。", "weapon": "高分子动能巨斧", "implant": "钛合金强固脊椎"},
@@ -123,6 +131,16 @@ DAY_MASTER_DICT = {
 
 SHEN_SKILLS = {"七杀": "零日漏洞爆破 [Lv.Max]", "正官": "底层协议锚定 [Lv.Max]", "偏印": "逆向工程解构 [Lv.Max]", "正印": "系统灾备兜底 [Lv.Max]", "偏财": "高频杠杆套利 [Lv.Max]", "正财": "算力资产吞噬 [Lv.Max]", "比肩": "分布式共识网 [Lv.Max]", "劫财": "网络节点劫持 [Lv.Max]", "食神": "感官体验降维 [Lv.Max]", "伤官": "范式秩序破坏 [Lv.Max]"}
 
+# 🚨【满血回归】赛博六十四卦 (每日一卦核心数据)
+CYBER_HEXAGRAMS = [
+    {"name": "乾为天 [SYS_ROOT]", "lines": [1,1,1,1,1,1], "desc": "获取系统最高物理权限，全网算力为你让路。潜龙升天，万物皆可并发。", "do": "高频并发、部署主网", "dont": "进入低功耗模式", "color": "#10b981"},
+    {"name": "坤为地 [SAFE_MODE]", "lines": [0,0,0,0,0,0], "desc": "进入深度防御与物理冷备份阶段，切断所有外部高危握手协议。厚德载物。", "do": "冷钱包存储、本地Debug", "dont": "高倍杠杆、开启未知端口", "color": "#fcee0a"},
+    {"name": "地天泰 [SYNC_100%]", "lines": [1,1,1,0,0,0], "desc": "天地交泰，内外网 API 完美握手。你处于系统生命周期的黄金波段。", "do": "满仓梭哈、跨界融合", "dont": "物理断网、过度保守", "color": "#00f3ff"},
+    {"name": "天地否 [DDOS_WARN]", "lines": [0,0,0,1,1,1], "desc": "遭遇全网降维打击与大雪崩，主链失去共识，天地不交。此节点极其凶险。", "do": "立刻拔网线、强制休眠", "dont": "正面硬刚大盘、大额转移", "color": "#f43f5e"},
+    {"name": "水雷屯 [BOOT_LOOP]", "lines": [1,0,0,0,1,0], "desc": "系统初始化遭遇未知依赖冲突，面临艰难的启动阻力。万事开头难。", "do": "耐心排错、重构底层代码", "dont": "带Bug裸奔、强行编译", "color": "#a855f7"},
+    {"name": "火水未济 [COMPILING]", "lines": [0,1,0,1,0,1], "desc": "代码编译接近尾声，但尚未通过最后的安全边界测试。黎明前的读条时刻。", "do": "保持算力输出、准备热更新", "dont": "提前开香槟、强行终止", "color": "#fb923c"}
+]
+
 # ==============================================================================
 # 🧠 [ CORE ALGORITHMS ] 量子核心算法库
 # ==============================================================================
@@ -135,47 +153,60 @@ def trigger_supernova():
         h_str += '<div class="firework-center" style="--tx:' + str(tx) + 'px; --ty:' + str(ty) + 'px; --s:' + str(random.uniform(1.0, 3.5)) + '; --rot:' + str(random.randint(-360, 360)) + 'deg; animation-delay:' + str(random.uniform(0, 0.2)) + 's; font-size:' + str(random.randint(14, 24)) + 'px;">' + random.choice(vocab) + '</div>'
     render_html(h_str)
 
+def get_daily_oracle(user_hash):
+    """联合加盐：确保每日每人神谕固定"""
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    daily_seed = int(hashlib.md5((str(user_hash) + today_str).encode()).hexdigest()[:8], 16)
+    return random.Random(daily_seed).choice(CYBER_HEXAGRAMS), today_str
+
+def get_quantum_answer(query, user_hash):
+    """NLP 实时互动推演"""
+    rng = random.Random(f"{user_hash}_{str(query).strip()}_{datetime.now().strftime('%Y%m%d%H%M%S')}")
+    prob = rng.randint(1, 99)
+    hex_res = rng.choice(CYBER_HEXAGRAMS)
+    if prob >= 80: conc = "【系统指令】: 矩阵算力倾斜，建议满仓执行 (EXECUTE)"
+    elif prob >= 40: conc = "【系统指令】: 存在未知波动，建议灰度观望 (STANDBY)"
+    else: conc = "【系统指令】: 探测到致命阻力，立即终止进程 (ABORT)"
+    return prob, hex_res, conc
+
 @st.cache_data
 def generate_alpha_curve(seed_hash):
-    rng = np.random.RandomState(int(seed_hash[:8], 16))
+    rng = np.random.RandomState(int(str(seed_hash)[:8], 16))
     yrs = [str(datetime.now().year + i) for i in range(10)]
     roi = [rng.randint(60, 85)]
     for _ in range(9): roi.append(max(30, min(100, roi[-1] + rng.randint(-20, 25))))
     return yrs, roi
 
 def calculate_synergy(my_hash, partner_stem):
-    rng_syn = np.random.RandomState(int(my_hash[:6], 16) + sum(ord(c) for c in str(partner_stem)))
+    rng_syn = np.random.RandomState(int(str(my_hash)[:6], 16) + sum(ord(c) for c in str(partner_stem)))
     score = rng_syn.randint(65, 99)
-    if score >= 90: return score, "【黄金并网】底层协议 100% 兼容，最强双核推土机！", "#10b981"
-    elif score >= 75: return score, "【灰度容错】代码视角互补，能打磨出极具弹性的业务闭环。", "#fcee0a"
-    else: return score, "【DDoS 互斥】底层逻辑完全相冲！必须背靠背物理隔离执行！", "#f43f5e"
+    if score >= 90: return score, "【硬件直连】底层协议 100% 兼容，最强双核推土机！", "#10b981"
+    elif score >= 75: return score, "【灰度容错】代码互补，能打磨极具弹性的闭环。", "#fcee0a"
+    else: return score, "【DDoS 互斥】底层逻辑相冲！建议绝对物理隔离！", "#f43f5e"
 
 # ==============================================================================
 # 🔮 [ ENTRY POINT ] 状态机与生辰降临采集
 # ==============================================================================
-# 🚨 绝对安全读取状态
 is_booted = st.session_state.get("sys_booted", False)
 
 if not is_booted:
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V18.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V20.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
-        <span>SYS-RISK: FIVE ELEMENTS BALANCED <b class="up">▲SECURE</b></span>
         <span>MARKET-ALPHA: 10-YEAR TREND <b class="down">▼COMPUTING</b></span>
-        <span>DAO-PROTOCOL: SMART CONTRACT <b class="up">▲MINTED</b></span>
     </div></div>""")
 
     render_html("""
     <div style="text-align: center; margin-bottom: 30px; margin-top:20px;">
         <div style="color:var(--neon-cyan); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:8px; margin-bottom:10px;">KARMA OS FRAMEWORK</div>
         <h1 class="hero-title" data-text="全息命盘推演终端">全息命盘推演终端</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE GOD MATRIX V18.0</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:8px; margin-top:10px;">THE MATRIX REBORN V20.0</div>
     </div>
     <div class="glass-card" style="max-width: 650px; margin: 0 auto; border-left: 4px solid var(--primary);">
         <div style="font-family:'Fira Code'; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">> INITIALIZING QUANTUM LUNAR KERNEL...</div>
         <div style="margin-bottom:5px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Mounting Lunar-Python astronomical algorithms.</div>
-        <div style="margin-bottom:5px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Bypassing temporal distortion logic.</div>
+        <div style="margin-bottom:5px; font-family:'Fira Code'; font-size:13px; color:#aaa;"><span style="color:var(--green);">[OK]</span> Loading Oracle Divination Engine.</div>
         <br><span style="color:#ffffff; font-size: 15px; line-height: 1.8;"><b>肉体不过是碳基的载体，八字才是灵魂的底层代码。</b><br><br>在硅基宇宙与玄学法则交汇的当下，本终端将提取您的先天降临坐标。为您生成不可篡改的高阶本命元神凭证与气运大盘。</span>
     </div>
     """)
@@ -233,15 +264,13 @@ if not is_booted:
             st.rerun()
 
 # ==============================================================================
-# 🌟 [ CORE 05 ] 全息大屏展示 (🚨 物理级阻断一切 KeyError 与 AttributeError)
+# 🌟 [ CORE 05 ] 全息大屏展示
 # ==============================================================================
 else:
-    # 绝对安全的动画状态读取
     if not st.session_state.get("anim_played", False): 
         trigger_supernova()
         st.session_state["anim_played"] = True
 
-    # 🚨【终极安全提取】: 全程使用 get，全部强制转为 str 防止报错
     d = st.session_state.get("sys_data", {})
     dm_key = str(d.get('day_master', '甲'))
     dm_info = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"]) 
@@ -268,10 +297,9 @@ else:
     
     token_id = int(hash_id[:8], 16)
     contract_addr = "0x" + hashlib.sha256(f"karma_dao_{token_id}".encode()).hexdigest()[:38]
-    block_height = f"V18-{(int(time.time()) % 1000000):06d}"
+    block_height = f"V20-{(int(time.time()) % 1000000):06d}"
     yrs, trend = generate_alpha_curve(hash_id)
 
-    # 熵增风控计算
     max_wx = max(list(wx_scores.values())) if wx_scores else 0
     entropy_score = int(min(99, (max_wx / 50.0) * 100))
     if entropy_score > 75: 
@@ -281,16 +309,15 @@ else:
     else: 
         e_tag, e_color, r_desc = "五行极度平稳，可抗任意暴击", "var(--green)", "您的系统架构堪称完美，拥有极强的抗打击与自愈恢复能力。"
 
-    # 跑马灯
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V18.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V20.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
         <span>SYS-RISK: FIREWALL ACTIVE <b class="up">▲SECURE</b></span>
         <span>DAO-PROTOCOL: SMART CONTRACT <b class="up">▲MINTED</b></span>
     </div></div>""")
 
-    # 💠 模块 I：链上确权 (基于纯静态模板替换，抛弃 f-string)
+    # 💠 模块 I：链上确权
     render_html("<div class='module-title'>💠 模块 I：天机链上确权</div>")
     M1_TEMPLATE = """
     <div class="glass-card" style="padding: 15px 25px; margin-bottom: 25px; font-family: 'Orbitron', monospace; border-top: none; border-left: 4px solid var(--primary);">
@@ -303,7 +330,7 @@ else:
         </div>
     </div>
     """
-    render_html(M1_TEMPLATE.replace("__BLK__", block_height).replace("__CON__", contract_addr[:25]).replace("__TID__", str(token_id)).replace("__TIME__", str(d.get('timestamp', ''))))
+    render_html(M1_TEMPLATE.replace("__BLK__", str(block_height)).replace("__CON__", str(contract_addr[:25])).replace("__TID__", str(token_id)).replace("__TIME__", str(d.get('timestamp', ''))))
 
     # 🧬 模块 II & III：源码与架构
     c1, c2 = st.columns([1.2, 1], gap="large")
@@ -320,10 +347,8 @@ else:
             sh = "text-shadow: 0 0 15px var(--primary);" if is_core else ""
             trans = "transform: scale(1.05); box-shadow: 0 0 15px rgba(0,243,255,0.15);" if is_core else ""
             
-            # 模板隔离拼接，坚决不用 f-string
             B_TEMP = """<div style="flex:1; background:__BG__; border:1px solid __BD__; padding:15px 0; border-radius:6px; margin: 0 4px; __TR__"><div style="font-size:clamp(26px, 4vw, 40px); font-weight:900; color:__TC__; __SH__ line-height:1.1; font-family:'Noto Sans SC', serif;">__Z0__<span style="color:#777; font-size:clamp(18px, 3vw, 28px); text-shadow:none;">__Z1__</span></div><div style="font-size:11px; color:__BD__; font-family:'Orbitron'; margin-top:8px; font-weight:bold;">__LBL__</div></div>"""
             bz_html += B_TEMP.replace("__BG__", bg).replace("__BD__", bd).replace("__TC__", tc).replace("__SH__", sh).replace("__TR__", trans).replace("__Z0__", str(bz[i][0])).replace("__Z1__", str(bz[i][1])).replace("__LBL__", labels[i])
-            
         bz_html += '</div>'
         render_html(bz_html)
 
@@ -340,7 +365,7 @@ else:
             </div>
         </div>
         """
-        render_html(CARD_TEMP.replace("__COLOR__", dm_color).replace("__TIER__", dm_tier).replace("__KEY__", dm_key).replace("__ROLE__", dm_role.split('/')[0]).replace("__DESC__", dm_desc).replace("__MBTI__", dm_mbti).replace("__WPN__", dm_wpn).replace("__IMP__", dm_imp))
+        render_html(CARD_TEMP.replace("__COLOR__", str(dm_color)).replace("__TIER__", str(dm_tier)).replace("__KEY__", str(dm_key)).replace("__ROLE__", str(dm_role).split('/')[0]).replace("__DESC__", str(dm_desc)).replace("__MBTI__", str(dm_mbti)).replace("__WPN__", str(dm_wpn)).replace("__IMP__", str(dm_imp)))
 
     with c2:
         render_html("<div class='module-title' style='margin-top: 0;'>🤝 模块 III：外挂神经插件</div>")
@@ -352,10 +377,75 @@ else:
         WARN_TEMP = """<div style="background: rgba(255,0,124,0.05); border-left: 4px solid var(--pink); padding: 18px; border-radius: 0 6px 6px 0; margin-top:15px;"><div style="font-size:11px; color:var(--pink); font-family:'Orbitron'; margin-bottom:8px; letter-spacing:1px; font-weight:bold;">/// DESTINY WARNING ///</div><div style="font-size:13px; color:#94a3b8; margin-bottom:8px;">系统测算五行熵增阀值为：<b style="color:__COLOR__; font-size:16px;">__SCORE__%</b></div><div style="font-size:14px; color:__COLOR__; font-weight:bold; margin-bottom:5px;">[ __TAG__ ]</div><div style="font-size:12px; color:#cbd5e1; line-height:1.6;">__DESC__</div></div>"""
         render_html(WARN_TEMP.replace("__COLOR__", str(e_color)).replace("__SCORE__", str(entropy_score)).replace("__TAG__", str(e_tag)).replace("__DESC__", str(r_desc)))
 
-    # 🗄️ [ 模块 IV & V ]：极客深潜控制台 (✅ 所有硬核功能满血回归)
+    # 🗄️ [ 模块 IV ]：极客深潜控制台 (🚀 每日神谕与NLP互动满血回归)
     render_html("<div class='module-title'>🗄️ 模块 IV：极客深潜控制台 (DEEP DIVE)</div>")
     
-    t_data, t_syn, t_3d, t_sol = st.tabs(["📊 大盘雷达 (DATA)", "🤝 赛博合盘 (SYNERGY)", "🌌 3D星图 (MAP)", "💻 智能合约 (WEB3)"])
+    t_oracle, t_data, t_syn, t_3d, t_sol = st.tabs(["🀄 每日神谕 (ORACLE)", "📊 大盘雷达 (DATA)", "🤝 赛博合盘 (SYNERGY)", "🌌 3D星图 (MAP)", "💻 智能合约 (WEB3)"])
+
+    with t_oracle:
+        c_o1, c_o2 = st.columns([1.1, 1], gap="large")
+        with c_o1:
+            render_html("<div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:10px; margin-bottom:15px;'>[01] DAILY HEXAGRAM (每日一卦)</div>")
+            render_html("<div style='font-size:13px; color:#aaa; margin-bottom:15px; line-height:1.6;'>基于您的灵魂 Hash 与时间戳抽取。<b>今日内绝对锁定，不会更改。</b></div>")
+            
+            daily_hex, date_str = get_daily_hexagram(hash_id)
+            h_c = str(daily_hex.get("color", "var(--primary)"))
+            
+            yao_html = ""
+            for line in reversed(daily_hex['lines']):
+                if line == 1: yao_html += "<div class='yao-yang' style='background:__C__; box-shadow:0 0 10px __C__;'></div>".replace("__C__", h_c)
+                else: yao_html += "<div class='yao-yin'><div class='half' style='background:__C__; box-shadow:0 0 10px __C__;'></div><div class='half' style='background:__C__; box-shadow:0 0 10px __C__;'></div></div>".replace("__C__", h_c)
+            
+            ORACLE_TEMP = """
+            <div class="glass-card" style="text-align:center; box-shadow: 0 0 40px __C__22; border-color:__C__44; border-left-color:__C__;">
+                <div style="font-family:'Orbitron'; color:__C__; font-size:12px; font-weight:bold; letter-spacing:2px; margin-bottom:15px;">[ DATE: __DATE__ ]</div>
+                <div class="hex-container">__YAO__</div>
+                <div style="font-size:28px; font-weight:900; color:__C__; font-family:'Orbitron', sans-serif; text-shadow:0 0 15px __C__; margin-top:20px; margin-bottom:15px;">__NAME__</div>
+                <div style="background:rgba(0,0,0,0.6); padding:15px; border-radius:4px; text-align:left; border:1px solid rgba(255,255,255,0.1); font-size:13px; line-height:1.7; color:#ddd; margin-bottom:15px;">
+                    <b style="color:__C__; font-family:'Fira Code';">> SYS_LOG:</b><br>__DESC__
+                </div>
+                <div style="display:flex; gap:10px; text-align:left;">
+                    <div style="flex:1; background:rgba(16,185,129,0.1); border-left:3px solid #10b981; padding:10px;">
+                        <div style="color:#10b981; font-size:12px; font-family:'Orbitron'; font-weight:bold; margin-bottom:6px;">[+] 宜 (EXECUTE)</div>
+                        <div style="color:#fff; font-size:12px; font-weight:bold;">__DO__</div>
+                    </div>
+                    <div style="flex:1; background:rgba(244,63,94,0.1); border-left:3px solid #f43f5e; padding:10px;">
+                        <div style="color:#f43f5e; font-size:12px; font-family:'Orbitron'; font-weight:bold; margin-bottom:6px;">[-] 忌 (KILL_PROC)</div>
+                        <div style="color:#fff; font-size:12px; font-weight:bold;">__DONT__</div>
+                    </div>
+                </div>
+            </div>
+            """
+            oracle_res = ORACLE_TEMP.replace("__C__", h_c).replace("__DATE__", date_str).replace("__YAO__", yao_html)
+            oracle_res = oracle_res.replace("__NAME__", str(daily_hex['name'])).replace("__DESC__", str(daily_hex['desc']))
+            oracle_res = oracle_res.replace("__DO__", str(daily_hex.get('do',''))).replace("__DONT__", str(daily_hex.get('dont','')))
+            render_html(oracle_res)
+
+        with c_o2:
+            render_html("<div style='color:var(--purple); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:10px; margin-bottom:15px;'>[02] QUANTUM NLP (交互神谕)</div>")
+            render_html("<div style='font-size:13px; color:#aaa; margin-bottom:25px; line-height:1.7;'>向阿卡夏主脑提出一个具体的进程请求。系统将通过你的哈希进行<b>实时真随机坍缩运算</b>。</div>")
+            
+            with st.form(key="nlp_oracle", clear_on_submit=False, border=False):
+                q_input = st.text_input("📝 输入待推演的现实请求 (Query)：", placeholder="e.g. 我今天能收到满意的 Offer 吗？", label_visibility="collapsed")
+                submit_q = st.form_submit_button("⚡ 发起哈希碰撞，坍缩因果律", use_container_width=True)
+                
+                if submit_q:
+                    if not q_input: st.warning("⚠️ 语法错误：Query 不能为空！")
+                    else:
+                        with st.spinner("正在连接第四维度阿卡夏记录..."):
+                            time.sleep(1.0)
+                            prob, hex_res, conc = get_quantum_answer(q_input, hash_id)
+                            q_c = str(hex_res.get('color', '#fff'))
+                            NLP_TEMP = """
+                            <div class="glass-card" style="margin-top:15px; border-color:__C__; text-align:center; box-shadow: 0 0 35px __C__33; border-left-width: 4px;">
+                                <div style="font-family:'Fira Code'; color:#888; font-size:13px; margin-bottom:15px; word-wrap:break-word;">> QUERY: "__Q__"</div>
+                                <div style="font-size:12px; color:__C__; font-family:'Orbitron'; letter-spacing:2px; margin-bottom:5px;">[ SUCCESS PROBABILITY ]</div>
+                                <div style="font-size:75px; font-weight:900; color:__C__; font-family:'Orbitron'; text-shadow:0 0 30px __C__; line-height:1; margin-bottom:20px;">__P__%</div>
+                                <div style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:10px;">坍缩基准：__HN__</div>
+                                <div style="font-size:14px; font-weight:bold; color:__C__;">__CONC__</div>
+                            </div>
+                            """
+                            render_html(NLP_TEMP.replace("__C__", q_c).replace("__Q__", str(q_input)).replace("__P__", str(prob)).replace("__HN__", str(hex_res['name'])).replace("__CONC__", str(conc)))
 
     with t_data:
         c3, c4 = st.columns([1, 1.2], gap="large")
@@ -388,7 +478,7 @@ else:
             t_node = st.selectbox("🎯 选择挂载目标节点:", options=opts, format_func=lambda x: f"[{DAY_MASTER_DICT.get(x, {}).get('mbti', 'UNK')}] {x} - {DAY_MASTER_DICT.get(x, {}).get('role', 'UNK').split('/')[0]}")
         with c_s2:
             sc, sd, sc_color = calculate_synergy(hash_id, t_node)
-            SYN_T = """<div style="background:rgba(0,0,0,0.6); border:1px solid __C__; border-left:4px solid __C__; padding:25px 20px; border-radius:4px; margin-top:15px; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);"><div style="font-family:'Orbitron'; font-size:12px; color:#888; letter-spacing:2px; margin-bottom:10px;">SYNERGY MATCH RATE</div><div style="font-family:'Orbitron'; font-size:55px; color:__C__; font-weight:900; margin-bottom:10px; text-shadow:0 0 20px __C__; line-height:1;">__SC__%</div><div style="color:#fff; font-size:14px; font-weight:bold; font-family:'Noto Sans SC';">__SD__</div></div>"""
+            SYN_T = """<div class="glass-card" style="border-left:4px solid __C__; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);"><div style="font-family:'Orbitron'; font-size:12px; color:#888; letter-spacing:2px; margin-bottom:10px;">SYNERGY MATCH RATE</div><div style="font-family:'Orbitron'; font-size:55px; color:__C__; font-weight:900; margin-bottom:10px; text-shadow:0 0 20px __C__; line-height:1;">__SC__%</div><div style="color:#fff; font-size:14px; font-weight:bold; font-family:'Noto Sans SC';">__SD__</div></div>"""
             render_html(SYN_T.replace("__C__", str(sc_color)).replace("__SC__", str(sc)).replace("__SD__", str(sd)))
 
     with t_3d:
@@ -397,7 +487,7 @@ else:
         f3d = go.Figure()
         f3d.add_trace(go.Scatter3d(x=rng_3d.randint(0,100,150), y=rng_3d.randint(0,100,150), z=rng_3d.randint(0,100,150), mode='markers', marker=dict(size=3, color='#334155', opacity=0.5), hoverinfo='none'))
         cx, cy, cz = wx_scores.get('金', 50), wx_scores.get('木', 50), wx_scores.get('水', 50)
-        f3d.add_trace(go.Scatter3d(x=[cx], y=[cy], z=[cz], mode='markers+text', text=["ROOT: " + dm_key], textposition="top center", marker=dict(size=15, color=dm_color, symbol='diamond', line=dict(color='#fff', width=2)), textfont=dict(color=dm_color, size=16, family="Orbitron", weight="bold")))
+        f3d.add_trace(go.Scatter3d(x=[cx], y=[cy], z=[cz], mode='markers+text', text=["ROOT: " + dm_key], textposition="top center", marker=dict(size=15, color=dm_color, symbol='diamond', line=dict(color='#fff', width=2)), textfont=dict(color=dm_color, size=16, font=dict(family="Orbitron", weight="bold"))))
         f3d.update_layout(scene=dict(xaxis_title='STR(金)', yaxis_title='AGI(木)', zaxis_title='INT(水)', xaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="#222"), yaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="#222"), zaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="#222")), paper_bgcolor='rgba(0,0,0,0)', margin=dict(l=0, r=0, t=0, b=0), height=350, showlegend=False)
         st.plotly_chart(f3d, use_container_width=True, config={'displayModeBar': False})
 
@@ -407,7 +497,7 @@ else:
 pragma solidity ^0.8.20;
 import "@karma-os/contracts/token/ERC721.sol";
 
-contract Destiny_SBT_V18 is ERC721 {
+contract Destiny_SBT_V20 is ERC721 {
     // ==========================================
     // > MINT_TARGET : __NAME__
     // > HASH_ID     : 0x__HASH__
@@ -432,12 +522,18 @@ contract Destiny_SBT_V18 is ERC721 {
         sk_html_img = "".join(["<span style='background:rgba(0,243,255,0.1); border:1px solid #00f3ff; color:#00f3ff; padding:4px 8px; margin:3px; border-radius:2px; font-size:10px; display:inline-block; font-family:Fira Code;'>" + str(s).split(' ')[0] + "</span>" for s in skills_list[:4]])
         
         bar_html_img = ""
+        wx_colors = {'金': '#e2e8f0', '木': '#10b981', '水': '#00f3ff', '火': '#f43f5e', '土': '#fcee0a'}
         for k, v in wx_scores.items():
             C_V = wx_colors.get(k, '#fff')
             B_TEMP = "<div style='display:flex; align-items:center; margin-bottom:6px; font-size:11px; color:#ccc;'><span style='width:25px;'>__K__</span><div style='flex:1; height:6px; background:#222; margin:0 10px; position:relative;'><div style='position:absolute; left:0; top:0; height:100%; width:__V__%; background:__C__; box-shadow:0 0 8px __C__;'></div></div><span style='width:30px; text-align:right;'>__V__%</span></div>"
             bar_html_img += B_TEMP.replace("__K__", str(k)).replace("__V__", str(v)).replace("__C__", C_V)
+        
+        # 将今日神谕嵌入海报
+        yao_html_img = ""
+        for line in reversed(daily_hex['lines']):
+            if line == 1: yao_html_img += "<div style='width:60px; height:6px; background:__C__; margin:4px auto; border-radius:1px; box-shadow:0 0 10px __C__;'></div>".replace("__C__", h_c)
+            else: yao_html_img += "<div style='width:60px; height:6px; display:flex; justify-content:space-between; margin:4px auto;'><div style='width:26px; background:__C__; border-radius:1px; box-shadow:0 0 10px __C__;'></div><div style='width:26px; background:__C__; border-radius:1px; box-shadow:0 0 10px __C__;'></div></div>".replace("__C__", h_c)
 
-        # 🚨 [究极防爆]: HTML_POSTER_RAW 纯静态字符串模板，完全脱离任何 f-string 花括号冲突！
         HTML_POSTER_RAW = """
         <!DOCTYPE html><html><head><meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -450,7 +546,7 @@ contract Destiny_SBT_V18 is ERC721 {
             .content { position:relative; z-index:1; }
             .h1 { font-family:'Orbitron'; font-size:24px; font-weight:900; color:#00f3ff; text-align:center; letter-spacing:2px; margin-bottom:5px; text-shadow:0 0 10px #00f3ff;}
             .h2 { font-size:10px; font-family:'Orbitron'; color:#f43f5e; text-align:center; letter-spacing:4px; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px; font-weight:bold;}
-            .bz-row { display:flex; justify-content:space-between; margin-bottom:20px; background:rgba(255,255,255,0.03); padding:10px; border:1px solid #222; border-radius:4px; }
+            .bz-row { display:flex; justify-content:space-between; margin-bottom:15px; background:rgba(255,255,255,0.03); padding:10px; border:1px solid #222; border-radius:4px; }
             .bz-c { text-align:center; width:25%; } .bz-t { font-size:22px; font-weight:900; color:#fff; } .bz-b { font-size:9px; color:#888; font-family:'Orbitron'; margin-top:5px; }
             .core-box { background:rgba(0,243,255,0.05); border-left:4px solid #00f3ff; padding:15px; margin-bottom:15px; }
             #ui-loading { color:#00f3ff; font-family:'Orbitron'; padding:40px; text-align:center; animation:blink 1s infinite alternate; font-weight:bold; letter-spacing:2px;}
@@ -460,8 +556,8 @@ contract Destiny_SBT_V18 is ERC721 {
         
         <div id="hide-box"><div id="poster">
             <div class="grid"></div><div class="content">
-                <div class="h1">KARMA OS_V18</div><div class="h2">DESTINY PROFILE</div>
-                <div style="text-align:center; font-size:20px; font-weight:900; margin-bottom:20px; letter-spacing:1px;">[__NAME__] · __GENDER__</div>
+                <div class="h1">KARMA OS_V20</div><div class="h2">DESTINY PROFILE</div>
+                <div style="text-align:center; font-size:20px; font-weight:900; margin-bottom:15px; letter-spacing:1px;">[__NAME__] · __GENDER__</div>
                 <div class="bz-row">
                     <div class="bz-c"><div class="bz-t">__Y__</div><div class="bz-b">YEAR</div></div>
                     <div class="bz-c"><div class="bz-t">__M__</div><div class="bz-b">MONTH</div></div>
@@ -473,12 +569,16 @@ contract Destiny_SBT_V18 is ERC721 {
                     <div style="font-size:18px; font-weight:900; color:__COLOR__;">__DM_KEY__ · __ROLE__</div>
                     <div style="font-size:11px; margin-top:6px;">MBTI: [ __MBTI__ ]</div>
                 </div>
-                <div style="text-align:center; margin-bottom:15px;">__SKILLS__</div>
-                <div style="background:rgba(0,0,0,0.6); padding:12px; border:1px solid #222;">
-                    <div style="font-size:9px; color:#888; font-family:'Orbitron'; margin-bottom:8px; text-align:center;">WUXING LOAD</div>
-                    __BARS__
+                
+                <div style="background:rgba(0,0,0,0.8); border:1px solid __HEX_COLOR__; padding:15px; margin-bottom:15px; text-align:center;">
+                    <div style="font-size:9px; color:#aaa; font-family:'Orbitron'; margin-bottom:10px;">DAILY ORACLE (__DATE__)</div>
+                    __HEX_LINES__
+                    <div style="font-size:15px; font-weight:bold; color:__HEX_COLOR__; margin-top:10px; letter-spacing:2px;">__HEX_NAME__</div>
                 </div>
-                <div style="font-family:'Fira Code'; font-size:8px; color:#666; margin-top:20px; text-align:center; border-top:1px dashed #333; padding-top:10px;">
+
+                <div style="text-align:center; margin-bottom:10px;">__SKILLS__</div>
+                
+                <div style="font-family:'Fira Code'; font-size:8px; color:#666; margin-top:15px; text-align:center; border-top:1px dashed #333; padding-top:10px;">
                     HASH: 0x__HASH__<br>© 2026 __CPY__
                 </div>
             </div>
@@ -496,21 +596,22 @@ contract Destiny_SBT_V18 is ERC721 {
                         document.getElementById('final-img').style.display = 'block';
                     });
                 }
-            }, 1500);
+            }, 1800);
         </script>
         </body></html>
         """
         html_ready = HTML_POSTER_RAW.replace("__NAME__", str(d.get('name', 'GHOST'))).replace("__GENDER__", str(d.get('gender', 'X')))
         html_ready = html_ready.replace("__Y__", str(bz[0])).replace("__M__", str(bz[1])).replace("__D__", str(bz[2])).replace("__T__", str(bz[3]))
         html_ready = html_ready.replace("__COLOR__", str(dm_color)).replace("__DM_KEY__", str(dm_key)).replace("__ROLE__", str(dm_role).split('/')[0])
-        html_ready = html_ready.replace("__MBTI__", str(dm_mbti)).replace("__SKILLS__", str(sk_html_img)).replace("__BARS__", str(bar_html_img))
+        html_ready = html_ready.replace("__MBTI__", str(dm_mbti)).replace("__SKILLS__", str(sk_html_img))
+        html_ready = html_ready.replace("__HEX_COLOR__", h_c).replace("__DATE__", date_str).replace("__HEX_LINES__", yao_html_img).replace("__HEX_NAME__", daily_hex['name'])
         html_ready = html_ready.replace("__HASH__", str(hash_id)[:20]).replace("__CPY__", str(COPYRIGHT))
-        components.html(html_ready, height=650)
+        components.html(html_ready, height=750)
 
     with t_txt:
         render_html("<div style='font-size:13px; color:#aaa; margin-top:10px; margin-bottom:15px;'>您专属的万字级【深度机密报告】。所有核心属性 100% 揭露，可直接下载本地档案。</div>")
         TXT_TEMP = """=======================================================
-[ KARMA-OS V18.0 ] 量子命盘 · 深度绝密档案 (ALL-FEATURES RESTORED)
+[ KARMA-OS V20.0 ] 量子命盘 · 深度绝密档案 (THE MATRIX REBORN)
 =======================================================
 
 >> 1. 节点基础信息 (IDENTITY)
@@ -609,27 +710,42 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
         st.markdown(ascii_res)
 
     # =========================================================================
-    # ⌨️ [ TERMINAL ] 交互终端 (安全读写状态机)
+    # ⌨️ [ TERMINAL ] 内联黑客终端 (✅ 彻底解决底部白条 Bug)
     # =========================================================================
     st.markdown("---")
-    render_html("<div style='font-family:Orbitron; color:var(--primary); font-size:14px; margin-bottom:10px; margin-top:20px;'>ROOT@GOD_MATRIX:~#</div>")
-    cmd = st.chat_input("输入命令 (如: /help, /matrix)...")
-    if cmd:
-        cmd = str(cmd).strip().lower()
-        logs = st.session_state.get("term_logs", ["> SYS_KERNEL READY. AWAITING COMMAND..."])
-        logs.append("<span style='color:#fff;'>> " + cmd + "</span>")
-        if cmd == '/help': logs.append("[SYS] CMDS: /sudo, /clear, /matrix")
-        elif cmd == '/sudo': logs.append("<span style='color:var(--pink);'>[ERR] ACCESS DENIED. 凡人无法黑入天命。</span>")
-        elif cmd == '/matrix': logs.append("<span style='color:var(--green);'>[MSG] WAKE UP, NEO. THE MATRIX HAS YOU.</span>")
-        elif cmd == '/clear': logs = ["> TERMINAL CLEARED."]
-        else: logs.append("<span style='color:var(--yellow);'>[ERR] UNKNOWN COMMAND: " + cmd + "</span>")
-        st.session_state["term_logs"] = logs
-
-    current_logs = st.session_state.get("term_logs", [])
-    log_html = "<br>".join(current_logs[-5:]) if current_logs else "> AWAITING COMMAND..."
-    terminal_ui = "<div style='background:rgba(0,0,0,0.85); border:1px solid #00f3ff; border-left:4px solid #00f3ff; padding:15px; border-radius:4px; font-family:\"Fira Code\"; color:#00f3ff; font-size:13px; height:150px; display:flex; flex-direction:column-reverse; overflow:hidden; margin-bottom:40px; box-shadow:inset 0 0 20px rgba(0,243,255,0.1);'><div>" + str(log_html) + "<span style=\"animation:blink 1s infinite;\">_</span></div></div>"
+    render_html("<div class='module-title' style='margin-bottom:15px;'>⌨️ 模块 VI：交互式终端命令</div>")
+    
+    current_logs = st.session_state.get("term_logs", ["> SYS_KERNEL READY. AWAITING COMMAND..."])
+    log_html = "<br>".join(current_logs[-6:]) if current_logs else "> AWAITING COMMAND..."
+    terminal_ui = "<div style='background:rgba(0,0,0,0.85); border:1px solid #00f3ff; border-left:4px solid #00f3ff; padding:15px; border-radius:4px 4px 0 0; font-family:\"Fira Code\"; color:#00f3ff; font-size:13px; height:180px; display:flex; flex-direction:column-reverse; overflow:hidden; box-shadow:inset 0 0 20px rgba(0,243,255,0.1); border-bottom:none; margin-bottom:0;'><div>" + str(log_html) + "<span style=\"animation:blink 1s infinite;\">_</span></div></div>"
     render_html(terminal_ui)
 
+    # 🚀 使用内联 st.form 重构终端输入框，彻底告别悬浮白底
+    with st.form("inline_terminal", clear_on_submit=True, border=False):
+        col_t1, col_t2 = st.columns([5, 1])
+        with col_t1:
+            cmd_input = st.text_input("CMD", label_visibility="collapsed", placeholder="> 输入终端指令按回车 (如: /help, /matrix)...")
+        with col_t2:
+            sub_cmd = st.form_submit_button("⏎ EXECUTE", use_container_width=True)
+            
+        if sub_cmd and cmd_input:
+            cmd_str = str(cmd_input).strip()
+            logs = st.session_state.get("term_logs", ["> SYS_KERNEL READY. AWAITING COMMAND..."])
+            logs.append("<span style='color:#fff;'>> " + cmd_str + "</span>")
+            
+            cmd_lower = cmd_str.lower()
+            if cmd_lower == '/help': logs.append("[SYS] CMDS: /sudo, /clear, /matrix, /ping")
+            elif cmd_lower == '/sudo': logs.append("<span style='color:var(--pink);'>[ERR] ACCESS DENIED. 凡人无法黑入天命。</span>")
+            elif cmd_lower == '/matrix': logs.append("<span style='color:var(--green);'>[MSG] WAKE UP, NEO. THE MATRIX HAS YOU.</span>")
+            elif cmd_lower == '/ping': logs.append("<span style='color:var(--yellow);'>[PONG] 赛博佛祖延迟 0.00ms. 「色即是空，Bug即是空。」</span>")
+            elif cmd_lower == '/clear': logs = ["> TERMINAL CLEARED."]
+            else: logs.append("<span style='color:var(--yellow);'>[ERR] UNKNOWN COMMAND: " + cmd_str + "</span>")
+            
+            st.session_state["term_logs"] = logs
+            st.rerun()
+
+    # 底部重启按钮
+    render_html("<br><br>")
     col_b_l, col_b_m, col_b_r = st.columns([1,2,1])
     with col_b_m:
         if st.button("⏏ 物理拔除网线并重启终端 (SYS_REBOOT)", type="primary", use_container_width=True):
@@ -639,8 +755,7 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
 # =========================================================================
 # 🛑 [ KERNEL 07 ] 赛博版权区
 # =========================================================================
-render_html('<div style="text-align:center; margin-top:80px; margin-bottom:40px; position:relative; z-index:10; border-top: 1px dashed #222; padding-top: 40px;">' +
+render_html('<div style="text-align:center; margin-top:30px; position:relative; z-index:10; border-top: 1px dashed #222; padding-top: 40px;">' +
     '<div style="color:var(--primary); font-family:\'Orbitron\', monospace; font-size:11px; opacity:0.5; letter-spacing:6px; margin-bottom:8px;">POWERED BY LUNAR ENGINE</div>' +
-    '<div style="color:var(--primary); font-family:\'Orbitron\', monospace; font-size:11px; opacity:0.3; letter-spacing:3px; margin-bottom:30px;">SYSTEM VERSION: ' + str(VERSION) + '</div>' +
     '<div style="display:inline-block; padding:10px 30px; border-radius:50px; font-size:13px; font-family:\'Orbitron\'; letter-spacing:2px; color:var(--primary); font-weight:bold; background:rgba(0,243,255,0.05); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 15px rgba(0,243,255,0.1);">© 2026 ' + str(COPYRIGHT) + '</div>' +
 '</div>')
