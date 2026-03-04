@@ -841,6 +841,7 @@ POWERED BY LUNAR DESTINY ENGINE | © __CPY__
 # 🛑 [ KERNEL 07 ] 赛博版权区
 # =========================================================================
 render_html('<div style="text-align:center; margin-top:30px; position:relative; z-index:10; border-top: 1px dashed #222; padding-top: 40px;">' +
-    '<div style="color:var(--primary); font-family:\'Orbitron\', monospace; font-size:11px; opacity:0.5; letter-spacing:6px; margin-bottom:8px;">POWERED BY LUNAR ENGINE</div>' +
+    '<div style="color:var(--primary); font-family:\'Orbitron\', monospace; font-size:11px; opacity:0.5; letter-spacing:6px; margin-bottom:8px;">版权归属：无名逆流</div>' +
     '<div style="display:inline-block; padding:10px 30px; border-radius:50px; font-size:13px; font-family:\'Orbitron\'; letter-spacing:2px; color:var(--primary); font-weight:bold; background:rgba(0,243,255,0.05); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 15px rgba(0,243,255,0.1);">© 2026 ' + str(COPYRIGHT) + '</div>' +
 '</div>')
+
