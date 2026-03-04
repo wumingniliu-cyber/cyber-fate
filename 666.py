@@ -222,7 +222,7 @@ is_booted = st.session_state.get("sys_booted", False)
 
 if not is_booted:
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V30.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V1.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
         <span>MARKET-ALPHA: 10-YEAR TREND <b class="down">▼COMPUTING</b></span>
@@ -357,7 +357,7 @@ else:
     else: e_tag, e_color, r_desc = "五行极度平稳，可抗任意暴击", "var(--green)", "您的系统架构堪称完美，拥有极强的抗打击与自愈恢复能力。"
 
     render_html("""<div class="ticker-wrap"><div class="ticker">
-        <span>KARMA-OS: V30.0 SECURE <b class="up">▲ONLINE</b></span>
+        <span>KARMA-OS: V1.0 SECURE <b class="up">▲ONLINE</b></span>
         <span>SOUL-NODE: FATE MAPPED <b class="up">▲LOCKED</b></span>
         <span>BAZI-HASH: DECRYPT SUCCESS <b class="up">▲14.2TH/s</b></span>
         <span>SYS-RISK: FIREWALL ACTIVE <b class="up">▲SECURE</b></span>
@@ -694,7 +694,7 @@ contract Destiny_SBT_V30 is ERC721 {
     with t_txt:
         render_html("<div style='font-size:13px; color:#aaa; margin-top:10px; margin-bottom:15px;'>您专属的万字级【深度机密报告】。新增了前世系统与神煞进程揭露。</div>")
         TXT_TEMP = """=======================================================
-[ KARMA-OS V30.0 ] 量子命盘 · 深度绝密档案 (THE TRUE OMEGA)
+[ KARMA-OS V1.0 ] 量子命盘 · 深度绝密档案 (THE TRUE OMEGA)
 =======================================================
 
 >> 1. 节点基础信息 (IDENTITY)
@@ -844,4 +844,5 @@ render_html('<div style="text-align:center; margin-top:30px; position:relative; 
     '<div style="color:var(--primary); font-family:\'Orbitron\', monospace; font-size:11px; opacity:0.5; letter-spacing:6px; margin-bottom:8px;">版权归属：无名逆流</div>' +
     '<div style="display:inline-block; padding:10px 30px; border-radius:50px; font-size:13px; font-family:\'Orbitron\'; letter-spacing:2px; color:var(--primary); font-weight:bold; background:rgba(0,243,255,0.05); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 15px rgba(0,243,255,0.1);">© 2026 ' + str(COPYRIGHT) + '</div>' +
 '</div>')
+
 
