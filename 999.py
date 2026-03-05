@@ -1,6 +1,8 @@
 import streamlit as st
+import streamlit.components.v1 as components  # 🚨 [核心修复] 夺回丢失的 HTML 渲染组件引擎！死死焊住！
 import random
 import time
+import math  # 🚨 [核心修复] 数学计算引擎归位！
 import hashlib
 import json
 from datetime import datetime, time as dt_time
@@ -17,7 +19,7 @@ except ImportError as e:
     st.error(f"🚨 **FATAL ERROR: 缺少核心算力模块 `{e.name}`**\n\n请配置 requirements.txt: streamlit, lunar-python, plotly, numpy。")
     st.stop()
 
-# ⚡ 局部重绘引擎 (极致交互体验，PVE打怪/抽签绝不引起全局白屏刷新)
+# ⚡ 局部重绘引擎 (仅用于独立组件，确保核心打金状态能全局同步)
 try:
     from streamlit import fragment as st_fragment
 except ImportError:
@@ -29,7 +31,7 @@ except ImportError:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 无名逆流 · 数据人生状态机
 # ==============================================================================
-VERSION = "DATA LIFE TCG V120.0 [THE NAMELESS GENESIS]"
+VERSION = "DATA LIFE TCG V150.0 [THE NAMELESS GENESIS]"
 COPYRIGHT = "无名逆流"
 SYS_NAME = "数据人生 | 赛博算命终端"
 
@@ -56,7 +58,7 @@ BOSS_ROSTER = [
 ]
 
 if "raid_state" not in st.session_state: 
-    st.session_state["raid_state"] = {"idx": 0, "boss_hp": BOSS_ROSTER[0]["max_hp"], "player_hp": 0, "logs": ["> AWAITING DATA-LIFE SIMULATION..."]}
+    st.session_state["raid_state"] = {"idx": 0, "boss_hp": BOSS_ROSTER[0]["max_hp"], "boss_max": BOSS_ROSTER[0]["max_hp"], "boss_atk": BOSS_ROSTER[0]["atk"], "player_hp": 0, "logs": ["> AWAITING DATA-LIFE SIMULATION..."]}
 
 def render_html(html_str):
     st.markdown('\n'.join([line.lstrip() for line in str(html_str).split('\n')]), unsafe_allow_html=True)
@@ -151,7 +153,7 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .hc-core .hc-tag { color: #000 !important; background: currentColor; padding: 2px 6px; border-radius: 2px; }
 
 /* ====================================================================== */
-/* 🌟 核心特效 3：3D 翻转塔罗牌 */
+/* 🌟 核心特效 3：3D 翻转神谕卡 */
 /* ====================================================================== */
 .flip-card { background-color: transparent; perspective: 1200px; width: 100%; max-width: 320px; aspect-ratio: 63/88; margin: 0 auto; cursor: pointer; }
 .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; box-shadow: 0 20px 40px rgba(0,0,0,0.8); border-radius: 16px;}
@@ -225,7 +227,7 @@ DAY_MASTER_DICT = {
     "癸": {"class_name": "Illusionist / 幻影刺客", "mbti": "INTJ", "color": "#b026ff", "element": "水", "tier": "SSR", "base_atk": 3000, "base_def": 3200, "hp": 8500, "desc": "极其聪慧隐秘，习惯幕后推演，兵不血刃达成目的。", "weapon": "认知劫持神经毒素", "skill": "[被动] 命运拨动：战斗前 2 回合处于无法被选中的隐身态。", "evo_path": "隐形爬虫 ➔ 渗透迷雾 ➔ 命运主宰", "ult_evo": "【命运主宰】在第四维度拨动因果的神明", "flaw": "常陷入死循环的逻辑死局，算计太多反错失红利。", "patch": "走向阳光接受丙火照射，用阳谋击碎阴谋。"}
 }
 
-# 🚨 【物理级剿灭 NameError Bug】：统一拼写为 EQUIPS_DICT，增加绝对容错
+# 🚨 【物理级防爆】：全局字典严格定义并统一名称为 EQUIPS_DICT
 EQUIPS_DICT = {
     "七杀": "【破壁】0-Day漏洞引爆器 (Crit+50%)", "正官": "【防火墙】底层协议装甲 (Resist+40%)", 
     "偏印": "【逆向】代码解构仪 (Armor Pen+30%)", "正印": "【灾备】十字架系统备份 (Revive 1x)", 
@@ -246,8 +248,9 @@ PAST_LIVES = [
     {"title": "V5.0 矩阵先知", "debt": "偷看牌库导致规则崩坏。直觉(INT)满级，但血量减半。"}
 ]
 
-# 🛒 黑市盲盒词条库
-LOOT_POOL = list(EQUIPS_DICT.values()) + ["【气运】赛博电子功德碑 (CP +5000)", "【佛性】纳米舍利子 (HP +3000)", "【奇迹】阿卡夏断章 (ATK +2000)"]
+# 🛒 抽卡无限装备生成前缀与后缀
+ITEM_PREFIXES = ["反物质", "量子", "纳米", "虚空", "阿卡夏", "深网", "强殖", "混沌", "暗物质", "等离子", "赛博", "因果", "以太", "星界", "神圣"]
+ITEM_SUFFIXES = ["核心", "装甲", "神经束", "引擎", "驱动器", "协议", "断章", "魔方", "发生器", "力场", "舍利", "圣杯", "王冠", "法则", "晶体"]
 
 # 🀄 赛博每日一卦 (Spell Gacha Pool)
 SPELL_POOL = [
@@ -263,7 +266,6 @@ SPELL_POOL = [
 # 🧠 [ TCG ALGORITHMS ] 核心引擎与战力计算 (新增五行共鸣)
 # ==============================================================================
 def calc_tcg_stats(hash_str, wx_dict, b_atk, b_def, b_hp, equip_count):
-    """🎲 动态稀有度、真实战力 (CP) 与元素共鸣引擎"""
     wx_vals = list(wx_dict.values()) if wx_dict else [20]
     entropy = max(wx_vals) - min(wx_vals)
     
@@ -273,13 +275,11 @@ def calc_tcg_stats(hash_str, wx_dict, b_atk, b_def, b_hp, equip_count):
     elif entropy < 25: rarity, r_col = "SR", "SR"
     else: rarity, r_col = "R", "R"
     
-    # 动态面板成长
     f_atk = int(b_atk + (wx_dict.get('金',0) * 80) + (wx_dict.get('火',0) * 50))
     f_def = int(b_def + (wx_dict.get('土',0) * 100) + (wx_dict.get('水',0) * 30))
     f_hp = int(b_hp + (wx_dict.get('土',0) * 150) + (wx_dict.get('木',0) * 120))
-    f_crit = min(100, 5 + int(wx_dict.get('火',0) * 0.8)) # 暴击率
+    f_crit = min(100, 5 + int(wx_dict.get('火',0) * 0.8)) 
     
-    # 🌟 五行阵营共鸣系统 (Elemental Resonance)
     reso_buff = "【无元素共鸣】"
     max_k = max(wx_dict, key=wx_dict.get) if wx_dict else "土"
     if wx_dict.get(max_k, 0) >= 35:
@@ -316,30 +316,24 @@ def roll_d100(query, user_hash):
 
 @st.cache_resource(show_spinner=False)
 def gen_akashic_charts(seed_hash, wx_scores, dm_color, dm_key):
-    """🚨 满血回归所有硬核图表！完全修复 Plotly ValueError"""
     rng = np.random.RandomState(int(str(seed_hash)[:8], 16))
-    
-    # 1. 3D 全息战区
     f3d = go.Figure()
     f3d.add_trace(go.Scatter3d(x=rng.randint(0,100,80), y=rng.randint(0,100,80), z=rng.randint(0,100,80), mode='markers', marker=dict(size=3, color='#334155', opacity=0.5), hoverinfo='none'))
     cx, cy, cz = wx_scores.get('金', 50), wx_scores.get('木', 50), wx_scores.get('水', 50)
     f3d.add_trace(go.Scatter3d(x=[cx], y=[cy], z=[cz], mode='markers+text', text=[f"<b>COMMANDER: {dm_key}</b>"], textposition="top center", marker=dict(size=18, color=dm_color, symbol='diamond', line=dict(color='#fff', width=2)), textfont=dict(color=dm_color, size=15, family="Orbitron")))
     f3d.update_layout(scene=dict(xaxis=dict(visible=False), yaxis=dict(visible=False), zaxis=dict(visible=False)), paper_bgcolor='rgba(0,0,0,0)', margin=dict(l=0, r=0, t=0, b=0), height=350, showlegend=False)
 
-    # 2. 六维战力雷达 (紧扣数据人生主题)
     r_labels = ["财力(GOLD)", "执行(EXEC)", "智慧(INT)", "气运(LUCK)", "体魄(CON)"]
     wx_v = [wx_scores.get('金',20), wx_scores.get('木',20), wx_scores.get('水',20), wx_scores.get('火',20), wx_scores.get('土',20)]
     f_radar = go.Figure(data=go.Scatterpolar(r=wx_v+[wx_v[0]], theta=r_labels+[r_labels[0]], fill='toself', fillcolor='rgba(0, 243, 255, 0.15)', line=dict(color=dm_color, width=2), marker=dict(color='#fff', size=6)))
     f_radar.update_layout(polar=dict(radialaxis=dict(visible=False), angularaxis=dict(tickfont=dict(color='#fff', size=12, family="Noto Sans SC"))), paper_bgcolor='rgba(0,0,0,0)', height=250, margin=dict(t=10, b=10, l=30, r=30))
     
-    # 3. 10年大运推演走势
     yrs = [str(datetime.now().year + i) for i in range(10)]
     trend = [rng.randint(40, 60)]
     for _ in range(9): trend.append(max(10, min(100, trend[-1] + rng.randint(-25, 30))))
     f_trend = go.Figure(go.Scatter(x=yrs, y=trend, mode='lines+markers', line=dict(color="#f43f5e", width=3, shape='spline'), fill='tozeroy', fillcolor='rgba(244, 63, 94, 0.15)'))
     f_trend.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=220, margin=dict(t=10, b=10, l=10, r=10), xaxis=dict(showgrid=False, tickfont=dict(color='#666', size=10)), yaxis=dict(showgrid=True, gridcolor='#222', tickfont=dict(color='#666', size=10)))
     
-    # 4. 12个月天梯环境热力图
     hm_z = rng.randint(20, 100, size=(4, 12)).tolist()
     hm_x = [f"{str(i).zfill(2)}月" for i in range(1, 13)]
     hm_y = ["财富(Gold)", "事业(Corp)", "姻缘(Love)", "健康(HP)"]
@@ -349,7 +343,6 @@ def gen_akashic_charts(seed_hash, wx_scores, dm_color, dm_key):
     return f3d, f_radar, f_trend, f_hm
 
 def calc_tag_team(my_hash, partner_stem):
-    """💞 赛博道侣合盘测试"""
     rng_syn = np.random.RandomState(int(str(my_hash)[:6], 16) + sum(ord(c) for c in str(partner_stem)))
     score = rng_syn.randint(30, 99)
     if score >= 90: return score, "【天作之合】底层代码 100% 融合，灵魂双修的绝佳道侣！", "#ffaa00", "💖"
@@ -357,17 +350,12 @@ def calc_tag_team(my_hash, partner_stem):
     elif score >= 60: return score, "【平庸握手】勉强能够并行，偶有 Bug 冲突，需耐心打补丁维护。", "#10b981", "🎭"
     else: return score, "【致命排斥】核心逻辑完全相冲！强行双修将导致双方走火入魔！", "#f43f5e", "💔"
 
-def trigger_gacha_draw(spell): 
-    st.session_state["oracle_drawn"] = True
-    st.session_state["active_buff"] = {"atk_mul": spell.get("buff_atk", 1.0), "def_mul": spell.get("buff_def", 1.0), "name": spell["name"]}
-
 # ==============================================================================
 # 🔮 [ ENTRY POINT ] 数据人生登录终端：开包仪式
 # ==============================================================================
 is_booted = st.session_state.get("sys_booted", False)
 
 if not is_booted:
-    # 模拟网游假广播系统
     r_user = f"0x{hashlib.md5(str(time.time()).encode()).hexdigest()[:6].upper()}"
     r_card = random.choice(list(DAY_MASTER_DICT.keys()))
     
@@ -420,7 +408,7 @@ if not is_booted:
         tot = sum(wx_counts.values()) or 1
         wx_scores = {k: int((v/tot)*100) for k, v in wx_counts.items()}
         
-        # 🚨 [BUG 彻底剿灭] 全面采用安全提取，三层 try-except 物理消灭 NameError
+        # 🚨 [BUG 物理级防爆] 三层 try-except 杜绝 NameError，容错度拉满
         skills = []
         try:
             for sg in [bazi.getYearShiShenGan(), bazi.getMonthShiShenGan(), bazi.getTimeShiShenGan()]:
@@ -464,17 +452,16 @@ if not is_booted:
         st.rerun()
 
 # ==============================================================================
-# 🌟 [ TCG DASHBOARD ] 数据人生 · 赛博推演大厅
+# 🌟 [ TCG DASHBOARD ] 数据人生大厅 (左侧主战卡，右侧战术面板)
 # ==============================================================================
 else:
-    # 🚨 绝对安全的全局变量提取，杜绝所有 NameError
     d = st.session_state.get("sys_data", {})
     player_name = str(d.get('name', 'P1'))
     hash_id = str(d.get('hash', '0000000000')).ljust(8, '0')
     entropy = d.get("entropy", 0)
     reso_buff = d.get("reso_buff", "无共鸣")
     
-    # 🚨【成瘾核心】动态计算最终战力：基础战力 + 后期黑市买装备附加的战力
+    # 动态战力结算 (实时加上黑市购买增加的属性)
     creds = st.session_state.get("creds", 0)
     extra_cp = st.session_state.get("extra_cp", 0)
     base_cp = d.get("base_cp", 50000)
@@ -490,13 +477,13 @@ else:
     dm_skill = str(dm_info.get("skill", "无"))
     dm_mbti = str(dm_info.get("mbti", "UNK"))
     
-    # 🚨【满血找回原版 Lore】：进化树与系统漏洞
+    # 满血 Lore
     dm_evo = str(dm_info.get("evo_path", "L1 ➔ L2 ➔ L3"))
     dm_ult = str(dm_info.get("ult_evo", "终极化神"))
     dm_flaw = str(dm_info.get("flaw", "未知漏洞"))
     dm_patch = str(dm_info.get("patch", "保持算法"))
 
-    # 动态面板
+    # 动态获取已增加的面板属性
     f_atk = d.get("atk", 5000)
     f_def = d.get("def", 5000)
     f_hp = d.get("hp", 8000)
@@ -504,20 +491,20 @@ else:
     
     bz = [str(x) for x in d.get('bazi_arr', ['??', '??', '??', '??'])] 
     wx_scores = d.get('wx', {'金':20, '木':20, '水':20, '火':20, '土':20})
-    skills_list = d.get('skills', ['无被动']) # 读取 Session_state 里可追加的 list
+    skills_list = d.get('skills', ['无被动']) 
     past_life = d.get('past_life', PAST_LIVES[0])
     
     rarity = str(d.get("rarity", "SR"))
     r_col_cls = str(d.get("r_col", "SR"))
     
-    # 赛博精神病扫描 / 腐化度检测
+    # 腐化度检测
     corruption = entropy
     corr_col = "#ff007c" if corruption > 60 else ("#fcee0a" if corruption > 30 else "#10b981")
     if corruption > 60: corr_tag, corr_desc = "【极危】重度排异反应", "五行单极属性过载。在矩阵中极易遭遇降维打击，建议寻找互补道侣双排。"
     elif corruption > 30: corr_tag, corr_desc = "【临界】存在系统隐患", "底层算力分布不均。需前往黑市抽取高阶圣遗物补齐短板，防止被一波清场。"
     else: corr_tag, corr_desc = "【完美】免疫精神攻击", "系统架构堪称完美，拥有极强的抗打击与自愈恢复能力，是天生的大后期核心。"
     
-    # 统一获取图表与法术卡 (所有原版图表 100% 满血回归)
+    # 统一获取图表与法术卡
     f3d, f_radar, f_trend, f_hm = gen_akashic_charts(hash_id, wx_scores, dm_color, dm_key)
     spell_card, date_str = pull_daily_spell(hash_id)
     sc_c = str(spell_card.get("color", "var(--primary)"))
@@ -553,7 +540,6 @@ else:
     with c_left:
         render_html(f"<div class='mod-title'><span class='tag'>HERO</span> 主将卡</div>")
         
-        # 🌟 核心黑科技：纯 CSS 3D 全息镭射实体卡牌，加入五行共鸣被动
         holo_fx = "holo-ur" if rarity in ["UR", "SP"] else ""
         TCG_CARD_HTML = f"""
         <div class="tcg-card-container">
@@ -571,7 +557,7 @@ else:
                     <i>"{dm_desc}"</i>
                 </div>
                 <div class="card-stats-box">
-                    <span style="color:#f43f5e;">ATK: {f_atk}</span><span style="color:#10b981;">HP: {f_hp}</span><span>DEF: {f_def}</span>
+                    <span style="color:#f43f5e;">ATK: {f_atk:,}</span><span style="color:#10b981;">HP: {f_hp:,}</span><span>DEF: {f_def:,}</span>
                 </div>
             </div>
         </div>
@@ -585,7 +571,6 @@ else:
         with t_deck:
             render_html("<div style='font-size:13px; color:#aaa; margin-bottom:10px;'>> 你的基础手牌由四柱源码构成，鼠标悬停可物理抽出查看：</div>")
             
-            # 🌟 满血重塑：呈扇形展开的四张基础手牌！(悬浮抽出特效)
             hand_html = '<div class="hand-container">'
             labels = ["OS_YEAR", "ENV_MONTH", "CORE_DAY", "THD_TIME"]
             for i in range(4):
@@ -596,7 +581,6 @@ else:
             hand_html += '</div>'
             render_html(hand_html)
 
-            # 🚨 【满血回归】原版的深度解析（演化路线、漏洞补丁）全部塞回玻璃面板！
             c_d1, c_d2 = st.columns(2)
             with c_d1:
                 DEEP_LORE_HTML = f"""
@@ -615,7 +599,6 @@ else:
                 """
                 render_html(DEEP_LORE_HTML)
             with c_d2:
-                # 动态拼接所有已有装备 (支持黑市抽出来的无限叠加)
                 clean_skills = [s.split(' (')[0] for s in skills_list]
                 sk_html = "".join([f"<div class='relic-item' style='color:{'var(--sp)' if '法术' in s else 'var(--primary)'};'><div style='overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'>{s}</div></div>" for s in reversed(clean_skills)])
                 render_html(f"""
@@ -628,7 +611,6 @@ else:
                 </div>
                 """)
 
-            # 精神病污染度扫描仪
             render_html(f"""
             <div class="glass-panel" style="border-left-color:{corr_col}; padding:15px; margin-bottom:0;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -640,13 +622,11 @@ else:
             """)
 
         with t_oracle:
-            # 🌟 【满血重做：每日一卦与暗骰系统】
             c_g1, c_g2 = st.columns([1.1, 1], gap="large")
             with c_g1:
                 render_html("<div style='color:var(--sp); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ CYBER ORACLE ] 量子塔罗盲盒</div>")
                 render_html("<div style='font-size:12px; color:#aaa; margin-bottom:15px;'>赛博起卦：每天免费抽取一次。抽到的卦象将化作 PVE 打怪的全局 Buff。</div>")
                 
-                # 采用非局部重绘，因为需要更新全局 active_buff
                 if not st.session_state.get("oracle_drawn", False):
                     render_html("""<div class="glass-panel" style="text-align:center; padding:50px 20px; border-color:var(--sp); border-style:dashed;"><div style="font-size:45px; margin-bottom:15px; animation:blink 2s infinite;">📦</div><div style="color:var(--sp); font-family:'Orbitron'; font-size:16px; font-weight:900; letter-spacing:2px; margin-bottom:10px;">DAILY HEXAGRAM SEALED</div><div style="color:#aaa; font-size:12px;">盲盒处于叠加态。点击下方按钮坍缩今日吉凶。</div></div>""")
                     if st.button("⚡ 注入算力，抽取今日神谕", use_container_width=True):
@@ -703,7 +683,6 @@ else:
                 render_dice()
 
         with t_syn:
-            # 🌟 【满血回归：姻缘与道侣匹配测试】
             @st_fragment
             def render_synergy_section():
                 c_l1, c_l2 = st.columns([1.2, 1], gap="large")
@@ -733,106 +712,122 @@ else:
             render_synergy_section()
 
         with t_raid:
-            # 🌟 数据人生：逆天改命打怪 PVE
-            render_html("<div style='font-size:13px; color:#aaa; margin-bottom:15px;'>数据人生就是一场打怪升级。以主将卡挑战命运阶层 Boss，<b>获取 赛博功德 并在黑市消费，永久提升战力！</b></div>")
+            render_html("<div style='font-size:13px; color:#aaa; margin-bottom:15px;'>数据人生就是一场打怪升级。以主将卡挑战命运阶层 Boss，<b>击杀心魔获取【赛博功德】并在黑市消费，永久提升战力！</b></div>")
             
             @st_fragment
             def render_raid():
                 rs = st.session_state["raid_state"]
                 ab = st.session_state["active_buff"]
                 
-                # 每日神谕法术联动数值
                 real_atk = int(f_atk * ab["atk_mul"])
                 real_def = int(f_def * ab["def_mul"])
                 
-                boss_info = BOSS_ROSTER[rs["idx"]]
-                boss_hp_pct = max(0, min(100, int((rs["boss_hp"] / boss_info["max_hp"]) * 100)))
-                my_hp = rs["player_hp"]
-                my_hp_pct = max(0, min(100, int((my_hp / f_hp) * 100)))
-                
-                c_pve1, c_pve2 = st.columns([1.1, 1.5], gap="large")
-                with c_pve1:
-                    render_html(f"""
-                    <div class="glass-panel" style="text-align:center; border-color:var(--pink); padding:15px;">
-                        <div style="font-size:45px; margin-bottom:5px; text-shadow:0 0 20px var(--pink); animation:blink 2s infinite;">👾</div>
-                        <div style="color:var(--pink); font-family:'Orbitron'; font-weight:900; font-size:16px;">{boss_info["name"]}</div>
-                        <div style="color:#aaa; font-size:11px; margin-bottom:10px;">[ {boss_info["desc"]} ]</div>
-                        <div class="hp-bar-bg"><div class="hp-bar-fill hp-red" style="width:{boss_hp_pct}%;"></div></div>
-                        <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold; margin-bottom:10px;">{rs["boss_hp"]:,} / {boss_info["max_hp"]:,} HP</div>
-                        
-                        <hr style="border-color:#333; margin:10px 0;">
-                        
-                        <div style="color:var(--green); font-family:'Orbitron'; font-weight:bold; font-size:12px; margin-bottom:5px;">YOUR HP (玩家血量)</div>
-                        <div class="hp-bar-bg"><div class="hp-bar-fill hp-green" style="width:{my_hp_pct}%;"></div></div>
-                        <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold;">{my_hp:,} / {f_hp:,} HP</div>
-                        <div style="font-size:10px; color:#888; margin-top:5px;">ACTIVE BUFF: {ab["name"]}</div>
-                    </div>
-                    """)
+                if rs["idx"] >= len(BOSS_ROSTER):
+                    render_html("<div class='glass-panel' style='text-align:center; padding:50px;'><div style='font-size:60px;'>👑</div><div style='color:var(--sp); font-size:24px; font-weight:bold; font-family:Orbitron;'>[ GOD MODE ]</div><div style='color:#aaa; font-size:14px; margin-top:10px;'>你已击穿所有命运阶层，成功登神！</div></div>")
+                else:
+                    boss_info = BOSS_ROSTER[rs["idx"]]
+                    boss_hp_pct = max(0, min(100, int((rs["boss_hp"] / boss_info["max_hp"]) * 100)))
+                    my_hp = rs["player_hp"]
+                    my_hp_pct = max(0, min(100, int((my_hp / f_hp) * 100)))
                     
-                    if my_hp <= 0:
-                        st.error("💀 你的碳基载体已崩溃，人生模拟结束。")
-                        if st.button("💉 消耗 500 赛博功德重塑肉身 (REVIVE)", use_container_width=True):
-                            if st.session_state["creds"] >= 500:
-                                st.session_state["creds"] -= 500
-                                st.session_state["raid_state"]["player_hp"] = f_hp
-                                st.session_state["raid_state"]["logs"].append("> [SYS] 功德支付成功，肉体重塑，意识重新上传。")
-                                st.rerun()
-                            else:
-                                st.warning("余额不足！你只能选择底部的【物理重启】重新投胎了。")
-                    elif rs["boss_hp"] > 0:
-                        if st.button("💥 发起骇入攻击 (ATTACK)", use_container_width=True):
-                            # Player Attack
-                            dmg = int((real_atk + final_cp * 0.05) * random.uniform(0.85, 1.2))
-                            is_crit = random.randint(1, 100) <= f_crit
-                            if is_crit:
-                                dmg = int(dmg * 2.5)
-                                log_msg = f"<span style='color:var(--sp); font-weight:bold;'>[CRITICAL] 触发暴击！对 Boss 造成 {dmg:,} 点毁灭伤害！</span>"
-                            else:
-                                log_msg = f"<span style='color:var(--primary);'>[ATTACK] 你发起了普攻，造成了 {dmg:,} 点真实伤害。</span>"
+                    c_pve1, c_pve2 = st.columns([1.1, 1.5], gap="large")
+                    with c_pve1:
+                        render_html(f"""
+                        <div class="glass-panel" style="text-align:center; border-color:var(--pink); padding:15px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:Orbitron; font-weight:bold; font-size:12px;">
+                                <span style="color:var(--pink);">BOSS_AI</span> <span style="color:#fff;">VS</span> <span style="color:var(--primary);">PLAYER</span>
+                            </div>
+                            <div class="boss-avatar">👾</div>
+                            <div style="color:var(--pink); font-family:'Orbitron'; font-weight:900; font-size:15px;">{boss_info["name"]}</div>
+                            <div style="color:#aaa; font-size:11px; margin-bottom:10px;">[ {boss_info["desc"]} ]</div>
+                            <div class="hp-bar-bg"><div class="hp-bar-fill hp-red" style="width:{boss_hp_pct}%;"></div></div>
+                            <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold; margin-bottom:10px;">{rs["boss_hp"]:,} / {boss_info["max_hp"]:,} HP</div>
                             
-                            rs["boss_hp"] -= dmg
-                            if rs["boss_hp"] <= 0:
-                                rs["boss_hp"] = 0
-                                reward = (rs["idx"] + 1) * 2500
-                                log_msg += f"<br><br><span style='color:var(--green); font-size:14px; font-weight:bold;'>🏆 [VICTORY] 阶层突破成功！<br>🎁 战利品：获得 <span style='color:var(--sp)'>{reward} 赛博功德</span>！去黑市抽卡吧！</span>"
-                                st.session_state["creds"] += reward
-                            else:
-                                boss_dmg = int(boss_info["atk"] * random.uniform(0.9, 1.1))
-                                actual_dmg = max(100, int(boss_dmg - (real_def * 0.5)))
-                                rs["player_hp"] -= actual_dmg
-                                log_msg += f"<br><span style='color:var(--pink);'>[BOSS COUNTER] 矩阵反噬！装甲抵消了部分伤害，受到 {actual_dmg:,} 点真实伤害。</span>"
-                                if rs["player_hp"] <= 0:
-                                    rs["player_hp"] = 0
-                                    log_msg += "<br><br><span style='color:var(--pink); font-size:16px; font-weight:bold;'>💀 [DEFEAT] 主将卡被粉碎！人生模拟结束。</span>"
+                            <hr style="border-color:#333; margin:10px 0;">
+                            
+                            <div style="color:var(--green); font-family:'Orbitron'; font-weight:bold; font-size:12px; margin-bottom:5px;">YOUR HP (玩家血量)</div>
+                            <div class="hp-bar-bg"><div class="hp-bar-fill hp-green" style="width:{my_hp_pct}%;"></div></div>
+                            <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold;">{my_hp:,} / {f_hp:,} HP</div>
+                            <div style="font-size:10px; color:#888; margin-top:5px;">ACTIVE BUFF: <span style="color:var(--sp);">{ab["name"]}</span></div>
+                        </div>
+                        """)
+                        
+                        if my_hp <= 0:
+                            st.error("💀 你的碳基载体已崩溃，人生模拟结束。")
+                            if st.button("💉 消耗 500 赛博功德重塑肉身 (REVIVE)", use_container_width=True):
+                                if st.session_state["creds"] >= 500:
+                                    st.session_state["creds"] -= 500
+                                    st.session_state["raid_state"]["player_hp"] = f_hp
+                                    st.session_state["raid_state"]["logs"].append("> [SYS] 功德支付成功，肉体重塑，意识重新上传。")
+                                    st.rerun()
+                                else:
+                                    st.warning("余额不足！你只能选择底部的【物理重启】重新投胎了。")
+                        elif rs["boss_hp"] > 0:
+                            if st.button("💥 发起骇入攻击 (ATTACK)", use_container_width=True):
+                                dmg = int((real_atk + final_cp * 0.05) * random.uniform(0.85, 1.2))
+                                is_crit = random.randint(1, 100) <= f_crit
+                                is_ult = random.randint(1, 100) <= 15 
                                 
-                            rs["logs"].append(log_msg)
-                            st.rerun()
-                    else:
-                        if rs["idx"] < len(BOSS_ROSTER) - 1:
-                            if st.button("🚀 跃迁至下一层生命矩阵 (NEXT STAGE)", use_container_width=True):
-                                rs["idx"] += 1
-                                rs["boss_hp"] = BOSS_ROSTER[rs["idx"]]["max_hp"]
-                                rs["player_hp"] = f_hp # 回满血
-                                rs["logs"].append(f"<br><span style='color:var(--yellow);'>> [SYS] 已进入人生第 {rs['idx']+1} 阶段。HP已恢复，侦测到更强阶层壁垒。</span>")
+                                if is_ult:
+                                    dmg = int(dmg * 3.5)
+                                    log_msg = f"<span style='color:var(--sp); font-weight:bold; font-size:14px;'>💥 [ULTIMATE] 触发终极神权【{dm_ult}】！造成 {dmg:,} 点降维打击伤害！</span>"
+                                elif is_crit:
+                                    dmg = int(dmg * 2.0)
+                                    log_msg = f"<span style='color:var(--ur); font-weight:bold;'>⚡ [CRITICAL] 触发暴击！对心魔造成 {dmg:,} 点毁灭伤害！</span>"
+                                else:
+                                    log_msg = f"<span style='color:var(--primary);'>⚔️ [ATTACK] 你发起了普攻，造成了 {dmg:,} 点真实伤害。</span>"
+                                
+                                rs["boss_hp"] -= dmg
+                                if rs["boss_hp"] <= 0:
+                                    rs["boss_hp"] = 0
+                                    reward = (rs["idx"] + 1) * 3500
+                                    log_msg += f"<br><br><span style='color:var(--green); font-size:14px; font-weight:bold;'>🏆 [VICTORY] 阶层突破成功！<br>🎁 战利品：获得 <span style='color:var(--sp)'>{reward} 赛博功德</span>！去黑市抽卡吧！</span>"
+                                    st.session_state["creds"] += reward
+                                else:
+                                    boss_dmg = int(boss_info["atk"] * random.uniform(0.9, 1.1))
+                                    actual_dmg = max(100, int(boss_dmg - (real_def * 0.6)))
+                                    rs["player_hp"] -= actual_dmg
+                                    log_msg += f"<br><span style='color:var(--pink);'>🛡️ [BOSS COUNTER] 矩阵反噬！装甲抵消了部分冲击，受到 {actual_dmg:,} 点伤害。</span>"
+                                    if rs["player_hp"] <= 0:
+                                        rs["player_hp"] = 0
+                                        log_msg += "<br><br><span style='color:var(--pink); font-size:16px; font-weight:bold;'>💀 [DEFEAT] 主将卡被粉碎！人生模拟结束。</span>"
+                                    
+                                rs["logs"].append(log_msg)
                                 st.rerun()
                         else:
-                            st.success("👑 [GOD MODE] 你已击穿了所有的命运阶层防火墙，成功登神！")
-                            
-                with c_pve2:
-                    log_html = "<br><hr style='border-color:#333; margin:10px 0;'>".join(rs["logs"][-6:])
-                    render_html(f"<div class='glass-panel' style='background:#000; font-family:\"Fira Code\"; font-size:12px; height:410px; display:flex; flex-direction:column-reverse; overflow-y:auto; border-left:4px solid var(--primary); padding:15px; margin-bottom:0;'><div>{log_html}<br><span style='animation:blink 1s infinite;'>_</span></div></div>")
+                            if rs["idx"] < len(BOSS_ROSTER) - 1:
+                                if st.button("🚀 跃迁至下一层生命矩阵 (NEXT STAGE)", use_container_width=True):
+                                    rs["idx"] += 1
+                                    rs["boss_hp"] = BOSS_ROSTER[rs["idx"]]["max_hp"]
+                                    rs["player_hp"] = f_hp # 回满血
+                                    rs["logs"].append(f"<br><span style='color:var(--yellow);'>> [SYS] 已进入人生第 {rs['idx']+1} 阶段。HP已恢复，侦测到更强阶层壁垒。</span>")
+                                    st.rerun()
+                            else:
+                                if st.button("👑 飞升登神 (ASCEND)", use_container_width=True):
+                                    rs["idx"] += 1
+                                    st.rerun()
+                                
+                    with c_pve2:
+                        log_html = "<br><hr style='border-color:#333; margin:10px 0;'>".join(rs["logs"][-6:])
+                        render_html(f"<div class='glass-panel' style='background:#000; font-family:\"Fira Code\"; font-size:12px; height:410px; display:flex; flex-direction:column-reverse; overflow-y:auto; border-left:4px solid var(--primary); padding:15px; margin-bottom:0;'><div>{log_html}<br><span style='animation:blink 1s infinite;'>_</span></div></div>")
             render_raid()
 
         with t_shop:
             c_sh1, c_sh2 = st.columns([1, 1], gap="large")
             with c_sh1:
-                render_html("<div style='color:var(--sp); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ CYBER SHRINE ] 赛博道观 (黑市)</div>")
+                render_html("<div style='color:var(--sp); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ CYBER SHRINE ] 赛博道观 (黑市盲盒)</div>")
                 
                 @st_fragment
                 def render_shop():
-                    render_html(f"<div class='glass-panel' style='padding:20px; border-color:var(--sp); margin-bottom:10px; text-align:center;'><div style='font-size:12px; color:#aaa; margin-bottom:10px;'>消耗 PVE 掉落的赛博功德抽取极品词条，永久增加基础 CP！</div><div style='font-size:30px; font-family:Orbitron; color:var(--sp); font-weight:bold; margin-bottom:10px; text-shadow:0 0 10px var(--sp);'>MERITS: {st.session_state['creds']:,}</div></div>")
+                    render_html(f"""
+                    <div class='glass-panel' style='padding:20px; border-color:var(--sp); margin-bottom:10px; text-align:center;'>
+                        <div style='font-size:12px; color:#aaa; margin-bottom:10px;'>消耗 PVE 掉落的赛博功德抽取极品词条，永久增加基础面板与 CP！</div>
+                        <div style='font-size:10px; color:#888; margin-bottom:10px;'>掉率: R(60%) | SR(25%) | SSR(10%) | UR(4%) | SP(1%)</div>
+                        <div style='font-size:30px; font-family:Orbitron; color:var(--sp); font-weight:bold; margin-bottom:10px; text-shadow:0 0 10px var(--sp);'>MERITS: {st.session_state['creds']:,}</div>
+                    </div>
+                    """)
                     
-                    if st.button("🪙 消耗 1,000 功德敲击赛博木鱼 (抽盲盒)", use_container_width=True):
+                    if st.button("🪙 消耗 1,000 功德敲击赛博木鱼 (无限抽卡)", use_container_width=True):
                         if st.session_state["creds"] >= 1000:
                             st.session_state["creds"] -= 1000
                             pull = random.choices(
@@ -840,34 +835,36 @@ else:
                                 weights=[60, 25, 10, 4, 1], k=1
                             )[0]
                             r_tier, b_cp, c_col = pull
-                            item_name = random.choice(["义体插件", "算力碎片", "黑冰代码", "神经接口", "阿卡夏断章", "舍利子", "量子符箓", "气运补丁"])
+                            item_name = f"{random.choice(ITEM_PREFIXES)}{random.choice(ITEM_SUFFIXES)}"
                             
                             clean_relic = f"[{r_tier}] {item_name} (+{b_cp} CP)"
-                            st.session_state["sys_data"]["skills"].append(clean_relic) # 加到技能池
-                            st.session_state["extra_cp"] += b_cp # 永久加CP
                             
-                            # 真实增加面板属性
+                            # 🚨 深拷贝强制更新机制，确保面板属性当场暴涨！
+                            new_skills = st.session_state["sys_data"]["skills"] + [clean_relic]
+                            st.session_state["sys_data"]["skills"] = new_skills
+                            st.session_state["extra_cp"] += b_cp 
+                            
                             st.session_state["sys_data"]["atk"] += int(b_cp * 0.05)
                             st.session_state["sys_data"]["def"] += int(b_cp * 0.05)
                             st.session_state["sys_data"]["hp"] += int(b_cp * 0.2)
-                            st.session_state["raid_state"]["player_hp"] = st.session_state["sys_data"]["hp"] # 满血
                             
-                            st.success(f"🎉 佛祖显灵！抽出 {r_tier} 级词条: {clean_relic}！战力永久飙升，血量与攻击已强化！")
-                            time.sleep(1.5)
-                            st.rerun()
+                            # 满血复活迎接下一层挑战
+                            st.session_state["raid_state"]["player_hp"] = st.session_state["sys_data"]["hp"] 
+                            
+                            st.success(f"🎉 佛祖显灵！抽出 {r_tier} 级词条: {clean_relic}！战力永久飙升！")
+                            time.sleep(1.0)
+                            st.rerun() # 触发全局重绘，刷新左侧英雄卡属性面板！
                         else:
                             st.error("赛博功德不足！请前往【逆天改命】面板击杀人生拦路虎！")
                 render_shop()
             with c_sh2:
-                render_html("<div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ INVENTORY ] 已挂载改命词条</div>")
-                # 过滤掉原有的白板
+                render_html("<div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ INVENTORY ] 你的装备背囊</div>")
                 clean_skills = [s for s in skills_list if "白板" not in s]
                 if not clean_skills: clean_skills = ["【空空如也】"]
                 sk_html = "".join([f"<div class='relic-item' style='color:{'var(--sp)' if 'SP' in s or 'UR' in s else 'var(--primary)'};'><div style='overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'>{s.split(' (')[0]}</div></div>" for s in reversed(clean_skills)])
                 render_html(f"<div class='glass-panel' style='height:300px; overflow-y:auto; border-left-color:var(--primary);'><div class='relic-grid'>{sk_html}</div></div>")
 
         with t_map:
-            # 🚨 满血回归：所有复杂大盘图表组合，无任何 ValueError 报错
             c_m1, c_m2 = st.columns(2, gap="large")
             with c_m1:
                 render_html("<div style='font-size:12px; color:var(--primary); font-family:Orbitron; margin-bottom:5px; text-align:center; font-weight:bold;'>[ DOMAIN EXPANSION ] 3D 全网战区拓扑仪</div>")
@@ -883,7 +880,7 @@ else:
         with t_export:
             @st_fragment
             def render_exports():
-                # 🚨【五大导出系统全量回归 & 版权归属无名逆流】
+                # 🚨【五大导出系统全量安全重构 & 版权归属无名逆流】
                 render_html(f"<div style='text-align:center; color:#888; font-size:13px; margin-top:10px; margin-bottom:15px;'>资产分发中心。可压制实体卡砖或提取底层数据。© {COPYRIGHT}</div>")
                 e_psa, e_web3, e_txt, e_json, e_asc = st.tabs(["📸 PSA 10 实体卡砖", "💻 智能合约铸造", "📜 万字机密档案", "💾 JSON 底包", "📟 ASCII 卡片"])
                 
@@ -891,11 +888,10 @@ else:
                     c_e1, c_e2, c_e3 = st.columns([1, 2, 1])
                     with c_e2:
                         if st.button("📸 压制 PSA 10 典藏卡砖 (MINT SLAB)", use_container_width=True):
-                            # 控制海报装备显示数量避免超出，过滤掉过长的字符串
                             clean_sk = [s.split(' (')[0].split('】')[-1].strip() if '】' in s else s for s in skills_list]
                             sk_h = "".join([f"<span style='background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:2px 6px; margin:2px; font-size:9px; display:inline-block; font-family:Fira Code; border-radius:2px;'>{s}</span>" for s in reversed(clean_sk[-5:])])
                             
-                            # 🚨 终极安全渲染，完全避开 f-string 冲突
+                            # 🚨 终极防爆渲染：没有任何 Python f-string 冲突。彻底引入 components。
                             HTML_POSTER_RAW = """
                             <!DOCTYPE html><html><head><meta charset="utf-8">
                             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -978,13 +974,13 @@ else:
                             </body></html>
                             """
                             
-                            # 🚨 完美修复：全部替换为字符串，统一使用变量名 final_cp
                             html_ready = HTML_POSTER_RAW.replace("__COLOR__", dm_color).replace("__PLAYER__", player_name.upper())
                             html_ready = html_ready.replace("__HASH__", hash_id[:10]).replace("__DM_KEY__", dm_key).replace("__CLASS__", dm_class.split('/')[0].strip())
                             html_ready = html_ready.replace("__TIER__", rarity).replace("__CP__", f"{final_cp:,}")
                             html_ready = html_ready.replace("__WPN__", dm_wpn.split('】')[-1].strip() if '】' in dm_wpn else dm_wpn).replace("__SKILL__", dm_skill).replace("__DESC__", dm_desc)
-                            html_ready = html_ready.replace("__EQUIPS__", sk_h).replace("__ATK__", str(f_atk)).replace("__HP__", str(f_hp)).replace("__CPY__", COPYRIGHT.upper())
+                            html_ready = html_ready.replace("__EQUIPS__", sk_h).replace("__ATK__", f"{f_atk:,}").replace("__HP__", f"{f_hp:,}").replace("__CPY__", COPYRIGHT.upper())
                             
+                            # 🚨 终极渲染调用！
                             components.html(html_ready, height=750)
                 
                 with e_web3:
@@ -996,7 +992,7 @@ import "@tcg-matrix/contracts/token/ERC721.sol";
 // POWERED BY {COPYRIGHT}
 // ==========================================
 
-contract Karma_TCG_V120 is ERC721 {{
+contract Karma_TCG_V130 is ERC721 {{
     // > MINT_TARGET : {player_name}
     // > CARD_RARITY : {rarity} (CP: {final_cp})
     // > HASH_ID     : 0x{hash_id}
@@ -1028,7 +1024,7 @@ contract Karma_TCG_V120 is ERC721 {{
 ▸ 代号：{dm_key} ({dm_info.get('element', '')}系)
 ▸ 职阶：{dm_class}
 ▸ MBTI：[ {dm_mbti} ]
-▸ 动态面板：ATK {f_atk} | DEF {f_def} | HP {f_hp} | CRI {f_crit}%
+▸ 动态面板：ATK {f_atk:,} | DEF {f_def:,} | HP {f_hp:,} | CRI {f_crit}%
 ▸ 特质：{dm_desc}
 ▸ 武装：{dm_wpn} | 技能：{dm_skill}
 
@@ -1077,7 +1073,7 @@ contract Karma_TCG_V120 is ERC721 {{
 [ COMMANDER / 主将面板 ]
 > NAME   : {dm_key} ({dm_class.split('/')[0].strip()})
 > WEAPON : {dm_wpn.split('】')[-1].strip() if '】' in dm_wpn else dm_wpn}
-> STATS  : ATK {f_atk} | DEF {f_def} | HP {f_hp}
+> STATS  : ATK {f_atk:,} | DEF {f_def:,} | HP {f_hp:,}
 
 [ RADAR / 属性水晶 ]
   GOLD(财力) : {wx_scores.get('金',0):02d}% |{m_b(wx_scores.get('金',0))}|
@@ -1116,10 +1112,10 @@ POWERED BY {COPYRIGHT}
                 cmd_lower = cmd_str.lower()
                 if cmd_lower == '/help': logs.append("<span style='color:#aaa;'>CMDS: /rank, /ping, /clear, /wuming</span>")
                 elif cmd_lower == '/rank': 
-                    rank_pct = min(99.9, max(1.0, final_cp / 1000.0))
-                    logs.append(f"<span style='color:var(--sp);'>[SYS] 当前战力(CP {final_cp:,})击败了矩阵中 {rank_pct:.1f}% 的玩家。</span>")
+                    rank_pct = min(99.9, max(1.0, final_cp / 10000.0))
+                    logs.append(f"<span style='color:var(--sp);'>[SYS] 当前战力(CP {final_cp:,})击败了矩阵中 {rank_pct:.2f}% 的玩家。</span>")
                 elif cmd_lower == '/clear': logs = ["> TERMINAL CLEARED."]
-                elif cmd_lower == '/wuming': logs.append(f"<span style='color:var(--sp); font-weight:bold;'>[EASTER EGG] 欢迎来到【无名逆流】的数据神域。万物皆虚，唯代码永存。</span>")
+                elif cmd_lower == '/wuming': logs.append(f"<span style='color:var(--sp); font-weight:bold;'>[EASTER EGG] 欢迎来到【{COPYRIGHT}】的数据神域。万物皆虚，唯代码永存。</span>")
                 elif cmd_lower == '/ping': logs.append("<span style='color:var(--yellow);'>[PONG] 赛博佛祖延迟 0.00ms. 「玄不救非，氪不改命。」</span>")
                 else: logs.append(f"<span style='color:var(--pink);'>[ERR] Bad Command.</span>")
                 st.session_state["term_logs"] = logs[-15:]
