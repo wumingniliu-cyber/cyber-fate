@@ -1,8 +1,8 @@
 import streamlit as st
-import streamlit.components.v1 as components  # 🚨 物理级焊死渲染引擎
+import streamlit.components.v1 as components
 import random
 import time
-import math  # 🚨 物理级焊死计算引擎
+import math
 import hashlib
 import json
 from datetime import datetime, time as dt_time
@@ -27,13 +27,13 @@ except ImportError:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 无名逆流 · 数据人生 工业级状态机 (深层自愈引擎)
 # ==============================================================================
-VERSION = "DATA LIFE TCG V1000.2 [THE OMEGA LOOP]"
+VERSION = "DATA LIFE TCG V1000.5 [THE OMEGA GENESIS]"
 COPYRIGHT = "无名逆流"
 SYS_NAME = "数据人生 | 工业级赛博修仙"
 
 st.set_page_config(page_title=SYS_NAME, page_icon="🎴", layout="wide", initial_sidebar_state="collapsed")
 
-# 🚨 【深层状态自愈装甲】：彻底解决所有旧缓存导致的 KeyError 和 NameError！
+# 🚨 【深层状态自愈装甲】：彻底解决所有旧缓存导致的 KeyError 和 语法错！
 def init_state():
     if "db" not in st.session_state:
         st.session_state["db"] = {}
@@ -53,7 +53,7 @@ def init_state():
             "pet_data": {"name": "无灵宠", "atk_mul": 1.0, "hp_mul": 1.0, "def_mul": 1.0, "crit_bonus": 0, "icon": ""}
         },
         "combat": {"cd_def": 0, "cd_heal": 0, "cd_ult": 0},
-        "pve": {"idx": 0, "boss_hp": 8000, "boss_max": 8000, "curr_hp": 0, "rebirth": 0, "logs": [f"> [{COPYRIGHT}] MATRIX INITIATED..."]},
+        "pve": {"idx": 0, "boss_hp": 15000, "boss_max": 15000, "curr_hp": 0, "rebirth": 0, "logs": [f"> [{COPYRIGHT}] MATRIX INITIATED..."]},
         "pvp": {"rp": 1000, "tier": "🔰 废土黑铁", "wins": 0, "logs": [f"> AWAITING RANKED MATCH..."]},
         "world_boss": {"highest_dmg": 0, "logs": [f"> WORLD BOSS DETECTED..."]},
         "quests": {"kills": 0, "merges": 0, "gacha_pulls": 0, "claimed": []},
@@ -63,6 +63,7 @@ def init_state():
         "term_logs": [f"> THE MATRIX BY {COPYRIGHT} INITIALIZED..."]
     }
     
+    # 强制深层合并补齐变量，遇到旧缓存也能瞬间修复，永不报错
     def deep_merge(d, u):
         for k, v in u.items():
             if isinstance(v, dict): d[k] = deep_merge(d.get(k, {}), v)
@@ -75,11 +76,11 @@ init_state()
 
 # 核心战役梯度
 BOSS_ROSTER = [
-    {"lvl": 1, "name": "L1 算法过滤网", "max_hp": 8000, "atk": 500, "reward": 2000, "desc": "出身的初始拦截。无Buff也可轻松强杀。"},
-    {"lvl": 2, "name": "L2 职场剥削阵列", "max_hp": 35000, "atk": 2500, "reward": 6000, "desc": "吞噬生命算力的永动机。建议去黑市抽点装备。"},
-    {"lvl": 3, "name": "L3 消费主义巨兽", "max_hp": 150000, "atk": 12000, "reward": 18000, "desc": "资本编织的迷幻网。必须抽每日神谕方可一战。"},
-    {"lvl": 4, "name": "L4 黑天鹅风暴", "max_hp": 480000, "atk": 35000, "reward": 50000, "desc": "因果律打击。必须合成神器+绑定高分道侣。"},
-    {"lvl": 5, "name": "L5 阿卡夏主脑", "max_hp": 2000000, "atk": 120000, "reward": 200000, "desc": "统御世界线的神明，击碎它即可开启飞升轮回！"}
+    {"lvl": 1, "name": "L1 算法过滤网", "max_hp": 15000, "atk": 800, "reward": 2500, "desc": "出身与学历的初始拦截。无Buff也可轻松强杀。"},
+    {"lvl": 2, "name": "L2 职场剥削阵列", "max_hp": 45000, "atk": 3500, "reward": 6000, "desc": "吞噬生命算力的永动机。建议去黑市抽点装备。"},
+    {"lvl": 3, "name": "L3 消费主义巨兽", "max_hp": 180000, "atk": 15000, "reward": 18000, "desc": "资本编织的迷幻网。必须抽每日神谕方可一战。"},
+    {"lvl": 4, "name": "L4 黑天鹅风暴", "max_hp": 550000, "atk": 45000, "reward": 50000, "desc": "因果律打击。必须合成神器+绑定高分道侣。"},
+    {"lvl": 5, "name": "L5 阿卡夏主脑", "max_hp": 2500000, "atk": 150000, "reward": 200000, "desc": "统御世界线的神明，击碎它即可开启飞升轮回！"}
 ]
 
 def render_html(html_str):
@@ -140,7 +141,7 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .synergy-row .mul { color: var(--green); font-weight: bold; text-shadow: 0 0 5px var(--green); }
 .synergy-total { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 18px; color: var(--sp); font-weight: 900; margin-top: 10px; padding-top: 10px; border-top: 1px solid #444; text-shadow: 0 0 10px var(--sp); }
 
-/* 🌟 扇形手牌系统 (物理级悬停抽出特效) */
+/* 🌟 扇形手牌系统 */
 .hand-container { display: flex; justify-content: center; align-items: center; margin-top: 40px; height: 200px; position: relative; perspective: 1000px; margin-bottom:40px;}
 .hand-card { width: 120px; height: 165px; background: linear-gradient(180deg, rgba(20,20,30,0.95) 0%, #050608 100%); border: 2px solid #444; border-radius: 8px; position: absolute; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: -5px 10px 20px rgba(0,0,0,0.6); }
 .hand-card .hc-val { font-size: 35px; font-weight: 900; font-family: 'Noto Sans SC'; color: #fff; line-height: 1; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
@@ -317,7 +318,9 @@ def calc_base_stats(hash_str, wx_dict, b_atk, b_def, b_hp):
         elif max_k == '火': reso_buff = "【极炎】暴击提升"; f_crit += 10
         elif max_k == '土': reso_buff = "【厚土】防御强化"; f_def = int(f_def * 1.3)
     
-    return rarity, r_col, f_atk, f_def, f_hp, f_crit, entropy, reso_buff
+    rng = np.random.RandomState(int(str(hash_str)[:8], 16))
+    base_cp = int((f_atk * 1.2 + f_def * 0.8 + f_hp * 0.1) * rng.uniform(0.9, 1.2))
+    return rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff
 
 def update_computed_stats(db):
     """⚔️ 核心大一统引擎：Base + Shop + Buffs + Pet + Synergy + Title -> Computed"""
@@ -420,14 +423,14 @@ if not st.session_state["db"].get("booted", False):
     
     ENTRY_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA LIFE MATRIX V1000.1 <b class="up">▲ONLINE</b></span>
+        <span>DATA LIFE MATRIX V1000.5 <b class="up">▲ONLINE</b></span>
         <span>BROADCAST: User {r_user} just pulled <b class="ur">★ SP {r_card} 主将卡</b> !</span>
         <span>COPYRIGHT: {COPYRIGHT} <b class="up">▲AUTHORIZED</b></span>
     </div></div>
     <div style="text-align: center; margin-bottom: 25px; margin-top:5vh;">
         <div style="color:var(--sp); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:10px; margin-bottom:10px; text-shadow:0 0 10px var(--sp);">[ INSERT COIN TO PULL ]</div>
         <h1 class="hero-title" data-text="无名逆流·数据人生">无名逆流·数据人生</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.1</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.5</div>
     </div>
     <div class="glass-panel" style="max-width: 680px; margin: 0 auto 30px auto; border-left: 4px solid var(--sp); padding: 35px; text-align:center;">
         <div style="color:var(--sp); font-size: 18px; font-weight:900; letter-spacing: 2px; margin-bottom:15px; text-shadow:0 0 10px var(--sp);">“如果命运是一场牌局，出生就是第一次抽卡。”</div>
@@ -549,7 +552,7 @@ else:
 
     HEADER_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA-LIFE RPG: V1000.1 <b class="up">▲SYNCED</b></span>
+        <span>DATA-LIFE RPG: V1000.5 <b class="up">▲SYNCED</b></span>
         <span>PLAYER: {player_name} <b class="up">▲ACTIVE</b></span>
         <span>CYBER_MERITS: {shop.get('creds', 0)} <b class="ur">★ LOADED</b></span>
         <span>PVP_RANK: {db.get('pvp',{}).get('tier', 'Unranked')} </span>
@@ -614,7 +617,7 @@ else:
         """
         render_html(TCG_CARD_HTML)
         
-        # 🚨 [核心视觉重构] 战力联动核算大盘！把底层联动公式砸在玩家脸上！
+        # 🚨 [核心视觉重构] 战力联动核算大盘
         f_atk_m = 1.1 if "荒坂" in base.get("faction", "") else 1.0
         eq_c = len(shop.get("relics", []))
         set_mul = 1.5 if eq_c >= 20 else (1.2 if eq_c >= 10 else (1.1 if eq_c >= 5 else 1.0))
@@ -625,16 +628,16 @@ else:
             <div class="synergy-row"><span>> 出厂基底 + 黑市装备总和:</span> <span class="val">{base.get('atk',0) + shop.get('b_atk',0):,} ATK</span></div>
             <div class="synergy-row"><span>> 阵营契约 & 装备套装共鸣:</span> <span class="mul">x {f_atk_m * set_mul:.2f}</span></div>
             <div class="synergy-row"><span>> 伴生机械灵宠 ({pet.get('name', '无')}):</span> <span class="mul">x {pet.get('atk_mul', 1.0):.2f}</span></div>
-            <div class="synergy-row"><span>> 赛博命运神谕 ({buffs.get('oracle_data',{}).get('name','')}):</span> <span class="mul">x {buffs.get('oracle_data',{}).get('atk_mul', 1.0):.2f}</span></div>
-            <div class="synergy-row"><span>> 灵魂合盘道侣 ({buffs.get('syn_data',{}).get('name','')}):</span> <span class="mul" style="color:var(--sp);">x {buffs.get('syn_data',{}).get('atk_mul', 1.0):.2f}</span></div>
-            <div class="synergy-row"><span>> 荣耀称号加成 ({ach.get('equipped',{}).get('name','')}):</span> <span class="mul" style="color:var(--green);">x {ach.get('equipped',{}).get('mul',1.0):.2f}</span></div>
+            <div class="synergy-row"><span>> 赛博命运神谕 ({buffs.get('oracle_data',{{}}).get('name','')}):</span> <span class="mul">x {buffs.get('oracle_data',{{}}).get('atk_mul', 1.0):.2f}</span></div>
+            <div class="synergy-row"><span>> 灵魂合盘道侣 ({buffs.get('syn_data',{{}}).get('name','')}):</span> <span class="mul" style="color:var(--sp);">x {buffs.get('syn_data',{{}}).get('atk_mul', 1.0):.2f}</span></div>
+            <div class="synergy-row"><span>> 荣耀称号加成 ({ach.get('equipped',{{}}).get('name','')}):</span> <span class="mul" style="color:var(--green);">x {ach.get('equipped',{{}}).get('mul',1.0):.2f}</span></div>
             <div class="synergy-total"><span>> 实战爆杀最终攻击力:</span> <span style="font-size:24px;">{fin_atk:,}</span></div>
         </div>
         """
         render_html(calc_html)
 
     with c_right:
-        # 🗄️ 工业级战术大厅 8 大 Tabs
+        # 🗄️ 工业级战术大厅 8 大 Tabs 满血集结
         t_deck, t_oracle, t_syn, t_raid, t_shop, t_pvp, t_map, t_export = st.tabs(["🎴 战术手牌", "☯️ 命运神谕", "💞 灵魂契约", "⚔️ 矩阵深潜", "🛒 黑市炼金", "🏆 竞技天梯", "🌌 数据大盘", "💼 资产导出"])
 
         with t_deck:
@@ -655,6 +658,7 @@ else:
                 hand_html += '</div>'
                 render_html(hand_html)
                 
+                # 🚨 真实的抽出检视系统，包含详细的赛博命运解析
                 c_btn1, c_btn2, c_btn3, c_btn4 = st.columns(4)
                 with c_btn1:
                     st.markdown('<div class="inspect-btn">', unsafe_allow_html=True)
@@ -676,7 +680,7 @@ else:
                 if _db.get("inspect_idx") is not None:
                     idx = _db["inspect_idx"]
                     skill_names = ["🗡️ 普通攻击 (Basic Attack)", "🛡️ 绝对防御 (Absolute Defense)", "💉 算力虹吸 (Data Leech)", "💥 终极神权 (Ultimate Override)"]
-                    skill_desc = ["基础物理攻击指令。伤害基于最终 ATK 和暴击率。无冷却时间，最稳定的输出手段。", "3回合CD。开启后极大强化当前装甲抵挡巨量伤害，化身钢铁壁垒。", "4回合CD。造成高额伤害，并按比例回复自身生命值，翻盘利器。", "5回合CD。无视大部分防御，造成 3.5 倍极限降维打击！高能耗绝杀指令。"]
+                    skill_desc = ["基础物理攻击指令。伤害基于最终 ATK 和暴击率。无冷却时间，最稳定的输出手段。", "3回合CD。开启后极大强化当前装甲抵挡巨量伤害，化身钢铁壁垒，抵御致命一击。", "4回合CD。造成高额伤害，并按比例回复自身生命值，绝境翻盘利器。", "5回合CD。无视大部分防御，造成 3.5 倍极限降维打击！高能耗绝杀指令。"]
                     lore_desc = [
                         "【年柱：根节点 OS】代表你的早期运势 (1-15岁)。决定初始资源池。",
                         "【月柱：环境变量 ENV】代表你的职场竞争模式 (16-30岁)。",
@@ -686,14 +690,17 @@ else:
                     
                     render_html(f"""
                     <div style="display:flex; justify-content:center; padding: 20px 0;">
-                        <div class="inspect-reveal" style="border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(0,243,255,0.4); background: linear-gradient(180deg, #0a0c10 0%, #1a1a2e 100%); width:100%; max-width:400px; border-radius:16px; padding:25px; text-align:center; position:relative; overflow:hidden;">
+                        <div class="inspect-reveal" style="border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(0,243,255,0.4); background: linear-gradient(180deg, #0a0c10 0%, #1a1a2e 100%); width:100%; max-width:400px; border-radius:16px; padding:25px; text-align:center; position:relative; overflow:hidden; animation: float-inspect 3s ease-in-out infinite;">
+                            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%); pointer-events:none;"></div>
                             <div style="font-family:Orbitron; color:var(--primary); font-weight:bold; margin-bottom:15px; letter-spacing:3px; font-size:12px;">[ EXAMINING DATA_NODE ]</div>
                             <div style="font-size:60px; font-weight:900; color:#fff; margin-bottom:5px; text-shadow:0 0 20px #fff; line-height:1;">{_bz[idx]}</div>
                             <div style="font-size:14px; font-family:Orbitron; color:var(--primary); margin-bottom:20px; font-weight:bold; letter-spacing:2px;">{labels[idx]}</div>
+                            
                             <div style="background:rgba(0,0,0,0.6); padding:15px; border-radius:8px; border:1px solid rgba(0,243,255,0.3); margin-bottom:20px;">
                                 <div style="color:var(--sp); font-weight:900; font-size:16px; margin-bottom:8px; font-family:'Noto Sans SC';">{skill_names[idx]}</div>
                                 <div style="color:#ddd; font-size:12px; line-height:1.6;">{skill_desc[idx]}</div>
                             </div>
+                            
                             <div style="text-align:left; background:rgba(16,185,129,0.1); border-left:3px solid var(--green); padding:12px; border-radius:0 8px 8px 0;">
                                 <div style="color:var(--green); font-size:11px; font-family:Orbitron; font-weight:bold; margin-bottom:5px;">> FATE_DECODE //</div>
                                 <div style="color:#aaa; font-size:12px; line-height:1.5;">{lore_desc[idx]}</div>
@@ -704,6 +711,7 @@ else:
 
                 render_html("<hr style='border-color:#333;'>")
                 
+                # Lore 满血呈现
                 _dm_i = DAY_MASTER_DICT.get(_db.get("player", {}).get("day_master", "甲"), DAY_MASTER_DICT["甲"])
                 c_d1, c_d2 = st.columns(2)
                 with c_d1:
@@ -817,7 +825,17 @@ else:
                             st.rerun()
                     if "cur_sync" in st.session_state:
                         sync = st.session_state["cur_sync"]
-                        render_html(f"<div class='glass-panel card-reveal' style='border-left:4px solid {sync['color']}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'><div style='font-family:Orbitron; font-size:12px; color:#888; margin-bottom:5px;'>SYNC RATE</div><div class="heart-pulse" style="font-size:40px; color:{sync['color']};">{sync['icon']}</div><div style='font-size:45px; color:{sync['color']}; font-weight:900; margin-bottom:5px;'>{sync['score']}%</div><div style='color:#fff; font-size:12px;'>{sync['sd']}</div></div>")
+                        
+                        # 🚨 终极安全语法：使用三引号彻底杜绝 SyntaxError！
+                        render_html(f"""
+                        <div class='glass-panel card-reveal' style='border-left:4px solid {sync['color']}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'>
+                            <div style='font-family:Orbitron; font-size:12px; color:#888; margin-bottom:5px;'>SYNC RATE</div>
+                            <div class='heart-pulse' style='font-size:40px; color:{sync['color']};'>{sync['icon']}</div>
+                            <div style='font-size:45px; color:{sync['color']}; font-weight:900; margin-bottom:5px;'>{sync['score']}%</div>
+                            <div style='color:#fff; font-size:12px;'>{sync['sd']}</div>
+                        </div>
+                        """)
+                        
                         if sync['score'] >= 60:
                             if st.button("🤝 签订契约 (拉入助战)", use_container_width=True):
                                 _db["buffs"]["syn_linked"] = True
@@ -834,7 +852,7 @@ else:
                 rs = _db.get("pve", {})
                 _cb = _db.get("combat", {})
                 
-                # 🚨 通过兜底函数抓取战力，彻底断绝 NameError
+                # 🚨 安全获取实战数据
                 _fin_atk, _fin_def, _fin_hp, _fin_cp, _fin_crit = get_final_combat_stats(_db)
                 
                 if rs.get("idx", 0) >= len(BOSS_ROSTER):
@@ -871,7 +889,7 @@ else:
                                 _db["shop"]["creds"] -= 500; _db["pve"]["curr_hp"] = _fin_hp
                                 _cb["cd_def"], _cb["cd_heal"], _cb["cd_ult"] = 0, 0, 0
                                 st.rerun()
-                            else: st.warning("功德不足！请去【竞技深渊】挂机挖点矿。")
+                            else: st.warning("功德不足！请去【竞技天梯】打榜或离线挖矿。")
                     elif rs.get("boss_hp",0) > 0:
                         b1, b2 = st.columns(2); b3, b4 = st.columns(2)
                         
@@ -1049,7 +1067,7 @@ else:
                     wb = _db.get("world_boss", {})
                     _f_atk, _f_crit = _db.get("computed", {}).get("atk", 0), _db.get("computed", {}).get("crit", 0)
                     
-                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:var(--sp); padding:20px;'><div style='font-size:50px; text-shadow:0 0 20px var(--sp); margin-bottom:10px;'>👹</div><div style='color:var(--sp); font-family:Orbitron; font-weight:900;'>3 回合极限输出</div><div style='font-family:Orbitron; color:#fff; font-size:20px; margin-top:15px;'>HIGHEST DMG: <br><span style='color:var(--sp); font-size:30px;'>{wb.get('highest_dmg', 0):,}</span></div></div>")
+                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:var(--sp); padding:20px;'><div style='font-size:50px; text-shadow:0 0 20px var(--sp); margin-bottom:10px;'>👹</div><div style='color:var(--sp); font-family:Orbitron; font-weight:900;'>3 回合极限输出挑战</div><div style='font-family:Orbitron; color:#fff; font-size:20px; margin-top:15px;'>HIGHEST DMG: <br><span style='color:var(--sp); font-size:30px;'>{wb.get('highest_dmg', 0):,}</span></div></div>")
                     if st.button("🔥 发起世界挑战", use_container_width=True):
                         total_dmg = sum([int(_f_atk * random.uniform(0.8, 1.5) * (2.5 if random.randint(1,100)<=_f_crit else 1)) for _ in range(3)])
                         if total_dmg > wb.get('highest_dmg', 0):
@@ -1090,6 +1108,7 @@ else:
         with t_export:
             @st_fragment
             def render_exports():
+                # 🚨 终极安全提取：必须在 Fragment 内重新取所有局部变量以防 NameError 报错！
                 local_db = st.session_state["db"]
                 local_base = local_db.get("player", {})
                 local_shop = local_db.get("shop", {})
@@ -1102,8 +1121,9 @@ else:
                 _bz = local_base.get('bazi_arr', ['?','?','?','?'])
                 _wx = local_base.get('wx', {})
                 
+                # 专门修复 past_life 的 NameError (强制提取，容错拉满)
                 _past_life = local_base.get('past_life', {})
-                _pl_title = _past_life.get('title', '未知')
+                _pl_title = _past_life.get('title', '【前世信息丢失】')
                 _pl_debt = _past_life.get('debt', '无')
                 
                 _f_atk, _f_def, _f_hp, _f_cp = local_comp.get("atk",0), local_comp.get("def",0), local_comp.get("hp",0), local_comp.get("cp",0)
@@ -1124,6 +1144,7 @@ else:
                             if not clean_sk: clean_sk = ["白板体质"]
                             sk_h = "".join([f"<span style='background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:2px 6px; margin:2px; font-size:9px; display:inline-block; font-family:Fira Code; border-radius:2px;'>{s}</span>" for s in reversed(clean_sk[-5:])])
                             
+                            # 🚨 终极防爆渲染：没有任何 Python f-string 冲突。彻底引入 components。
                             HTML_POSTER_RAW = """
                             <!DOCTYPE html><html><head><meta charset="utf-8">
                             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
