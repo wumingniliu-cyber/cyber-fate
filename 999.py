@@ -27,7 +27,7 @@ except ImportError:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 无名逆流 · 数据人生 工业级状态机 (深层自愈引擎)
 # ==============================================================================
-VERSION = "DATA LIFE TCG V1000.0 [THE OMEGA GENESIS]"
+VERSION = "DATA LIFE TCG V1000.2 [THE OMEGA LOOP]"
 COPYRIGHT = "无名逆流"
 SYS_NAME = "数据人生 | 工业级赛博修仙"
 
@@ -53,7 +53,7 @@ def init_state():
             "pet_data": {"name": "无灵宠", "atk_mul": 1.0, "hp_mul": 1.0, "def_mul": 1.0, "crit_bonus": 0, "icon": ""}
         },
         "combat": {"cd_def": 0, "cd_heal": 0, "cd_ult": 0},
-        "pve": {"idx": 0, "boss_hp": 15000, "boss_max": 15000, "curr_hp": 0, "rebirth": 0, "logs": [f"> [{COPYRIGHT}] MATRIX INITIATED..."]},
+        "pve": {"idx": 0, "boss_hp": 8000, "boss_max": 8000, "curr_hp": 0, "rebirth": 0, "logs": [f"> [{COPYRIGHT}] MATRIX INITIATED..."]},
         "pvp": {"rp": 1000, "tier": "🔰 废土黑铁", "wins": 0, "logs": [f"> AWAITING RANKED MATCH..."]},
         "world_boss": {"highest_dmg": 0, "logs": [f"> WORLD BOSS DETECTED..."]},
         "quests": {"kills": 0, "merges": 0, "gacha_pulls": 0, "claimed": []},
@@ -63,7 +63,6 @@ def init_state():
         "term_logs": [f"> THE MATRIX BY {COPYRIGHT} INITIALIZED..."]
     }
     
-    # 强制深层合并补齐变量，遇到旧缓存也能瞬间修复，永不报错
     def deep_merge(d, u):
         for k, v in u.items():
             if isinstance(v, dict): d[k] = deep_merge(d.get(k, {}), v)
@@ -76,11 +75,11 @@ init_state()
 
 # 核心战役梯度
 BOSS_ROSTER = [
-    {"lvl": 1, "name": "L1 算法过滤网", "max_hp": 15000, "atk": 800, "reward": 2500, "desc": "出身与学历的初始拦截。无Buff也可轻松强杀。"},
-    {"lvl": 2, "name": "L2 职场剥削阵列", "max_hp": 45000, "atk": 3500, "reward": 6000, "desc": "吞噬生命算力的永动机。建议去黑市抽点装备。"},
-    {"lvl": 3, "name": "L3 消费主义巨兽", "max_hp": 180000, "atk": 15000, "reward": 18000, "desc": "资本编织的迷幻网。必须抽每日神谕方可一战。"},
-    {"lvl": 4, "name": "L4 黑天鹅风暴", "max_hp": 550000, "atk": 45000, "reward": 50000, "desc": "因果律打击。必须合成神器+绑定高分道侣。"},
-    {"lvl": 5, "name": "L5 阿卡夏主脑", "max_hp": 2500000, "atk": 150000, "reward": 200000, "desc": "统御世界线的神明，击碎它即可开启飞升轮回！"}
+    {"lvl": 1, "name": "L1 算法过滤网", "max_hp": 8000, "atk": 500, "reward": 2000, "desc": "出身的初始拦截。无Buff也可轻松强杀。"},
+    {"lvl": 2, "name": "L2 职场剥削阵列", "max_hp": 35000, "atk": 2500, "reward": 6000, "desc": "吞噬生命算力的永动机。建议去黑市抽点装备。"},
+    {"lvl": 3, "name": "L3 消费主义巨兽", "max_hp": 150000, "atk": 12000, "reward": 18000, "desc": "资本编织的迷幻网。必须抽每日神谕方可一战。"},
+    {"lvl": 4, "name": "L4 黑天鹅风暴", "max_hp": 480000, "atk": 35000, "reward": 50000, "desc": "因果律打击。必须合成神器+绑定高分道侣。"},
+    {"lvl": 5, "name": "L5 阿卡夏主脑", "max_hp": 2000000, "atk": 120000, "reward": 200000, "desc": "统御世界线的神明，击碎它即可开启飞升轮回！"}
 ]
 
 def render_html(html_str):
@@ -130,8 +129,16 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .card-art-char { font-size: 110px; font-weight: 900; font-family: 'Noto Sans SC', serif; text-shadow: 0 0 50px #000; color:#fff; z-index:2; }
 .card-desc-box { font-size: 12px; color: #d1d5db; line-height: 1.6; background: rgba(0,0,0,0.7); padding: 15px; border-radius: 4px; border-left: 4px solid currentColor; margin-bottom: 15px; z-index:2;}
 .card-stats-box { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 16px; font-weight: bold; background: rgba(255,255,255,0.1); padding: 12px 18px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); color: #fff; z-index:2;}
-.stat-bonus { color: var(--green); font-size: 12px; text-shadow: 0 0 5px var(--green); }
+.stat-bonus { color: var(--green); font-size: 12px; text-shadow: 0 0 5px var(--green); margin-left: 4px;}
 .tcg-badge { position:absolute; top:-2px; right:-2px; background:currentColor; color:#000; font-family:'Orbitron'; font-weight:900; font-size:20px; padding:6px 30px; border-radius:0 14px 0 16px; z-index:15; box-shadow:-2px 2px 15px rgba(0,0,0,0.6);}
+
+/* 🌟 万物联动核算大盘 UI */
+.synergy-core-box { background: rgba(0,0,0,0.85); border: 1px solid #444; border-left: 4px solid var(--sp); border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
+.synergy-core-title { font-family: 'Orbitron'; font-size: 13px; color: var(--sp); font-weight: 900; margin-bottom: 10px; letter-spacing: 1px; display: flex; justify-content: space-between; }
+.synergy-row { display: flex; justify-content: space-between; font-family: 'Fira Code'; font-size: 12px; color: #aaa; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+.synergy-row .val { color: #fff; font-weight: bold; }
+.synergy-row .mul { color: var(--green); font-weight: bold; text-shadow: 0 0 5px var(--green); }
+.synergy-total { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 18px; color: var(--sp); font-weight: 900; margin-top: 10px; padding-top: 10px; border-top: 1px solid #444; text-shadow: 0 0 10px var(--sp); }
 
 /* 🌟 扇形手牌系统 (物理级悬停抽出特效) */
 .hand-container { display: flex; justify-content: center; align-items: center; margin-top: 40px; height: 200px; position: relative; perspective: 1000px; margin-bottom:40px;}
@@ -225,7 +232,7 @@ div.stButton > button[data-testid="baseButton-primary"] { background: linear-gra
 st.markdown(STATIC_CSS, unsafe_allow_html=True)
 
 # ==============================================================================
-# 🗃️ [ DICTIONARY ] 数据人生映射库 & 深度 Lore (全量满血回归)
+# 🗃️ [ DICTIONARY ] 数据人生映射库 & 深度 Lore
 # ==============================================================================
 DAY_MASTER_DICT = {
     "甲": {"class_name": "Root Paladin / 根基骑士", "mbti": "ENTJ", "color": "#10b981", "element": "木", "tier": "UR", "base_atk": 2500, "base_def": 4000, "hp": 12000, "desc": "掌控底层因果的重装核心。", "weapon": "高分子动能巨斧", "skill": "[被动] 建木庇护：受致命伤触发锁血。", "evo_path": "架构幼苗 ➔ 核心骨干 ➔ 苍天建木", "ult_evo": "【苍天建木】执掌三界底层协议", "flaw": "过于刚硬，遇强则折。遭遇降维打击易宕机。", "patch": "引入水属性柔性冗余，挂起进程等待重启。"},
@@ -255,7 +262,7 @@ ZODIAC_PETS = {
     "亥": {"name": "吞噬铠猪", "atk_mul": 1.0, "def_mul": 1.15, "hp_mul": 1.2, "crit_bonus": 0, "icon": "🐷"}
 }
 
-# 🚨 【先天装备库】：凸显赛博算命本源
+# 🚨 先天装备库
 EQUIPS_DICT = {
     "七杀": {"name": "【先天】漏洞引爆器", "atk": 800, "def": 0, "hp": 0, "cp": 2500},
     "正官": {"name": "【先天】底层装甲", "atk": 0, "def": 1200, "hp": 1000, "cp": 2000},
@@ -279,13 +286,13 @@ ITEM_PREFIXES = ["反物质", "量子", "纳米", "虚空", "阿卡夏", "暗物
 ITEM_SUFFIXES = ["核心", "装甲", "神经束", "引擎", "驱动器", "协议", "魔方", "圣杯"]
 
 SPELL_POOL = [
-    {"name": "✨ 乾为天 [ROOT]", "type": "UR 天命神谕", "lines": [1,1,1,1,1,1], "buff_atk": 2.0, "buff_def": 1.0, "buff_hp": 1.0, "desc": "攻击力乘区 x 2.0！", "color": "#ffaa00", "do": "发起终极突击", "dont": "防御退缩"},
+    {"name": "✨ 乾为天 [ROOT]", "type": "UR 天命神谕", "lines": [1,1,1,1,1,1], "buff_atk": 2.0, "buff_def": 1.0, "buff_hp": 1.0, "desc": "攻击力乘区 x 2.0！神挡杀神！", "color": "#ffaa00", "do": "发起终极突击", "dont": "防御退缩"},
     {"name": "🛡️ 坤为地 [SAFE]", "type": "SSR 绝对防御", "lines": [0,0,0,0,0,0], "buff_atk": 0.5, "buff_def": 3.0, "buff_hp": 1.5, "desc": "防御乘区 x 3.0，生命 x 1.5。", "color": "#10b981", "do": "防守反击", "dont": "激进输出"},
-    {"name": "⚡ 地天泰 [SYNC]", "type": "UR 命运交泰", "lines": [1,1,1,0,0,0], "buff_atk": 1.5, "buff_def": 1.5, "buff_hp": 1.5, "desc": "战斗全属性提升 150%。", "color": "#00f3ff", "do": "释放大招", "dont": "过度保守"}
+    {"name": "⚡ 地天泰 [SYNC]", "type": "UR 命运交泰", "lines": [1,1,1,0,0,0], "buff_atk": 1.5, "buff_def": 1.5, "buff_hp": 1.5, "desc": "战斗全属性均衡提升 150%。", "color": "#00f3ff", "do": "释放大招", "dont": "过度保守"}
 ]
 
 # ==============================================================================
-# 🧠 [ TCG ALGORITHMS ] 核心引擎
+# 🧠 [ TCG ALGORITHMS ] 核心引擎：大一统计算与渲染
 # ==============================================================================
 def calc_base_stats(hash_str, wx_dict, b_atk, b_def, b_hp):
     wx_vals = list(wx_dict.values()) if wx_dict else [20]
@@ -310,24 +317,29 @@ def calc_base_stats(hash_str, wx_dict, b_atk, b_def, b_hp):
         elif max_k == '火': reso_buff = "【极炎】暴击提升"; f_crit += 10
         elif max_k == '土': reso_buff = "【厚土】防御强化"; f_def = int(f_def * 1.3)
     
-    rng = np.random.RandomState(int(str(hash_str)[:8], 16))
-    base_cp = int((f_atk * 1.2 + f_def * 0.8 + f_hp * 0.1) * rng.uniform(0.9, 1.2))
-    return rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff
+    return rarity, r_col, f_atk, f_def, f_hp, f_crit, entropy, reso_buff
 
 def update_computed_stats(db):
-    base, shop, buffs = db["player"], db["shop"], db["buffs"]
+    """⚔️ 核心大一统引擎：Base + Shop + Buffs + Pet + Synergy + Title -> Computed"""
+    base, shop, buffs = db.get("player",{}), db.get("shop",{}), db.get("buffs",{})
     if not base: return
     
-    o_atk = buffs["oracle_data"]["atk_mul"] if buffs["oracle_drawn"] else 1.0
-    o_def = buffs["oracle_data"]["def_mul"] if buffs["oracle_drawn"] else 1.0
-    o_hp = buffs["oracle_data"].get("hp_mul", 1.0) if buffs["oracle_drawn"] else 1.0
-    s_atk = buffs["syn_data"]["atk_mul"] if buffs["syn_linked"] else 1.0
-    s_hp = buffs["syn_data"]["hp_mul"] if buffs["syn_linked"] else 1.0
-    s_def = buffs["syn_data"].get("def_mul", 1.0) if buffs["syn_linked"] else 1.0
-    p_atk = buffs["pet_data"].get("atk_mul", 1.0) if buffs["pet_active"] else 1.0
-    p_def = buffs["pet_data"].get("def_mul", 1.0) if buffs["pet_active"] else 1.0
-    p_hp = buffs["pet_data"].get("hp_mul", 1.0) if buffs["pet_active"] else 1.0
-    t_mul = db["achieve"]["equipped"].get("mul", 1.0)
+    o_b = buffs.get("oracle_data", {})
+    o_atk = o_b.get("atk_mul", 1.0) if buffs.get("oracle_drawn") else 1.0
+    o_def = o_b.get("def_mul", 1.0) if buffs.get("oracle_drawn") else 1.0
+    o_hp = o_b.get("hp_mul", 1.0) if buffs.get("oracle_drawn") else 1.0
+    
+    s_b = buffs.get("syn_data", {})
+    s_atk = s_b.get("atk_mul", 1.0) if buffs.get("syn_linked") else 1.0
+    s_hp = s_b.get("hp_mul", 1.0) if buffs.get("syn_linked") else 1.0
+    s_def = s_b.get("def_mul", 1.0) if buffs.get("syn_linked") else 1.0
+    
+    p_b = buffs.get("pet_data", {})
+    p_atk = p_b.get("atk_mul", 1.0) if buffs.get("pet_active") else 1.0
+    p_def = p_b.get("def_mul", 1.0) if buffs.get("pet_active") else 1.0
+    p_hp = p_b.get("hp_mul", 1.0) if buffs.get("pet_active") else 1.0
+    
+    t_mul = db.get("achieve", {}).get("equipped", {}).get("mul", 1.0)
 
     f_atk_m = 1.1 if "荒坂" in base.get("faction", "") else 1.0
     f_def_m = 1.1 if "军用" in base.get("faction", "") else 1.0
@@ -337,11 +349,21 @@ def update_computed_stats(db):
     eq_c = len(shop.get("relics", []))
     set_mul = 1.5 if eq_c >= 20 else (1.2 if eq_c >= 10 else (1.1 if eq_c >= 5 else 1.0))
     
-    db["computed"]["atk"] = int(((base.get("atk",0) + shop.get("b_atk",0))) * o_atk * s_atk * p_atk * t_mul * f_atk_m * set_mul)
-    db["computed"]["def"] = int(((base.get("def",0) + shop.get("b_def",0))) * o_def * s_def * p_def * t_mul * f_def_m * set_mul)
-    db["computed"]["hp"] = int(((base.get("hp",0) + shop.get("b_hp",0))) * o_hp * s_hp * p_hp * t_mul * f_hp_m * set_mul)
-    db["computed"]["cp"] = int(((db["computed"]["atk"] * 1.5 + db["computed"]["def"] * 0.8 + db["computed"]["hp"] * 0.15) + shop.get("b_cp",0) + buffs.get("syn_data",{}).get("cp_bonus",0)) * f_cp_m * set_mul)
-    db["computed"]["crit"] = min(100, base.get("crit",0) + int(shop.get("b_atk",0) / 1000) + buffs.get("pet_data",{}).get("crit_bonus", 0))
+    asc_mul = math.pow(1.5, db.get("pve", {}).get("rebirth", 0))
+
+    db["computed"]["atk"] = int((base.get("atk",0) + shop.get("b_atk",0)) * asc_mul * o_atk * s_atk * p_atk * t_mul * f_atk_m * set_mul)
+    db["computed"]["def"] = int((base.get("def",0) + shop.get("b_def",0)) * asc_mul * o_def * s_def * p_def * t_mul * f_def_m * set_mul)
+    db["computed"]["hp"] = int((base.get("hp",0) + shop.get("b_hp",0)) * asc_mul * o_hp * s_hp * p_hp * t_mul * f_hp_m * set_mul)
+    
+    base_cp_raw = db["computed"]["atk"] * 1.5 + db["computed"]["def"] * 0.8 + db["computed"]["hp"] * 0.15
+    db["computed"]["cp"] = int((base_cp_raw + shop.get("b_cp",0) + s_b.get("cp_bonus",0)) * f_cp_m * set_mul)
+    db["computed"]["crit"] = min(100, base.get("crit",0) + int(shop.get("b_atk",0) / 1000) + p_b.get("crit_bonus", 0))
+
+def get_final_combat_stats(db):
+    """兜底防护，专门防止 PVE 旧缓存报错！"""
+    update_computed_stats(db)
+    c = db.get("computed", {})
+    return c.get("atk",0), c.get("def",0), c.get("hp",0), c.get("cp",0), c.get("crit",0)
 
 @st.cache_resource(show_spinner=False)
 def gen_akashic_charts(seed_hash, wx_scores, dm_color, dm_key, current_cp):
@@ -373,7 +395,7 @@ def gen_akashic_charts(seed_hash, wx_scores, dm_color, dm_key, current_cp):
 def calc_tag_team(my_hash, partner_stem):
     rng = np.random.RandomState(int(str(my_hash)[:6], 16) + sum(ord(c) for c in str(partner_stem)))
     sync = rng.randint(30, 99)
-    if sync >= 90: return sync, "【天作之合】灵魂双修绝佳道侣！PVE 属性暴涨！", "#ffaa00", "💖", 1.45
+    if sync >= 90: return sync, "【天作之合】灵魂双修绝佳道侣！全属性暴涨！", "#ffaa00", "💖", 1.45
     elif sync >= 75: return sync, "【战术互补】五行互补，提供稳定增益。", "#00f3ff", "🤝", 1.2
     elif sync >= 60: return sync, "【平庸握手】勉强并行，偶尔提供微弱辅助。", "#10b981", "🎭", 1.05
     else: return sync, "【致命排斥】逻辑完全相冲！强行组队走火入魔！", "#f43f5e", "💔", 0.9
@@ -392,20 +414,20 @@ def roll_d100(query, user_hash):
 # ==============================================================================
 # 🔮 [ ENTRY POINT ] 数据人生登录终端
 # ==============================================================================
-if not st.session_state["db"]["booted"]:
+if not st.session_state["db"].get("booted", False):
     r_user = f"0x{hashlib.md5(str(time.time()).encode()).hexdigest()[:6].upper()}"
     r_card = random.choice(list(DAY_MASTER_DICT.keys()))
     
     ENTRY_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA LIFE MATRIX V1000.0 <b class="up">▲ONLINE</b></span>
+        <span>DATA LIFE MATRIX V1000.1 <b class="up">▲ONLINE</b></span>
         <span>BROADCAST: User {r_user} just pulled <b class="ur">★ SP {r_card} 主将卡</b> !</span>
         <span>COPYRIGHT: {COPYRIGHT} <b class="up">▲AUTHORIZED</b></span>
     </div></div>
     <div style="text-align: center; margin-bottom: 25px; margin-top:5vh;">
         <div style="color:var(--sp); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:10px; margin-bottom:10px; text-shadow:0 0 10px var(--sp);">[ INSERT COIN TO PULL ]</div>
         <h1 class="hero-title" data-text="无名逆流·数据人生">无名逆流·数据人生</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.0</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.1</div>
     </div>
     <div class="glass-panel" style="max-width: 680px; margin: 0 auto 30px auto; border-left: 4px solid var(--sp); padding: 35px; text-align:center;">
         <div style="color:var(--sp); font-size: 18px; font-weight:900; letter-spacing: 2px; margin-bottom:15px; text-shadow:0 0 10px var(--sp);">“如果命运是一场牌局，出生就是第一次抽卡。”</div>
@@ -471,7 +493,7 @@ if not st.session_state["db"]["booted"]:
         pet_info = ZODIAC_PETS.get(zodiac_idx, ZODIAC_PETS["子"])
         
         dm_base = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"])
-        rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff = calc_base_stats(hash_id, wx_scores, dm_base.get("base_atk", 1000), dm_base.get("base_def", 1000), dm_base.get("hp", 8000))
+        rarity, r_col, f_atk, f_def, f_hp, f_crit, entropy, reso_buff = calc_base_stats(hash_id, wx_scores, dm_base.get("base_atk", 1000), dm_base.get("base_def", 1000), dm_base.get("hp", 8000))
 
         db = st.session_state["db"]
         db["player"] = {
@@ -499,14 +521,17 @@ if not st.session_state["db"]["booted"]:
 # 🌟 [ TCG DASHBOARD ] 工业级大一统死循环大厅
 # ==============================================================================
 else:
+    # 强制全量计算，确保所有的 Buff、装备属性立刻体现在最高战力上！
     update_computed_stats(st.session_state["db"]) 
     db = st.session_state["db"]
-    base, comp, shop, buffs, cb, ach, pet = db["player"], db["computed"], db["shop"], db["buffs"], db["combat"], db["achieve"], db["buffs"]["pet_data"]
+    base, comp, shop, buffs, cb, ach, pet = db.get("player",{}), db.get("computed",{}), db.get("shop",{}), db.get("buffs",{}), db.get("combat",{}), db.get("achieve",{}), db.get("buffs",{}).get("pet_data",{})
     
-    fin_atk, fin_def, fin_hp, fin_cp, fin_crit = comp["atk"], comp["def"], comp["hp"], comp["cp"], comp["crit"]
+    fin_atk, fin_def, fin_hp, fin_cp, fin_crit = comp.get("atk",0), comp.get("def",0), comp.get("hp",0), comp.get("cp",0), comp.get("crit",0)
     player_name, hash_id, entropy = base.get('name', 'P1'), base.get('hash', '0000'), base.get('entropy', 0)
     
-    if db["pve"]["curr_hp"] > fin_hp or (db["pve"]["curr_hp"] == 0 and db["pve"]["idx"] == 0): db["pve"]["curr_hp"] = fin_hp
+    # 防止血量溢出
+    if db.get("pve",{}).get("curr_hp",0) > fin_hp or (db.get("pve",{}).get("curr_hp",0) == 0 and db.get("pve",{}).get("idx",0) == 0): 
+        db["pve"]["curr_hp"] = fin_hp
     
     dm_key = base.get('day_master', '甲')
     dm_info = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"]) 
@@ -518,16 +543,16 @@ else:
     f3d, f_radar, f_trend, f_hm = gen_akashic_charts(hash_id, base.get('wx', {}), dm_color, dm_key, fin_cp)
 
     buff_display = f"<div style='background:rgba(168,85,247,0.2); color:var(--sr); padding:4px 8px; border-radius:2px; font-family:Orbitron; border:1px solid var(--sr); margin-bottom:4px;'>🐾 伴生灵宠: {pet.get('name', '')}</div>"
-    if buffs.get("oracle_drawn", False): buff_display += f"<div style='background:rgba(255,170,0,0.2); color:var(--sp); padding:4px 8px; border-radius:2px; font-family:Orbitron; border:1px solid var(--sp); margin-bottom:4px;'>⚡ 命运神谕: {buffs['oracle_data'].get('name', '')}</div>"
-    if buffs.get("syn_linked", False): buff_display += f"<div style='background:rgba(0,243,255,0.2); color:var(--primary); padding:4px 8px; border-radius:2px; font-family:Orbitron; border:1px solid var(--primary); margin-bottom:4px;'>💞 道侣羁绊: {buffs['syn_data'].get('name', '')}</div>"
+    if buffs.get("oracle_drawn", False): buff_display += f"<div style='background:rgba(255,170,0,0.2); color:var(--sp); padding:4px 8px; border-radius:2px; font-family:Orbitron; border:1px solid var(--sp); margin-bottom:4px;'>⚡ 命运神谕: {buffs.get('oracle_data',{}).get('name', '')}</div>"
+    if buffs.get("syn_linked", False): buff_display += f"<div style='background:rgba(0,243,255,0.2); color:var(--primary); padding:4px 8px; border-radius:2px; font-family:Orbitron; border:1px solid var(--primary); margin-bottom:4px;'>💞 道侣羁绊: {buffs.get('syn_data',{}).get('name', '')}</div>"
     if len(shop.get("relics", [])) >= 5: buff_display += f"<div style='background:rgba(16,185,129,0.2); color:var(--green); padding:4px 8px; border-radius:2px; font-family:Orbitron; border:1px solid var(--green); margin-bottom:4px;'>🎁 装备套装: 全属性加成</div>"
 
     HEADER_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA-LIFE RPG: V1000.0 <b class="up">▲SYNCED</b></span>
+        <span>DATA-LIFE RPG: V1000.1 <b class="up">▲SYNCED</b></span>
         <span>PLAYER: {player_name} <b class="up">▲ACTIVE</b></span>
         <span>CYBER_MERITS: {shop.get('creds', 0)} <b class="ur">★ LOADED</b></span>
-        <span>PVP_RANK: {db['pvp'].get('tier', 'Unranked')} </span>
+        <span>PVP_RANK: {db.get('pvp',{}).get('tier', 'Unranked')} </span>
     </div></div>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid {dm_color}; padding-bottom:15px; margin-bottom:30px;">
         <div>
@@ -547,7 +572,10 @@ else:
     c_left, c_right = st.columns([1, 1.8], gap="large")
 
     with c_left:
-        atk_bonus, hp_bonus, def_bonus = fin_atk - base.get("atk", 0), fin_hp - base.get("hp", 0), fin_def - base.get("def", 0)
+        # 显示战力增幅的特效
+        atk_bonus = fin_atk - base.get("atk", 0)
+        hp_bonus = fin_hp - base.get("hp", 0)
+        def_bonus = fin_def - base.get("def", 0)
         atk_str = f"{fin_atk:,}" + (f" <span class='stat-bonus'>(+{atk_bonus:,})</span>" if atk_bonus>0 else "")
         hp_str = f"{fin_hp:,}" + (f" <span class='stat-bonus'>(+{hp_bonus:,})</span>" if hp_bonus>0 else "")
         def_str = f"{fin_def:,}" + (f" <span class='stat-bonus'>(+{def_bonus:,})</span>" if def_bonus>0 else "")
@@ -570,7 +598,7 @@ else:
                     <div style="font-size:12px; font-weight:bold; color:var(--sp);">⚔️ {dm_wpn.split('】')[-1].strip() if '】' in dm_wpn else dm_wpn}</div>
                 </div>
                 <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:4px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.1); min-height:55px;">
-                    <div style="color:var(--sp); margin-bottom:6px; font-size:10px; font-weight:bold; font-family:Orbitron;">[ACTIVE MULTIPLIERS]</div>
+                    <div style="color:var(--sp); margin-bottom:6px; font-size:10px; font-weight:bold; font-family:Orbitron;">[⚡ 全局联动乘区监控]</div>
                     <div style="line-height:1.6;">{buff_display}</div>
                 </div>
                 <div class="card-stats-box" style="flex-direction:column;">
@@ -585,20 +613,38 @@ else:
         </div>
         """
         render_html(TCG_CARD_HTML)
+        
+        # 🚨 [核心视觉重构] 战力联动核算大盘！把底层联动公式砸在玩家脸上！
+        f_atk_m = 1.1 if "荒坂" in base.get("faction", "") else 1.0
+        eq_c = len(shop.get("relics", []))
+        set_mul = 1.5 if eq_c >= 20 else (1.2 if eq_c >= 10 else (1.1 if eq_c >= 5 else 1.0))
+        
+        calc_html = f"""
+        <div class="synergy-core-box">
+            <div class="synergy-core-title"><span>>> BATTLE SYNERGY CORE</span><span>万物联动核算矩阵</span></div>
+            <div class="synergy-row"><span>> 出厂基底 + 黑市装备总和:</span> <span class="val">{base.get('atk',0) + shop.get('b_atk',0):,} ATK</span></div>
+            <div class="synergy-row"><span>> 阵营契约 & 装备套装共鸣:</span> <span class="mul">x {f_atk_m * set_mul:.2f}</span></div>
+            <div class="synergy-row"><span>> 伴生机械灵宠 ({pet.get('name', '无')}):</span> <span class="mul">x {pet.get('atk_mul', 1.0):.2f}</span></div>
+            <div class="synergy-row"><span>> 赛博命运神谕 ({buffs.get('oracle_data',{}).get('name','')}):</span> <span class="mul">x {buffs.get('oracle_data',{}).get('atk_mul', 1.0):.2f}</span></div>
+            <div class="synergy-row"><span>> 灵魂合盘道侣 ({buffs.get('syn_data',{}).get('name','')}):</span> <span class="mul" style="color:var(--sp);">x {buffs.get('syn_data',{}).get('atk_mul', 1.0):.2f}</span></div>
+            <div class="synergy-row"><span>> 荣耀称号加成 ({ach.get('equipped',{}).get('name','')}):</span> <span class="mul" style="color:var(--green);">x {ach.get('equipped',{}).get('mul',1.0):.2f}</span></div>
+            <div class="synergy-total"><span>> 实战爆杀最终攻击力:</span> <span style="font-size:24px;">{fin_atk:,}</span></div>
+        </div>
+        """
+        render_html(calc_html)
 
     with c_right:
-        # 🗄️ 工业级战术大厅 8 大 Tabs 满血集结
-        t_deck, t_oracle, t_syn, t_raid, t_shop, t_pvp, t_map, t_export = st.tabs(["🎴 战术档案", "☯️ 命运神谕", "💞 灵魂契约", "⚔️ 矩阵深潜", "🛒 黑市炼金", "🏆 竞技深渊", "🌌 数据大盘", "💼 资产导出"])
+        # 🗄️ 工业级战术大厅 8 大 Tabs
+        t_deck, t_oracle, t_syn, t_raid, t_shop, t_pvp, t_map, t_export = st.tabs(["🎴 战术手牌", "☯️ 命运神谕", "💞 灵魂契约", "⚔️ 矩阵深潜", "🛒 黑市炼金", "🏆 竞技天梯", "🌌 数据大盘", "💼 资产导出"])
 
         with t_deck:
             @st_fragment
             def render_deck():
-                # 重新抓取防爆
                 _db = st.session_state["db"]
-                _bz = _db["player"].get("bazi_arr", ["?","?","?","?"])
-                _dm_color = DAY_MASTER_DICT.get(_db["player"].get("day_master", "甲"), DAY_MASTER_DICT["甲"])["color"]
+                _bz = _db.get("player", {}).get("bazi_arr", ["?","?","?","?"])
+                _dm_color = DAY_MASTER_DICT.get(_db.get("player", {}).get("day_master", "甲"), DAY_MASTER_DICT["甲"])["color"]
                 
-                render_html("<div style='font-size:13px; color:#aaa; margin-bottom:10px;'>> 基础手牌由四柱源码构成。点击下方按钮可抽出检视打牌技能：</div>")
+                render_html("<div style='font-size:13px; color:#aaa; margin-bottom:10px;'>> 基础手牌由四柱源码构成。<b>点击下方按钮可抽出检视对应的 PVE 技能：</b></div>")
                 hand_html = '<div class="hand-container">'
                 labels = ["OS_YEAR", "ENV_MONTH", "CORE_DAY", "THD_TIME"]
                 for i in range(4):
@@ -609,7 +655,6 @@ else:
                 hand_html += '</div>'
                 render_html(hand_html)
                 
-                # 🚨 真实的抽出检视系统，包含详细的赛博命运解析
                 c_btn1, c_btn2, c_btn3, c_btn4 = st.columns(4)
                 with c_btn1:
                     st.markdown('<div class="inspect-btn">', unsafe_allow_html=True)
@@ -631,27 +676,24 @@ else:
                 if _db.get("inspect_idx") is not None:
                     idx = _db["inspect_idx"]
                     skill_names = ["🗡️ 普通攻击 (Basic Attack)", "🛡️ 绝对防御 (Absolute Defense)", "💉 算力虹吸 (Data Leech)", "💥 终极神权 (Ultimate Override)"]
-                    skill_desc = ["基础物理攻击指令。伤害基于最终 ATK 和 暴击率。没有冷却时间，最稳定的输出手段。", "3回合CD。开启后极大强化当前装甲抵挡巨量伤害，化身钢铁壁垒，抵御致命一击。", "4回合CD。造成基于攻击力的高额伤害，并根据伤害量按比例回复自身生命值，绝境翻盘利器。", "5回合CD。无视大部分防御，造成 3.5 倍极限降维打击！高能耗的绝杀指令。"]
+                    skill_desc = ["基础物理攻击指令。伤害基于最终 ATK 和暴击率。无冷却时间，最稳定的输出手段。", "3回合CD。开启后极大强化当前装甲抵挡巨量伤害，化身钢铁壁垒。", "4回合CD。造成高额伤害，并按比例回复自身生命值，翻盘利器。", "5回合CD。无视大部分防御，造成 3.5 倍极限降维打击！高能耗绝杀指令。"]
                     lore_desc = [
-                        "【年柱：根节点 OS】代表你的祖业遗留代码与早期运势 (1-15岁)。决定了你的底层初始资源池厚度和家族因果。",
-                        "【月柱：环境变量 ENV】代表你的社会阶层接口与职场竞争模式 (16-30岁)。决定你在矩阵中向上爬升的阻力与机遇。",
-                        "【日柱：核心处理器 CORE】你的本命元神所在！决定你的绝对性格、配偶接口与核心算法逻辑 (31-45岁)。",
-                        "【时柱：外设端口 I/O】代表你的创造力分支、晚年归宿与子嗣衍生进程 (46岁以后)。揭示你的终极结局。"
+                        "【年柱：根节点 OS】代表你的早期运势 (1-15岁)。决定初始资源池。",
+                        "【月柱：环境变量 ENV】代表你的职场竞争模式 (16-30岁)。",
+                        "【日柱：核心处理器 CORE】你的本命元神所在！决定核心算法逻辑。",
+                        "【时柱：外设端口 I/O】代表创造力分支与衍生结局 (46岁以后)。"
                     ]
                     
                     render_html(f"""
                     <div style="display:flex; justify-content:center; padding: 20px 0;">
-                        <div class="inspect-reveal" style="border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(0,243,255,0.4); background: linear-gradient(180deg, #0a0c10 0%, #1a1a2e 100%); width:100%; max-width:400px; border-radius:16px; padding:25px; text-align:center; position:relative; overflow:hidden; animation: float-inspect 3s ease-in-out infinite;">
-                            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%); pointer-events:none;"></div>
+                        <div class="inspect-reveal" style="border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(0,243,255,0.4); background: linear-gradient(180deg, #0a0c10 0%, #1a1a2e 100%); width:100%; max-width:400px; border-radius:16px; padding:25px; text-align:center; position:relative; overflow:hidden;">
                             <div style="font-family:Orbitron; color:var(--primary); font-weight:bold; margin-bottom:15px; letter-spacing:3px; font-size:12px;">[ EXAMINING DATA_NODE ]</div>
                             <div style="font-size:60px; font-weight:900; color:#fff; margin-bottom:5px; text-shadow:0 0 20px #fff; line-height:1;">{_bz[idx]}</div>
                             <div style="font-size:14px; font-family:Orbitron; color:var(--primary); margin-bottom:20px; font-weight:bold; letter-spacing:2px;">{labels[idx]}</div>
-                            
                             <div style="background:rgba(0,0,0,0.6); padding:15px; border-radius:8px; border:1px solid rgba(0,243,255,0.3); margin-bottom:20px;">
                                 <div style="color:var(--sp); font-weight:900; font-size:16px; margin-bottom:8px; font-family:'Noto Sans SC';">{skill_names[idx]}</div>
                                 <div style="color:#ddd; font-size:12px; line-height:1.6;">{skill_desc[idx]}</div>
                             </div>
-                            
                             <div style="text-align:left; background:rgba(16,185,129,0.1); border-left:3px solid var(--green); padding:12px; border-radius:0 8px 8px 0;">
                                 <div style="color:var(--green); font-size:11px; font-family:Orbitron; font-weight:bold; margin-bottom:5px;">> FATE_DECODE //</div>
                                 <div style="color:#aaa; font-size:12px; line-height:1.5;">{lore_desc[idx]}</div>
@@ -662,8 +704,7 @@ else:
 
                 render_html("<hr style='border-color:#333;'>")
                 
-                # Lore 满血呈现
-                _dm_i = DAY_MASTER_DICT.get(_db["player"].get("day_master", "甲"), DAY_MASTER_DICT["甲"])
+                _dm_i = DAY_MASTER_DICT.get(_db.get("player", {}).get("day_master", "甲"), DAY_MASTER_DICT["甲"])
                 c_d1, c_d2 = st.columns(2)
                 with c_d1:
                     render_html(f"""
@@ -681,229 +722,54 @@ else:
                     </div>
                     """)
                 with c_d2:
-                    p_life = _db["player"].get('past_life',{})
+                    p_life = _db.get("player", {}).get('past_life',{})
                     render_html(f"""
                     <div class="glass-panel" style="padding:15px; border-left-color:var(--yellow); height:210px; overflow-y:auto;">
                         <div style="font-size:11px; color:var(--yellow); font-family:'Orbitron'; margin-bottom:5px; font-weight:bold;">>> KARMIC LORE (前世业力残存)</div>
-                        <div style="font-size:13px; font-weight:bold; color:#fff; margin-bottom:4px;">{p_life.get('title','')}</div>
-                        <div style="color:#aaa; font-size:11px; line-height:1.5;">{p_life.get('debt','')}</div>
+                        <div style="font-size:13px; font-weight:bold; color:#fff; margin-bottom:4px;">{p_life.get('title','未知')}</div>
+                        <div style="color:#aaa; font-size:11px; line-height:1.5;">{p_life.get('debt','无')}</div>
                     </div>
                     """)
             render_deck()
-
-        with t_raid:
-            @st_fragment
-            def render_raid():
-                _db = st.session_state["db"] 
-                rs = _db["pve"]
-                _cb = _db["combat"]
-                _fin_atk, _fin_def, _fin_hp, _fin_cp, _fin_crit = get_final_combat_stats(_db)
-                
-                if rs["idx"] >= len(BOSS_ROSTER):
-                    boss_info = {"lvl": rs["idx"]+1, "name": f"深渊魔影 层数 {rs['idx']-4}", "max_hp": int(2500000 * math.pow(1.5, rs["idx"] - 4)), "atk": int(150000 * math.pow(1.2, rs["idx"] - 4)), "reward": int(50000 * math.pow(1.1, rs["idx"] - 4)), "desc": "阿卡夏深渊的无尽梦魇。"}
-                else: boss_info = BOSS_ROSTER[rs["idx"]]
-                
-                if rs["boss_max"] != boss_info["max_hp"]: rs["boss_max"] = boss_info["max_hp"]; rs["boss_hp"] = boss_info["max_hp"]
-                boss_hp_pct = max(0, min(100, int((rs["boss_hp"] / rs["boss_max"]) * 100)))
-                my_hp, my_hp_pct = rs["curr_hp"], max(0, min(100, int((rs["curr_hp"] / _fin_hp) * 100)))
-                
-                c_pve1, c_pve2 = st.columns([1.2, 1.5], gap="large")
-                with c_pve1:
-                    render_html(f"""
-                    <div class="glass-panel" style="text-align:center; border-color:var(--pink); padding:15px; margin-bottom:10px;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:Orbitron; font-weight:bold; font-size:12px;">
-                            <span style="color:var(--pink);">MATRIX_ICE</span> <span style="color:#fff;">VS</span> <span style="color:var(--primary);">PLAYER</span>
-                        </div>
-                        <div style="font-size:45px; margin-bottom:5px; text-shadow:0 0 20px var(--pink); animation:blink 2s infinite;">👾</div>
-                        <div style="color:var(--pink); font-family:'Orbitron'; font-weight:900; font-size:15px;">{boss_info["name"]}</div>
-                        <div style="color:#aaa; font-size:11px; margin-bottom:10px;">[ {boss_info["desc"]} ]</div>
-                        <div class="hp-bar-bg" style="margin-top:10px;"><div class="hp-bar-fill hp-red" style="width:{boss_hp_pct}%;"></div></div>
-                        <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold; margin-bottom:5px;">{rs["boss_hp"]:,} / {rs["boss_max"]:,} HP</div>
-                        
-                        <hr style="border-color:#333; margin:10px 0;">
-                        <div style="color:var(--green); font-family:'Orbitron'; font-weight:bold; font-size:12px; margin-bottom:5px;">YOUR HP (你的载体)</div>
-                        <div class="hp-bar-bg"><div class="hp-bar-fill hp-green" style="width:{my_hp_pct}%;"></div></div>
-                        <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold;">{my_hp:,} / {_fin_hp:,} HP</div>
-                    </div>
-                    """)
-                    
-                    if my_hp <= 0:
-                        if st.button("💉 消耗 500 功德复活", use_container_width=True):
-                            if _db["shop"]["creds"] >= 500:
-                                _db["shop"]["creds"] -= 500; _db["pve"]["curr_hp"] = _fin_hp
-                                _db["combat"]["cd_def"], _db["combat"]["cd_heal"], _db["combat"]["cd_ult"] = 0, 0, 0
-                                st.rerun()
-                            else: st.warning("功德不足！请去【竞技深渊】挂机挖点矿。")
-                    elif rs["boss_hp"] > 0:
-                        b1, b2 = st.columns(2); b3, b4 = st.columns(2)
-                        
-                        def handle_victory():
-                            rs["boss_hp"] = 0; _db["shop"]["creds"] += boss_info["reward"]; _db["quests"]["kills"] += 1
-                            rs["logs"].append(f"<br><span style='color:var(--green); font-weight:bold;'>🏆 [VICTORY] 获得 {boss_info['reward']:,} 功德！</span>")
-                        
-                        def enemy_counter(dmg_taken):
-                            boss_dmg = int(boss_info["atk"] * random.uniform(0.9, 1.1))
-                            act_dmg = max(10, int(boss_dmg - (_fin_def * 3.0))) if _cb.get("cd_def", 0) == 3 else max(100, int(boss_dmg - (_fin_def * 0.6)))
-                            rs["curr_hp"] -= act_dmg
-                            rs["logs"].append(f"<span style='color:var(--pink);'>🛡️ [BOSS] 反噬！受到 {act_dmg:,} 点伤害。</span>")
-                            if rs["curr_hp"] <= 0: rs["curr_hp"] = 0; rs["logs"].append("<br><span style='color:var(--pink); font-weight:bold;'>💀 [DEFEAT] 主将阵亡！</span>")
-                        
-                        def adv_cd():
-                            if _cb.get("cd_def", 0) > 0: _cb["cd_def"] -= 1
-                            if _cb.get("cd_heal", 0) > 0: _cb["cd_heal"] -= 1
-                            if _cb.get("cd_ult", 0) > 0: _cb["cd_ult"] -= 1
-
-                        _bz = _db["player"].get("bazi_arr", ["?","?","?","?"])
-                        with b1:
-                            st.markdown('<div class="combat-btn">', unsafe_allow_html=True)
-                            if st.button(f"🗡️ 普攻\n[{_bz[0]}]", use_container_width=True):
-                                adv_cd()
-                                dmg = int(_fin_atk * random.uniform(0.85, 1.15)) * (2 if random.randint(1,100)<=_fin_crit else 1)
-                                rs["boss_hp"] -= dmg; rs["logs"].append(f"<span style='color:var(--primary);'>⚔️ 攻击造成 {dmg:,} 伤害。</span>")
-                                handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
-                                st.rerun()
-                            st.markdown('</div>', unsafe_allow_html=True)
-                        with b2:
-                            c_d = _cb.get("cd_def", 0); c_c = "btn-cd" if c_d > 0 else "combat-btn"
-                            st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
-                            if st.button(f"🛡️ 防御(CD:{c_d})\n[{_bz[1]}]" if c_d > 0 else f"🛡️ 绝对防御\n[{_bz[1]}]", disabled=(c_d > 0), use_container_width=True):
-                                adv_cd(); _cb["cd_def"] = 3; rs["logs"].append(f"<span style='color:var(--yellow);'>🛡️ 开启绝对防御！</span>")
-                                enemy_counter(0); st.rerun()
-                            st.markdown('</div>', unsafe_allow_html=True)
-                        with b3:
-                            c_h = _cb.get("cd_heal", 0); c_c = "btn-cd" if c_h > 0 else "combat-btn"
-                            st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
-                            if st.button(f"💉 虹吸(CD:{c_h})\n[{_bz[2]}]" if c_h > 0 else f"💉 算力虹吸\n[{_bz[2]}]", disabled=(c_h > 0), use_container_width=True):
-                                adv_cd(); dmg = int(_fin_atk * 1.2); rs["boss_hp"] -= dmg; rs["curr_hp"] = min(_fin_hp, rs["curr_hp"] + int(dmg*0.8))
-                                _cb["cd_heal"] = 4; rs["logs"].append(f"<span style='color:var(--green);'>💉 虹吸造成 {dmg:,} 伤害，回复大量HP！</span>")
-                                handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
-                                st.rerun()
-                            st.markdown('</div>', unsafe_allow_html=True)
-                        with b4:
-                            c_u = _cb.get("cd_ult", 0); c_c = "btn-cd" if c_u > 0 else "combat-btn"
-                            st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
-                            if st.button(f"💥 神权(CD:{c_u})\n[{_bz[3]}]" if c_u > 0 else f"💥 终极神权\n[{_bz[3]}]", disabled=(c_u > 0), use_container_width=True):
-                                adv_cd(); dmg = int(_fin_atk * 3.5); rs["boss_hp"] -= dmg
-                                _cb["cd_ult"] = 5; rs["logs"].append(f"<span style='color:var(--sp); font-weight:bold;'>💥 释放神权大招！造成 {dmg:,} 伤害！</span>")
-                                handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
-                                st.rerun()
-                            st.markdown('</div>', unsafe_allow_html=True)
-                    else:
-                        if st.button("🚀 跃迁下一层", use_container_width=True):
-                            rs["idx"] += 1; rs["boss_max"] = BOSS_ROSTER[rs["idx"]]["max_hp"] if rs["idx"] < len(BOSS_ROSTER) else int(1500000 * math.pow(1.5, rs['idx']-4)) 
-                            rs["boss_hp"] = rs["boss_max"]; rs["curr_hp"] = _fin_hp
-                            _cb["cd_def"], _cb["cd_heal"], _cb["cd_ult"] = 0, 0, 0 
-                            rs["logs"].append(f"<br><span style='color:var(--yellow);'>> 已跃迁下一层。</span>"); st.rerun()
-                                    
-                with c_pve2:
-                    log_html = "<br><hr style='border-color:#333; margin:8px 0;'>".join(rs["logs"][-7:])
-                    render_html(f"<div class='glass-panel' style='background:#000; font-family:\"Fira Code\"; font-size:11px; height:430px; display:flex; flex-direction:column-reverse; overflow-y:auto; border-left:4px solid var(--primary); padding:15px; margin-bottom:0;'><div>{log_html}<br><span style='animation:blink 1s infinite;'>_</span></div></div>")
-            render_raid()
-
-        with t_shop:
-            c_sh1, c_sh2 = st.columns([1, 1], gap="large")
-            with c_sh1:
-                @st_fragment
-                def render_10_pull():
-                    _db = st.session_state["db"]
-                    _shop = _db["shop"]
-                    pity_val = _shop.get('pity', 0)
-                    render_html(f"""
-                    <div class='glass-panel' style='padding:20px; border-color:var(--sp); margin-bottom:10px; text-align:center;'>
-                        <div style='font-size:12px; color:#aaa; margin-bottom:5px;'>消耗功德进行抽卡，<b style="color:var(--sp);">满 50 抽必出 UR/SP 极品！</b></div>
-                        <div style='font-size:10px; color:var(--sp); font-weight:bold; margin-bottom:10px;'>【保底进度: {pity_val}/50】</div>
-                        <div style='font-size:30px; font-family:Orbitron; color:var(--sp); font-weight:bold; margin-bottom:10px; text-shadow:0 0 10px var(--sp);'>MERITS: {_shop.get('creds',0):,}</div>
-                    </div>
-                    """)
-                    col_b1, col_b2 = st.columns(2)
-                    with col_b1:
-                        if st.button("🪙 1,000 单抽", use_container_width=True):
-                            if _shop["creds"] >= 1000:
-                                _shop["creds"] -= 1000; _shop["pity"] += 1
-                                _db["quests"]["gacha_pulls"] += 1
-                                if _shop["pity"] >= 50: pull, _shop["pity"] = random.choices([("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[80, 20], k=1)[0], 0
-                                else: pull = random.choices([("R", 500, "#00f3ff"), ("SR", 1500, "#a855f7"), ("SSR", 5000, "#fcee0a"), ("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[60, 25, 10, 4, 1], k=1)[0]
-                                r_tier, b_cp, c_col = pull
-                                clean_relic = f"[{r_tier}] {random.choice(ITEM_PREFIXES)}{random.choice(ITEM_SUFFIXES)} (+{b_cp} CP)"
-                                _shop["relics"].append(clean_relic); _shop["b_cp"] += b_cp; _shop["b_atk"] += int(b_cp * 0.08); _shop["b_def"] += int(b_cp * 0.05); _shop["b_hp"] += int(b_cp * 0.3)
-                                st.rerun() 
-                    with col_b2:
-                        if st.button("💎 10,000 十连抽", use_container_width=True):
-                            if _shop["creds"] >= 10000:
-                                _shop["creds"] -= 10000; _shop["pity"] += 10; pulls = []
-                                _db["quests"]["gacha_pulls"] += 10
-                                for i in range(10):
-                                    if _shop["pity"] >= 50 or i == 9: tier_data, _shop["pity"] = random.choices([("SSR", 5000, "#fcee0a"), ("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[80, 15, 5], k=1)[0], 0 if _shop["pity"] >= 50 else _shop["pity"]
-                                    else: tier_data = random.choices([("R", 500, "#00f3ff"), ("SR", 1500, "#a855f7"), ("SSR", 5000, "#fcee0a"), ("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[60, 25, 10, 4, 1], k=1)[0]
-                                    clean_relic = f"[{tier_data[0]}] {random.choice(ITEM_PREFIXES)}{random.choice(ITEM_SUFFIXES)}"
-                                    pulls.append((tier_data[0], clean_relic, tier_data[2]))
-                                    _shop["relics"].append(f"{clean_relic} (+{tier_data[1]} CP)"); _shop["b_cp"] += tier_data[1]; _shop["b_atk"] += int(tier_data[1] * 0.08); _shop["b_def"] += int(tier_data[1] * 0.05); _shop["b_hp"] += int(tier_data[1] * 0.3)
-                                st.session_state["gacha_result"] = pulls; st.rerun()
-                    if "gacha_result" in st.session_state and st.session_state["gacha_result"]:
-                        grid_html = "<div class='gacha-10-grid'>" + "".join([f"<div class='gacha-item' style='border-color:{p[2]}; animation-delay:{i*0.1}s;'><div style='color:{p[2]}; font-family:Orbitron; font-weight:bold; font-size:16px;'>{p[0]}</div><div style='color:#fff; font-size:9px; margin-top:5px;'>{p[1]}</div></div>" for i, p in enumerate(st.session_state["gacha_result"])]) + "</div>"
-                        render_html(f"<div class='glass-panel' style='text-align:center; padding:15px;'>{grid_html}</div>")
-                        if st.button("✔ 确认收入背包"): st.session_state["gacha_result"] = []; st.rerun()
-                render_10_pull()
-                
-            with c_sh2:
-                @st_fragment
-                def render_forge():
-                    _db = st.session_state["db"]
-                    _shop = _db["shop"]
-                    render_html("<div style='color:var(--ur); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ THE FORGE ] 赛博炼金炉</div>")
-                    inv_count = len(_shop.get("relics", []))
-                    if st.button(f"🔥 献祭 3 件旧装备熔铸高阶神器！(当前: {inv_count}/3)", use_container_width=True):
-                        if inv_count >= 3:
-                            _shop["relics"] = _shop["relics"][3:] 
-                            r_tier, b_cp = random.choices([("SSR", 8000), ("UR", 25000), ("SP", 80000)], weights=[60, 30, 10], k=1)[0]
-                            _shop["relics"].append(f"[{r_tier}] 炼狱·{random.choice(ITEM_PREFIXES)}{random.choice(ITEM_SUFFIXES)} (+{b_cp} CP)")
-                            _shop["b_cp"] += b_cp; _shop["b_atk"] += int(b_cp * 0.08); _shop["b_def"] += int(b_cp * 0.05); _shop["b_hp"] += int(b_cp * 0.3)
-                            _db["quests"]["merges"] += 1
-                            st.rerun()
-                        else: st.error("装备不足 3 件！")
-
-                    render_html("<div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:20px; margin-bottom:10px;'>[ INVENTORY ] 你的装备背囊</div>")
-                    r_items = _shop.get("relics", [])
-                    if not r_items: r_items = ["【空空如也，快去抽卡】"]
-                    sk_html = "".join([f"<div class='relic-item' style='color:{'var(--sp)' if 'SP' in s or 'UR' in s else 'var(--primary)'};'><div style='overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'>{s.split(' (')[0]}</div></div>" for s in reversed(r_items[-30:])])
-                    render_html(f"<div class='glass-panel' style='height:280px; overflow-y:auto; border-left-color:var(--primary);'><div class='relic-grid'>{sk_html}</div></div>")
-                render_forge()
 
         with t_oracle:
             c_o1, c_o2 = st.columns([1.1, 1], gap="large")
             with c_o1:
                 render_html("<div style='color:var(--sp); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ CYBER ORACLE ] 每日量子神谕</div>")
+                render_html("<div style='font-size:12px; color:#aaa; margin-bottom:15px;'>每天免费抽取一次。抽到的神谕将作为乘区<b>直接让你的实战面板暴涨！</b>打怪前必抽！</div>")
+                
                 @st_fragment
                 def render_oracle():
                     _db = st.session_state["db"]
-                    _buffs = _db["buffs"]
+                    _buffs = _db.get("buffs", {})
                     if not _buffs.get("oracle_drawn", False):
-                        render_html("""<div class="glass-panel" style="text-align:center; padding:50px 20px; border-color:var(--sp); border-style:dashed;"><div style="font-size:45px; margin-bottom:15px; animation:blink 2s infinite;">📦</div><div style="color:var(--sp); font-family:'Orbitron'; font-size:16px; font-weight:900; letter-spacing:2px; margin-bottom:10px;">DAILY HEXAGRAM SEALED</div><div style="color:#aaa; font-size:12px;">每日免费单抽，获取 PVE 全局 Buff。</div></div>""")
-                        if st.button("⚡ 抽取今日神谕 (PVE BUFF)", use_container_width=True):
+                        render_html("""<div class="glass-panel" style="text-align:center; padding:50px 20px; border-color:var(--sp); border-style:dashed;"><div style="font-size:45px; margin-bottom:15px; animation:blink 2s infinite;">📦</div><div style="color:var(--sp); font-family:'Orbitron'; font-size:16px; font-weight:900; letter-spacing:2px; margin-bottom:10px;">DAILY HEXAGRAM SEALED</div><div style="color:#aaa; font-size:12px;">盲盒处于叠加态。点击下方按钮坍缩今日命运乘区。</div></div>""")
+                        if st.button("⚡ 注入算力，抽取今日神谕 (PVE BUFF)", use_container_width=True):
                             spell_card, _ = pull_daily_spell(hash_id)
                             _buffs["oracle_drawn"] = True
                             _buffs["oracle_data"] = {"name": spell_card["name"], "atk_mul": spell_card.get("buff_atk", 1.0), "def_mul": spell_card.get("buff_def", 1.0), "hp_mul": spell_card.get("buff_hp", 1.0), "desc": spell_card["desc"], "card": spell_card}
+                            st.toast("⚡ 获得神谕加持！左侧属性已暴涨！", icon="🔮")
                             st.rerun() 
                     else:
-                        sc = _buffs["oracle_data"]["card"]
-                        sc_c = sc["color"]
+                        sc = _buffs.get("oracle_data", {}).get("card", {})
+                        if not sc: return
+                        sc_c = sc.get("color", "#fff")
                         today_str = datetime.now().strftime("%Y-%m-%d")
-                        yao_html = "".join([f"<div class='yao-yang' style='background:{sc_c}; box-shadow:0 0 10px {sc_c};'></div>" if line == 1 else f"<div class='yao-yin'><div class='half' style='background:{sc_c}; box-shadow:0 0 10px {sc_c};'></div><div class='half' style='background:{sc_c}; box-shadow:0 0 10px {sc_c};'></div></div>" for line in reversed(sc['lines'])])
+                        yao_html = "".join([f"<div class='yao-yang' style='background:{sc_c}; box-shadow:0 0 10px {sc_c};'></div>" if line == 1 else f"<div class='yao-yin'><div class='half' style='background:{sc_c}; box-shadow:0 0 10px {sc_c};'></div><div class='half' style='background:{sc_c}; box-shadow:0 0 10px {sc_c};'></div></div>" for line in reversed(sc.get('lines', []))])
                         render_html(f"""
                         <div class="flip-card card-reveal" style="max-width:280px; margin:0 auto;">
                           <div class="flip-card-inner">
                             <div class="flip-card-front" style="border-color:{sc_c}; box-shadow:0 0 40px {sc_c}66; background:linear-gradient(0deg, rgba(0,0,0,0.95), {sc_c}22); padding:15px;">
                                 <div style="font-family:'Orbitron'; color:{sc_c}; font-size:10px; font-weight:bold; letter-spacing:1px; margin-bottom:15px;">[ DATE: {today_str} ]</div>
-                                <div style="background:{sc_c}; color:#000; display:inline-block; padding:2px 10px; font-family:'Orbitron'; font-weight:900; font-size:12px; border-radius:2px; margin-bottom:10px;">{sc['type']}</div>
+                                <div style="background:{sc_c}; color:#000; display:inline-block; padding:2px 10px; font-family:'Orbitron'; font-weight:900; font-size:12px; border-radius:2px; margin-bottom:10px;">{sc.get('type','')}</div>
                                 <div class="hex-container" style="margin-bottom:15px;">{yao_html}</div>
-                                <div style="font-size:20px; font-weight:900; color:#fff; font-family:'Noto Sans SC'; margin-bottom:15px; text-shadow:0 0 10px {sc_c};">{sc['name']}</div>
+                                <div style="font-size:20px; font-weight:900; color:#fff; font-family:'Noto Sans SC'; margin-bottom:15px; text-shadow:0 0 10px {sc_c};">{sc.get('name','')}</div>
                                 <div style="font-size:10px; font-family:Orbitron; color:#888;">HOVER TO REVEAL DETAILS</div>
                             </div>
                             <div class="flip-card-back" style="border-color:{sc_c}; background:#050810; padding:15px; display:flex; flex-direction:column; justify-content:center;">
                                 <div style="background:rgba(0,0,0,0.6); padding:10px; border-radius:4px; text-align:left; border:1px solid rgba(255,255,255,0.1); font-size:11px; line-height:1.5; color:#ddd; margin-bottom:10px;">
-                                    <b style="color:{sc_c}; font-family:'Fira Code';">> PVE BUFF:</b><br>{sc['desc']}
+                                    <b style="color:{sc_c}; font-family:'Fira Code';">> PVE BUFF 乘区:</b><br>{sc.get('desc','')}
                                 </div>
-                                <div style="font-size:11px; color:var(--green); font-weight:bold; text-align:left;">[+] 宜: {sc.get('do','')}</div>
                             </div>
                           </div>
                         </div>
@@ -922,7 +788,7 @@ else:
                     if sub_q:
                         if not q_input: ph.warning("⚠️ 语法错误：事件为空！")
                         else:
-                            prob, hex_res, conc, q_c = roll_d100(q_input, _db["player"].get("hash", "00"))
+                            prob, hex_res, conc, q_c = roll_d100(q_input, _db.get("player",{}).get("hash", "00"))
                             ph.markdown(f"""
                             <div class="glass-panel card-reveal" style="margin-top:10px; border-color:{q_c}; text-align:center; border-left-width: 4px;">
                                 <div style="font-family:'Fira Code'; color:#888; font-size:11px; margin-bottom:10px; word-wrap:break-word;">> ACTION: "{q_input}"</div>
@@ -951,29 +817,218 @@ else:
                             st.rerun()
                     if "cur_sync" in st.session_state:
                         sync = st.session_state["cur_sync"]
-                        render_html(f"<div class='glass-panel card-reveal' style='border-left:4px solid {sync['color']}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'><div style='font-family:Orbitron; font-size:12px; color:#888; margin-bottom:5px;'>SYNC RATE</div><div style='font-size:45px; color:{sync['color']}; font-weight:900; margin-bottom:5px;'>{sync['score']}%</div><div style='color:#fff; font-size:12px;'>{sync['sd']}</div></div>")
+                        render_html(f"<div class='glass-panel card-reveal' style='border-left:4px solid {sync['color']}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'><div style='font-family:Orbitron; font-size:12px; color:#888; margin-bottom:5px;'>SYNC RATE</div><div class="heart-pulse" style="font-size:40px; color:{sync['color']};">{sync['icon']}</div><div style='font-size:45px; color:{sync['color']}; font-weight:900; margin-bottom:5px;'>{sync['score']}%</div><div style='color:#fff; font-size:12px;'>{sync['sd']}</div></div>")
                         if sync['score'] >= 60:
                             if st.button("🤝 签订契约 (拉入助战)", use_container_width=True):
                                 _db["buffs"]["syn_linked"] = True
                                 _db["buffs"]["syn_data"] = {"name": f"{sync['node']}系道侣", "atk_mul": sync['mul'], "def_mul": sync['mul'], "hp_mul": sync['mul'], "cp_bonus": sync['score']*200}
+                                st.toast("💞 契约结成！全属性飙升！", icon="😍")
                                 st.rerun()
                 render_sync()
+
+        with t_raid:
+            render_html("<div style='font-size:13px; color:#aaa; margin-bottom:15px;'>数据人生是一场爬塔。<b>请亲自打出你的八字手牌（普攻/护盾/吸血/大招）来击杀心魔，赚取海量功德！</b></div>")
+            @st_fragment
+            def render_raid():
+                _db = st.session_state["db"] 
+                rs = _db.get("pve", {})
+                _cb = _db.get("combat", {})
+                
+                # 🚨 通过兜底函数抓取战力，彻底断绝 NameError
+                _fin_atk, _fin_def, _fin_hp, _fin_cp, _fin_crit = get_final_combat_stats(_db)
+                
+                if rs.get("idx", 0) >= len(BOSS_ROSTER):
+                    boss_info = {"lvl": rs.get("idx",0)+1, "name": f"深渊魔影 层数 {rs.get('idx',0)-4}", "max_hp": int(1500000 * math.pow(1.5, rs.get("idx",0) - 4)), "atk": int(80000 * math.pow(1.2, rs.get("idx",0) - 4)), "reward": int(50000 * math.pow(1.1, rs.get("idx",0) - 4)), "desc": "阿卡夏深渊的无尽梦魇。"}
+                else: boss_info = BOSS_ROSTER[rs.get("idx", 0)]
+                
+                if rs.get("boss_max", 0) != boss_info["max_hp"]: rs["boss_max"] = boss_info["max_hp"]; rs["boss_hp"] = boss_info["max_hp"]
+                boss_hp_pct = max(0, min(100, int((rs.get("boss_hp",0) / rs.get("boss_max",1)) * 100)))
+                my_hp, my_hp_pct = rs.get("curr_hp",0), max(0, min(100, int((rs.get("curr_hp",0) / max(1, _fin_hp)) * 100)))
+                
+                c_pve1, c_pve2 = st.columns([1.2, 1.5], gap="large")
+                with c_pve1:
+                    render_html(f"""
+                    <div class="glass-panel" style="text-align:center; border-color:var(--pink); padding:15px; margin-bottom:10px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:Orbitron; font-weight:bold; font-size:12px;">
+                            <span style="color:var(--pink);">MATRIX_ICE</span> <span style="color:#fff;">VS</span> <span style="color:var(--primary);">PLAYER</span>
+                        </div>
+                        <div style="font-size:45px; margin-bottom:5px; text-shadow:0 0 20px var(--pink); animation:blink 2s infinite;">👾</div>
+                        <div style="color:var(--pink); font-family:'Orbitron'; font-weight:900; font-size:15px;">{boss_info["name"]}</div>
+                        <div style="color:#aaa; font-size:11px; margin-bottom:10px;">[ {boss_info["desc"]} ]</div>
+                        <div class="hp-bar-bg" style="margin-top:10px;"><div class="hp-bar-fill hp-red" style="width:{boss_hp_pct}%;"></div></div>
+                        <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold; margin-bottom:5px;">{rs.get("boss_hp",0):,} / {rs.get("boss_max",0):,} HP</div>
+                        
+                        <hr style="border-color:#333; margin:10px 0;">
+                        <div style="color:var(--green); font-family:'Orbitron'; font-weight:bold; font-size:12px; margin-bottom:5px;">YOUR HP (你的载体)</div>
+                        <div class="hp-bar-bg"><div class="hp-bar-fill hp-green" style="width:{my_hp_pct}%;"></div></div>
+                        <div style="font-family:'Orbitron'; font-size:13px; color:#fff; font-weight:bold;">{my_hp:,} / {_fin_hp:,} HP</div>
+                    </div>
+                    """)
+                    
+                    if my_hp <= 0:
+                        if st.button("💉 消耗 500 功德复活", use_container_width=True):
+                            if _db.get("shop",{}).get("creds",0) >= 500:
+                                _db["shop"]["creds"] -= 500; _db["pve"]["curr_hp"] = _fin_hp
+                                _cb["cd_def"], _cb["cd_heal"], _cb["cd_ult"] = 0, 0, 0
+                                st.rerun()
+                            else: st.warning("功德不足！请去【竞技深渊】挂机挖点矿。")
+                    elif rs.get("boss_hp",0) > 0:
+                        b1, b2 = st.columns(2); b3, b4 = st.columns(2)
+                        
+                        def handle_victory():
+                            rs["boss_hp"] = 0; _db["shop"]["creds"] += boss_info["reward"]; _db["quests"]["kills"] += 1
+                            st.toast(f"🔥 爽！击杀 Boss 爆出 {boss_info['reward']:,} 金币！", icon="💰")
+                            rs["logs"].append(f"<br><span style='color:var(--green); font-weight:bold;'>🏆 [VICTORY] 获得 {boss_info['reward']:,} 功德！去黑市抽装备吧！</span>")
+                        
+                        def enemy_counter(dmg_taken):
+                            boss_dmg = int(boss_info["atk"] * random.uniform(0.9, 1.1))
+                            act_dmg = max(10, int(boss_dmg - (_fin_def * 3.0))) if _cb.get("cd_def", 0) == 3 else max(100, int(boss_dmg - (_fin_def * 0.6)))
+                            rs["curr_hp"] -= act_dmg
+                            rs["logs"].append(f"<span style='color:var(--pink);'>🛡️ [BOSS] 反噬！受到 {act_dmg:,} 点伤害。</span>")
+                            if rs["curr_hp"] <= 0: rs["curr_hp"] = 0; rs["logs"].append("<br><span style='color:var(--pink); font-weight:bold;'>💀 [DEFEAT] 主将阵亡！</span>")
+                        
+                        def adv_cd():
+                            if _cb.get("cd_def", 0) > 0: _cb["cd_def"] -= 1
+                            if _cb.get("cd_heal", 0) > 0: _cb["cd_heal"] -= 1
+                            if _cb.get("cd_ult", 0) > 0: _cb["cd_ult"] -= 1
+
+                        _bz = _db.get("player", {}).get("bazi_arr", ["?","?","?","?"])
+                        with b1:
+                            st.markdown('<div class="combat-btn">', unsafe_allow_html=True)
+                            if st.button(f"🗡️ 普攻\n[{_bz[0]}]", use_container_width=True):
+                                adv_cd()
+                                dmg = int(_fin_atk * random.uniform(0.85, 1.15)) * (2 if random.randint(1,100)<=_fin_crit else 1)
+                                rs["boss_hp"] -= dmg; rs["logs"].append(f"<span style='color:var(--primary);'>⚔️ 基于 {_fin_atk:,} 面板攻击造成 {dmg:,} 伤害。</span>")
+                                handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
+                                st.rerun()
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        with b2:
+                            c_d = _cb.get("cd_def", 0); c_c = "btn-cd" if c_d > 0 else "combat-btn"
+                            st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
+                            if st.button(f"🛡️ 防御(CD:{c_d})\n[{_bz[1]}]" if c_d > 0 else f"🛡️ 绝对防御\n[{_bz[1]}]", disabled=(c_d > 0), use_container_width=True):
+                                adv_cd(); _cb["cd_def"] = 3; rs["logs"].append(f"<span style='color:var(--yellow);'>🛡️ 开启绝对防御！装甲 x3！</span>")
+                                enemy_counter(0); st.rerun()
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        with b3:
+                            c_h = _cb.get("cd_heal", 0); c_c = "btn-cd" if c_h > 0 else "combat-btn"
+                            st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
+                            if st.button(f"💉 虹吸(CD:{c_h})\n[{_bz[2]}]" if c_h > 0 else f"💉 算力虹吸\n[{_bz[2]}]", disabled=(c_h > 0), use_container_width=True):
+                                adv_cd(); dmg = int(_fin_atk * 1.2); rs["boss_hp"] -= dmg; rs["curr_hp"] = min(_fin_hp, rs["curr_hp"] + int(dmg*0.8))
+                                _cb["cd_heal"] = 4; rs["logs"].append(f"<span style='color:var(--green);'>💉 虹吸造成 {dmg:,} 伤害，回复大量HP！</span>")
+                                handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
+                                st.rerun()
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        with b4:
+                            c_u = _cb.get("cd_ult", 0); c_c = "btn-cd" if c_u > 0 else "combat-btn"
+                            st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
+                            if st.button(f"💥 神权(CD:{c_u})\n[{_bz[3]}]" if c_u > 0 else f"💥 终极神权\n[{_bz[3]}]", disabled=(c_u > 0), use_container_width=True):
+                                adv_cd(); dmg = int(_fin_atk * 3.5); rs["boss_hp"] -= dmg
+                                _cb["cd_ult"] = 5; rs["logs"].append(f"<span style='color:var(--sp); font-weight:bold;'>💥 释放神权大招！造成 {dmg:,} 点极限伤害！</span>")
+                                handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
+                                st.rerun()
+                            st.markdown('</div>', unsafe_allow_html=True)
+                    else:
+                        if st.button("🚀 跃迁下一层", use_container_width=True):
+                            rs["idx"] += 1; rs["boss_max"] = BOSS_ROSTER[rs["idx"]]["max_hp"] if rs["idx"] < len(BOSS_ROSTER) else int(1500000 * math.pow(1.5, rs['idx']-4)) 
+                            rs["boss_hp"] = rs["boss_max"]; rs["curr_hp"] = _fin_hp
+                            _cb["cd_def"], _cb["cd_heal"], _cb["cd_ult"] = 0, 0, 0 
+                            rs["logs"].append(f"<br><span style='color:var(--yellow);'>> 已跃迁下一层。</span>"); st.rerun()
+                                    
+                with c_pve2:
+                    log_html = "<br><hr style='border-color:#333; margin:8px 0;'>".join(rs.get("logs", [])[-7:])
+                    render_html(f"<div class='glass-panel' style='background:#000; font-family:\"Fira Code\"; font-size:11px; height:430px; display:flex; flex-direction:column-reverse; overflow-y:auto; border-left:4px solid var(--primary); padding:15px; margin-bottom:0;'><div>{log_html}<br><span style='animation:blink 1s infinite;'>_</span></div></div>")
+            render_raid()
+
+        with t_shop:
+            c_sh1, c_sh2 = st.columns([1, 1], gap="large")
+            with c_sh1:
+                @st_fragment
+                def render_10_pull():
+                    _db = st.session_state["db"]
+                    _shop = _db.get("shop", {})
+                    pity_val = _shop.get('pity', 0)
+                    render_html(f"""
+                    <div class='glass-panel' style='padding:20px; border-color:var(--sp); margin-bottom:10px; text-align:center;'>
+                        <div style='font-size:12px; color:#aaa; margin-bottom:5px;'>消耗功德进行抽卡，<b style="color:var(--sp);">满 50 抽必出 UR/SP 极品！抽出的属性会自动核算到左侧面板！</b></div>
+                        <div style='font-size:10px; color:var(--sp); font-weight:bold; margin-bottom:10px;'>【保底进度: {pity_val}/50】</div>
+                        <div style='font-size:30px; font-family:Orbitron; color:var(--sp); font-weight:bold; margin-bottom:10px; text-shadow:0 0 10px var(--sp);'>MERITS: {_shop.get('creds',0):,}</div>
+                    </div>
+                    """)
+                    col_b1, col_b2 = st.columns(2)
+                    with col_b1:
+                        if st.button("🪙 1,000 单抽", use_container_width=True):
+                            if _shop.get("creds", 0) >= 1000:
+                                _shop["creds"] -= 1000; _shop["pity"] += 1
+                                _db["quests"]["gacha_pulls"] += 1
+                                if _shop["pity"] >= 50: pull, _shop["pity"] = random.choices([("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[80, 20], k=1)[0], 0
+                                else: pull = random.choices([("R", 500, "#00f3ff"), ("SR", 1500, "#a855f7"), ("SSR", 5000, "#fcee0a"), ("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[60, 25, 10, 4, 1], k=1)[0]
+                                r_tier, b_cp, c_col = pull
+                                clean_relic = f"[{r_tier}] {random.choice(ITEM_PREFIXES)}{random.choice(ITEM_SUFFIXES)} (+{b_cp} CP)"
+                                _shop["relics"].append(clean_relic); _shop["b_cp"] += b_cp; _shop["b_atk"] += int(b_cp * 0.08); _shop["b_def"] += int(b_cp * 0.05); _shop["b_hp"] += int(b_cp * 0.3)
+                                st.toast(f"🎉 抽出 {r_tier} 级词条！左侧战力已瞬间飙升！", icon="🚀")
+                                st.rerun() 
+                            else: st.error("功德不足！去打怪爆金币！")
+                    with col_b2:
+                        if st.button("💎 10,000 十连抽", use_container_width=True):
+                            if _shop.get("creds", 0) >= 10000:
+                                _shop["creds"] -= 10000; _shop["pity"] += 10; pulls = []
+                                _db["quests"]["gacha_pulls"] += 10
+                                for i in range(10):
+                                    if _shop["pity"] >= 50 or i == 9: tier_data, _shop["pity"] = random.choices([("SSR", 5000, "#fcee0a"), ("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[80, 15, 5], k=1)[0], 0 if _shop["pity"] >= 50 else _shop["pity"]
+                                    else: tier_data = random.choices([("R", 500, "#00f3ff"), ("SR", 1500, "#a855f7"), ("SSR", 5000, "#fcee0a"), ("UR", 15000, "#ff007c"), ("SP", 50000, "#ffaa00")], weights=[60, 25, 10, 4, 1], k=1)[0]
+                                    clean_relic = f"[{tier_data[0]}] {random.choice(ITEM_PREFIXES)}{random.choice(ITEM_SUFFIXES)}"
+                                    pulls.append((tier_data[0], clean_relic, tier_data[2]))
+                                    _shop["relics"].append(f"{clean_relic} (+{tier_data[1]} CP)"); _shop["b_cp"] += tier_data[1]; _shop["b_atk"] += int(tier_data[1] * 0.08); _shop["b_def"] += int(tier_data[1] * 0.05); _shop["b_hp"] += int(tier_data[1] * 0.3)
+                                st.session_state["gacha_result"] = pulls
+                                st.toast("🔥 十连爆闪！海量属性已注入左侧面板！", icon="✨")
+                                st.rerun()
+                            else: st.error("功德不足！去打怪爆金币！")
+                    if "gacha_result" in st.session_state and st.session_state["gacha_result"]:
+                        grid_html = "<div class='gacha-10-grid'>" + "".join([f"<div class='gacha-item' style='border-color:{p[2]}; animation-delay:{i*0.1}s;'><div style='color:{p[2]}; font-family:Orbitron; font-weight:bold; font-size:16px;'>{p[0]}</div><div style='color:#fff; font-size:9px; margin-top:5px;'>{p[1]}</div></div>" for i, p in enumerate(st.session_state["gacha_result"])]) + "</div>"
+                        render_html(f"<div class='glass-panel' style='text-align:center; padding:15px;'>{grid_html}</div>")
+                        if st.button("✔ 确认收入背包"): st.session_state["gacha_result"] = []; st.rerun()
+                render_10_pull()
+                
+            with c_sh2:
+                @st_fragment
+                def render_forge():
+                    _db = st.session_state["db"]
+                    _shop = _db.get("shop", {})
+                    render_html("<div style='color:var(--ur); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ THE FORGE ] 赛博炼金炉</div>")
+                    inv_count = len(_shop.get("relics", []))
+                    if st.button(f"🔥 献祭 3 件旧装备熔铸高阶神器！(当前: {inv_count}/3)", use_container_width=True):
+                        if inv_count >= 3:
+                            _shop["relics"] = _shop["relics"][3:] 
+                            r_tier, b_cp = random.choices([("SSR", 8000), ("UR", 25000), ("SP", 80000)], weights=[60, 30, 10], k=1)[0]
+                            _shop["relics"].append(f"[{r_tier}] 炼狱·{random.choice(ITEM_PREFIXES)}{random.choice(ITEM_SUFFIXES)} (+{b_cp} CP)")
+                            _shop["b_cp"] += b_cp; _shop["b_atk"] += int(b_cp * 0.08); _shop["b_def"] += int(b_cp * 0.05); _shop["b_hp"] += int(b_cp * 0.3)
+                            _db["quests"]["merges"] += 1
+                            st.toast("🎇 熔炼成功！神器出世！左侧战力已核爆！", icon="🔥")
+                            st.rerun()
+                        else: st.error("装备不足 3 件！")
+
+                    render_html("<div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900; margin-top:20px; margin-bottom:10px;'>[ INVENTORY ] 你的装备背囊</div>")
+                    r_items = _shop.get("relics", [])
+                    if not r_items: r_items = ["【空空如也，快去抽卡】"]
+                    sk_html = "".join([f"<div class='relic-item' style='color:{'var(--sp)' if 'SP' in s or 'UR' in s else 'var(--primary)'};'><div style='overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'>{s.split(' (')[0]}</div></div>" for s in reversed(r_items[-30:])])
+                    render_html(f"<div class='glass-panel' style='height:280px; overflow-y:auto; border-left-color:var(--primary);'><div class='relic-grid'>{sk_html}</div></div>")
+                render_forge()
 
         with t_pvp:
             c_p1, c_p2 = st.columns([1, 1], gap="large")
             with c_p1:
-                render_html("<div style='font-size:14px; font-weight:bold; color:var(--primary); font-family:Orbitron; margin-bottom:10px;'>[ PVP RANKED ] 幻影天梯</div>")
+                render_html("<div style='font-size:14px; font-weight:bold; color:var(--primary); font-family:Orbitron; margin-bottom:10px;'>[ PVP RANKED ] 幻影天梯排位赛</div>")
                 @st_fragment
                 def render_pvp():
                     _db = st.session_state["db"]
-                    p = _db["pvp"]
-                    _f_cp = _db["computed"]["cp"]
-                    if p["rp"] >= 3000: p["tier"], r_col = "👑 璀璨神权", "var(--sp)"
-                    elif p["rp"] >= 2000: p["tier"], r_col = "💎 阿卡夏钻石", "#00f3ff"
-                    elif p["rp"] >= 1500: p["tier"], r_col = "🥇 矩阵黄金", "#fcee0a"
+                    p = _db.get("pvp", {})
+                    _f_cp = _db.get("computed", {}).get("cp", 0)
+                    if p.get("rp", 0) >= 3000: p["tier"], r_col = "👑 璀璨神权", "var(--sp)"
+                    elif p.get("rp", 0) >= 2000: p["tier"], r_col = "💎 阿卡夏钻石", "#00f3ff"
+                    elif p.get("rp", 0) >= 1500: p["tier"], r_col = "🥇 矩阵黄金", "#fcee0a"
                     else: p["tier"], r_col = "🔰 废土黑铁", "#888"
                     
-                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:{r_col}; padding:20px;'><div style='font-size:24px; font-weight:bold; color:{r_col}; margin-bottom:10px; text-shadow:0 0 15px {r_col};'>{p['tier']}</div><div style='font-size:50px; font-weight:900; color:#fff; font-family:Orbitron; line-height:1; margin-bottom:10px;'>{p['rp']}</div></div>")
+                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:{r_col}; padding:20px;'><div style='font-size:24px; font-weight:bold; color:{r_col}; margin-bottom:10px; text-shadow:0 0 15px {r_col};'>{p.get('tier', '')}</div><div style='font-size:50px; font-weight:900; color:#fff; font-family:Orbitron; line-height:1; margin-bottom:10px;'>{p.get('rp', 0)}</div></div>")
                     if st.button("⚔️ 匹配镜像对手", use_container_width=True):
                         opp_cp = int(_f_cp * random.uniform(0.85, 1.3)); my_score, opp_score = _f_cp * random.randint(1,100), opp_cp * random.randint(1,100)
                         log = f"<div style='color:#fff;'>> [MATCH] Opponent CP: {opp_cp:,}<br>"
@@ -983,7 +1038,7 @@ else:
                             loss = random.randint(10, 20); p["rp"] = max(0, p["rp"] - loss); log += f"<span style='color:var(--pink); font-weight:bold;'>💀 [LOSE] RP -{loss}</span></div>"
                         p["logs"].append(log); st.rerun()
                     
-                    log_html = "<br><hr style='border-color:#333; margin:8px 0;'>".join(p["logs"][-3:])
+                    log_html = "<br><hr style='border-color:#333; margin:8px 0;'>".join(p.get("logs", [])[-3:])
                     render_html(f"<div class='glass-panel' style='background:#000; font-family:\"Fira Code\"; font-size:12px; height:180px; display:flex; flex-direction:column-reverse; overflow-y:auto; border-left:4px solid {r_col}; padding:15px; margin-top:10px;'><div>{log_html}</div></div>")
                 render_pvp()
             with c_p2:
@@ -991,30 +1046,31 @@ else:
                 @st_fragment
                 def render_wb():
                     _db = st.session_state["db"]
-                    wb = _db["world_boss"]
-                    _f_atk, _f_crit = _db["computed"]["atk"], _db["computed"]["crit"]
+                    wb = _db.get("world_boss", {})
+                    _f_atk, _f_crit = _db.get("computed", {}).get("atk", 0), _db.get("computed", {}).get("crit", 0)
                     
-                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:var(--sp); padding:20px;'><div style='font-size:50px; text-shadow:0 0 20px var(--sp); margin-bottom:10px;'>👹</div><div style='color:var(--sp); font-family:Orbitron; font-weight:900;'>3 回合极限输出挑战</div><div style='font-family:Orbitron; color:#fff; font-size:20px; margin-top:15px;'>HIGHEST DMG: <br><span style='color:var(--sp); font-size:30px;'>{wb['highest_dmg']:,}</span></div></div>")
+                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:var(--sp); padding:20px;'><div style='font-size:50px; text-shadow:0 0 20px var(--sp); margin-bottom:10px;'>👹</div><div style='color:var(--sp); font-family:Orbitron; font-weight:900;'>3 回合极限输出</div><div style='font-family:Orbitron; color:#fff; font-size:20px; margin-top:15px;'>HIGHEST DMG: <br><span style='color:var(--sp); font-size:30px;'>{wb.get('highest_dmg', 0):,}</span></div></div>")
                     if st.button("🔥 发起世界挑战", use_container_width=True):
                         total_dmg = sum([int(_f_atk * random.uniform(0.8, 1.5) * (2.5 if random.randint(1,100)<=_f_crit else 1)) for _ in range(3)])
-                        if total_dmg > wb['highest_dmg']:
+                        if total_dmg > wb.get('highest_dmg', 0):
                             wb['highest_dmg'] = total_dmg; reward = int(total_dmg // 10); wb["logs"].append(f"<span style='color:var(--green); font-weight:bold;'>🎉 破纪录 {total_dmg:,}！获得 {reward:,} 功德！</span>"); _db["shop"]["creds"] += reward
                         else:
                             reward = int(total_dmg // 20); wb["logs"].append(f"<span style='color:#aaa;'>伤害 {total_dmg:,}。获得参与奖 {reward:,} 功德。</span>"); _db["shop"]["creds"] += reward
                         st.rerun()
-                    if wb["logs"]: render_html(f"<div class='glass-panel' style='background:#000; font-family:Fira Code; font-size:12px; border-left:4px solid var(--sp); padding:15px; height:100px; overflow-y:auto; margin-top:10px;'>{wb['logs'][-1]}</div>")
+                    if wb.get("logs", []): render_html(f"<div class='glass-panel' style='background:#000; font-family:Fira Code; font-size:12px; border-left:4px solid var(--sp); padding:15px; height:100px; overflow-y:auto; margin-top:10px;'>{wb['logs'][-1]}</div>")
                 render_wb()
                 
                 @st_fragment
                 def render_mine():
                     _db = st.session_state["db"]
-                    ms = _db["mining"]
-                    elapsed = time.time() - ms["last_time"]
-                    earned = int((_db["computed"]["cp"] / 1000) * (elapsed / 60) * 20) 
-                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:var(--primary); padding:15px; margin-top:10px;'><div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900;'>[ IDLE MINING ] 离线挖矿</div><div style='font-family:Orbitron; font-size:25px; color:var(--sp); font-weight:bold; margin-top:5px;'>{earned:,}</div></div>")
+                    ms = _db.get("mining", {"last_time": time.time(), "total": 0})
+                    elapsed = time.time() - ms.get("last_time", time.time())
+                    earned = int((_db.get("computed", {}).get("cp", 0) / 1000) * (elapsed / 60) * 20) 
+                    render_html(f"<div class='glass-panel' style='text-align:center; border-color:var(--primary); padding:15px; margin-top:10px;'><div style='color:var(--primary); font-family:Orbitron; font-size:14px; font-weight:900;'>[ IDLE MINING ] 离线挖矿收益</div><div style='font-family:Orbitron; font-size:25px; color:var(--sp); font-weight:bold; margin-top:5px;'>{earned:,}</div></div>")
                     if st.button("📥 提取挖矿收益", use_container_width=True):
                         if earned > 0:
                             _db["shop"]["creds"] += earned; ms["total"] += earned; ms["last_time"] = time.time()
+                            st.toast(f"⛏️ 收菜成功！获得 {earned} 功德！", icon="💰")
                             st.rerun()
                 render_mine()
 
@@ -1034,7 +1090,6 @@ else:
         with t_export:
             @st_fragment
             def render_exports():
-                # 🚨 终极安全提取：必须在 Fragment 内重新取所有局部变量以防 NameError 报错！
                 local_db = st.session_state["db"]
                 local_base = local_db.get("player", {})
                 local_shop = local_db.get("shop", {})
@@ -1047,7 +1102,6 @@ else:
                 _bz = local_base.get('bazi_arr', ['?','?','?','?'])
                 _wx = local_base.get('wx', {})
                 
-                # 专门修复 past_life 的 NameError
                 _past_life = local_base.get('past_life', {})
                 _pl_title = _past_life.get('title', '未知')
                 _pl_debt = _past_life.get('debt', '无')
@@ -1070,7 +1124,6 @@ else:
                             if not clean_sk: clean_sk = ["白板体质"]
                             sk_h = "".join([f"<span style='background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:2px 6px; margin:2px; font-size:9px; display:inline-block; font-family:Fira Code; border-radius:2px;'>{s}</span>" for s in reversed(clean_sk[-5:])])
                             
-                            # 🚨 终极防爆渲染：没有任何 Python f-string 冲突。彻底引入 components。
                             HTML_POSTER_RAW = """
                             <!DOCTYPE html><html><head><meta charset="utf-8">
                             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -1104,15 +1157,10 @@ else:
                                     <div class="psa-r"><div style="font-size:9px; font-weight:bold; margin-bottom:4px;">GEM MINT</div><div class="psa-grade">10</div></div>
                                 </div>
                                 <div class="card-inner">
-                                    <div class="c-head">
-                                        <div class="h1">__DM_KEY__ · __CLASS__</div>
-                                        <div style="font-family:'Orbitron'; font-size:18px; font-weight:900; background:__COLOR__; color:#000; padding:2px 8px; border-radius:2px;">__TIER__</div>
-                                    </div>
+                                    <div class="c-head"><div class="h1">__DM_KEY__ · __CLASS__</div><div style="font-family:'Orbitron'; font-size:18px; font-weight:900; background:__COLOR__; color:#000; padding:2px 8px; border-radius:2px;">__TIER__</div></div>
                                     <div class="art-box"><div class="art-char">__DM_KEY__</div></div>
                                     <div class="cp-text">CP __CP__</div>
-                                    <div class="desc-box">
-                                        <div style="color:__COLOR__; font-weight:bold; margin-bottom:4px;">⚔️ __WPN__</div>
-                                    </div>
+                                    <div class="desc-box"><div style="color:__COLOR__; font-weight:bold; margin-bottom:4px;">⚔️ __WPN__</div></div>
                                     <div style="text-align:center; margin-bottom:10px;">__EQUIPS__</div>
                                     <div style="display:flex; justify-content:space-between; font-family:'Orbitron'; font-size:14px; font-weight:bold; color:#fff; border-top:1px solid #333; padding-top:8px;"><span style="color:#f43f5e;">ATK: __ATK__</span><span style="color:#10b981;">HP: __HP__</span></div>
                                     <div style="text-align:right; font-family:'Orbitron'; font-size:8px; color:#666; margin-top:10px;">© 2026 __CPY__</div>
@@ -1129,7 +1177,6 @@ else:
                             html_ready = html_ready.replace("__HASH__", _hash[:10]).replace("__DM_KEY__", _dm_key).replace("__CLASS__", _dm_class)
                             html_ready = html_ready.replace("__TIER__", _rarity).replace("__CP__", f"{_f_cp:,}").replace("__WPN__", _dm_wpn)
                             html_ready = html_ready.replace("__EQUIPS__", sk_h).replace("__ATK__", f"{_f_atk:,}").replace("__HP__", f"{_f_hp:,}").replace("__CPY__", COPYRIGHT.upper())
-                            
                             components.html(html_ready, height=750) 
                 
                 with e_web3:
@@ -1156,7 +1203,7 @@ contract Karma_TCG_V1000 is ERC721 {{
 >> 1. 玩家档案 (PLAYER DATA)
 ▸ 身份：{_pname} 
 ▸ 哈希：0x{_hash}
-▸ 天梯段位：{local_db['pvp']['tier']}
+▸ 天梯段位：{local_db.get('pvp',{}).get('tier', 'Unranked')}
 ▸ 最终战力：{_f_cp:,} CP [{_rarity}]
 
 >> 2. 主将设定 (COMMANDER LORE)
@@ -1173,7 +1220,7 @@ contract Karma_TCG_V1000 is ERC721 {{
 
                 with e_json:
                     export_data = {
-                        "version": VERSION, "copyright": COPYRIGHT, "player": _pname, "rarity": _rarity, "cp": _f_cp, "rank": local_db["pvp"]["tier"],
+                        "version": VERSION, "copyright": COPYRIGHT, "player": _pname, "rarity": _rarity, "cp": _f_cp, "rank": local_db.get("pvp",{}).get("tier", "Unranked"),
                         "commander": { "id": _dm_key, "atk": _f_atk, "hp": _f_hp },
                         "equips": local_shop.get("relics", []), "hash": _hash, "lore": {"title": _pl_title}
                     }
@@ -1212,7 +1259,7 @@ POWERED BY {COPYRIGHT}
     st.markdown("---")
     @st_fragment
     def render_terminal():
-        current_logs = st.session_state["db"]["term_logs"]
+        current_logs = st.session_state["db"].get("term_logs", [])
         log_html = "<br>".join(current_logs[-4:])
         render_html(f"<div style='max-width: 800px; margin: 0 auto; background:#000; border:1px solid #333; padding:15px; font-family:\"Fira Code\"; color:var(--primary); font-size:13px; height:120px; display:flex; flex-direction:column-reverse; overflow:hidden; border-left:4px solid var(--primary);'><div>{log_html}<span style=\"animation:blink 1s infinite;\">_</span></div></div>")
 
@@ -1230,7 +1277,7 @@ POWERED BY {COPYRIGHT}
                 cmd_lower = cmd_str.lower()
                 if cmd_lower == '/help': logs.append("<span style='color:#aaa;'>CMDS: /rank, /ping, /clear, /wuming</span>")
                 elif cmd_lower == '/rank': 
-                    f_cp = st.session_state["db"]["computed"]["cp"]
+                    f_cp = st.session_state["db"].get("computed", {}).get("cp", 0)
                     rank_pct = min(99.99, max(1.0, f_cp / 50000.0))
                     logs.append(f"<span style='color:var(--sp);'>[SYS] 当前最终战力(CP {f_cp:,})击败了全服 {rank_pct:.2f}% 的玩家。</span>")
                 elif cmd_lower == '/clear': 
