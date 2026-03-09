@@ -141,7 +141,7 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .synergy-row .mul { color: var(--green); font-weight: bold; text-shadow: 0 0 5px var(--green); }
 .synergy-total { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 18px; color: var(--sp); font-weight: 900; margin-top: 10px; padding-top: 10px; border-top: 1px solid #444; text-shadow: 0 0 10px var(--sp); }
 
-/* 🌟 扇形手牌系统 */
+/* 🌟 扇形手牌系统 (物理级悬停抽出特效) */
 .hand-container { display: flex; justify-content: center; align-items: center; margin-top: 40px; height: 200px; position: relative; perspective: 1000px; margin-bottom:40px;}
 .hand-card { width: 120px; height: 165px; background: linear-gradient(180deg, rgba(20,20,30,0.95) 0%, #050608 100%); border: 2px solid #444; border-radius: 8px; position: absolute; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: -5px 10px 20px rgba(0,0,0,0.6); }
 .hand-card .hc-val { font-size: 35px; font-weight: 900; font-family: 'Noto Sans SC'; color: #fff; line-height: 1; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
@@ -320,6 +320,8 @@ def calc_base_stats(hash_str, wx_dict, b_atk, b_def, b_hp):
     
     rng = np.random.RandomState(int(str(hash_str)[:8], 16))
     base_cp = int((f_atk * 1.2 + f_def * 0.8 + f_hp * 0.1) * rng.uniform(0.9, 1.2))
+    
+    # 🚨 终极修复：正确返回 9 个参数，彻底消除 ValueError 
     return rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff
 
 def update_computed_stats(db):
@@ -414,6 +416,11 @@ def roll_d100(query, user_hash):
     else: conc, c = "【死局 | FATAL BLUNDER】: 命中死穴，绝对禁止！", "#8b0000"
     return prob, hex_res, conc, c
 
+def pull_daily_spell(user_hash):
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    seed = int(hashlib.md5((str(user_hash) + today_str).encode()).hexdigest()[:8], 16)
+    return random.Random(seed).choice(SPELL_POOL), today_str
+
 # ==============================================================================
 # 🔮 [ ENTRY POINT ] 数据人生登录终端
 # ==============================================================================
@@ -423,14 +430,14 @@ if not st.session_state["db"].get("booted", False):
     
     ENTRY_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA LIFE MATRIX V1000.5 <b class="up">▲ONLINE</b></span>
+        <span>DATA LIFE MATRIX V1000.9 <b class="up">▲ONLINE</b></span>
         <span>BROADCAST: User {r_user} just pulled <b class="ur">★ SP {r_card} 主将卡</b> !</span>
         <span>COPYRIGHT: {COPYRIGHT} <b class="up">▲AUTHORIZED</b></span>
     </div></div>
     <div style="text-align: center; margin-bottom: 25px; margin-top:5vh;">
         <div style="color:var(--sp); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:10px; margin-bottom:10px; text-shadow:0 0 10px var(--sp);">[ INSERT COIN TO PULL ]</div>
         <h1 class="hero-title" data-text="无名逆流·数据人生">无名逆流·数据人生</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.5</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.9</div>
     </div>
     <div class="glass-panel" style="max-width: 680px; margin: 0 auto 30px auto; border-left: 4px solid var(--sp); padding: 35px; text-align:center;">
         <div style="color:var(--sp); font-size: 18px; font-weight:900; letter-spacing: 2px; margin-bottom:15px; text-shadow:0 0 10px var(--sp);">“如果命运是一场牌局，出生就是第一次抽卡。”</div>
@@ -496,7 +503,9 @@ if not st.session_state["db"].get("booted", False):
         pet_info = ZODIAC_PETS.get(zodiac_idx, ZODIAC_PETS["子"])
         
         dm_base = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"])
-        rarity, r_col, f_atk, f_def, f_hp, f_crit, entropy, reso_buff = calc_base_stats(hash_id, wx_scores, dm_base.get("base_atk", 1000), dm_base.get("base_def", 1000), dm_base.get("hp", 8000))
+        
+        # 🚨 解决 ValueError：严格解包 9 个变量！
+        rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff = calc_base_stats(hash_id, wx_scores, dm_base.get("base_atk", 1000), dm_base.get("base_def", 1000), dm_base.get("hp", 8000))
 
         db = st.session_state["db"]
         db["player"] = {
@@ -552,7 +561,7 @@ else:
 
     HEADER_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA-LIFE RPG: V1000.5 <b class="up">▲SYNCED</b></span>
+        <span>DATA-LIFE RPG: V1000.9 <b class="up">▲SYNCED</b></span>
         <span>PLAYER: {player_name} <b class="up">▲ACTIVE</b></span>
         <span>CYBER_MERITS: {shop.get('creds', 0)} <b class="ur">★ LOADED</b></span>
         <span>PVP_RANK: {db.get('pvp',{}).get('tier', 'Unranked')} </span>
@@ -828,11 +837,11 @@ else:
                         
                         # 🚨 终极安全语法：使用三引号彻底杜绝 SyntaxError！
                         render_html(f"""
-                        <div class='glass-panel card-reveal' style='border-left:4px solid {sync['color']}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'>
+                        <div class='glass-panel card-reveal' style='border-left:4px solid {sync["color"]}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'>
                             <div style='font-family:Orbitron; font-size:12px; color:#888; margin-bottom:5px;'>SYNC RATE</div>
-                            <div class='heart-pulse' style='font-size:40px; color:{sync['color']};'>{sync['icon']}</div>
-                            <div style='font-size:45px; color:{sync['color']}; font-weight:900; margin-bottom:5px;'>{sync['score']}%</div>
-                            <div style='color:#fff; font-size:12px;'>{sync['sd']}</div>
+                            <div class='heart-pulse' style='font-size:40px; color:{sync["color"]};'>{sync["icon"]}</div>
+                            <div style='font-size:45px; color:{sync["color"]}; font-weight:900; margin-bottom:5px;'>{sync["score"]}%</div>
+                            <div style='color:#fff; font-size:12px;'>{sync["sd"]}</div>
                         </div>
                         """)
                         
@@ -843,6 +852,14 @@ else:
                                 st.toast("💞 契约结成！全属性飙升！", icon="😍")
                                 st.rerun()
                 render_sync()
+            with c_l2:
+                render_html("""
+                <div class="glass-panel" style="text-align:center; border-color:var(--pink); padding:40px 20px; margin-top:10px;">
+                    <div style="font-size:50px; margin-bottom:15px; animation:blink 1.5s infinite; text-shadow:0 0 20px var(--pink);">🔗</div>
+                    <div style="color:var(--pink); font-family:'Orbitron'; font-size:16px; font-weight:bold; letter-spacing:2px;">SOULMATES MATRIX</div>
+                    <div style="color:#aaa; font-size:12px; margin-top:10px;">尚未匹配。<br>请在左侧发起神经链结测算。</div>
+                </div>
+                """)
 
         with t_raid:
             render_html("<div style='font-size:13px; color:#aaa; margin-bottom:15px;'>数据人生是一场爬塔。<b>请亲自打出你的八字手牌（普攻/护盾/吸血/大招）来击杀心魔，赚取海量功德！</b></div>")
@@ -852,7 +869,7 @@ else:
                 rs = _db.get("pve", {})
                 _cb = _db.get("combat", {})
                 
-                # 🚨 安全获取实战数据
+                # 🚨 安全获取实战数据，彻底杜绝 NameError
                 _fin_atk, _fin_def, _fin_hp, _fin_cp, _fin_crit = get_final_combat_stats(_db)
                 
                 if rs.get("idx", 0) >= len(BOSS_ROSTER):
