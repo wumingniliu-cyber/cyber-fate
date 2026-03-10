@@ -27,7 +27,7 @@ except ImportError:
 # ==============================================================================
 # 🌌 [ GLOBALS ] 无名逆流 · 数据人生 工业级状态机 (深层自愈引擎)
 # ==============================================================================
-VERSION = "DATA LIFE TCG V1000.5 [THE OMEGA GENESIS]"
+VERSION = "DATA LIFE TCG V1000.MAX [THE OMEGA GENESIS]"
 COPYRIGHT = "无名逆流"
 SYS_NAME = "数据人生 | 工业级赛博修仙"
 
@@ -76,12 +76,14 @@ init_state()
 
 # 核心战役梯度
 BOSS_ROSTER = [
-    {"lvl": 1, "name": "L1 算法过滤网", "max_hp": 15000, "atk": 800, "reward": 2500, "desc": "出身与学历的初始拦截。无Buff也可轻松强杀。"},
-    {"lvl": 2, "name": "L2 职场剥削阵列", "max_hp": 45000, "atk": 3500, "reward": 6000, "desc": "吞噬生命算力的永动机。建议去黑市抽点装备。"},
-    {"lvl": 3, "name": "L3 消费主义巨兽", "max_hp": 180000, "atk": 15000, "reward": 18000, "desc": "资本编织的迷幻网。必须抽每日神谕方可一战。"},
-    {"lvl": 4, "name": "L4 黑天鹅风暴", "max_hp": 550000, "atk": 45000, "reward": 50000, "desc": "因果律打击。必须合成神器+绑定高分道侣。"},
-    {"lvl": 5, "name": "L5 阿卡夏主脑", "max_hp": 2500000, "atk": 150000, "reward": 200000, "desc": "统御世界线的神明，击碎它即可开启飞升轮回！"}
+    {"lvl": 1, "name": "L1 算法过滤网", "elem": "木", "max_hp": 15000, "atk": 800, "reward": 2500, "desc": "出身与学历的初始拦截。无Buff也可轻松强杀。"},
+    {"lvl": 2, "name": "L2 职场剥削阵列", "elem": "土", "max_hp": 45000, "atk": 3500, "reward": 6000, "desc": "吞噬生命算力的永动机。建议去黑市抽点装备。"},
+    {"lvl": 3, "name": "L3 消费主义巨兽", "elem": "火", "max_hp": 180000, "atk": 15000, "reward": 18000, "desc": "资本编织的迷幻网。必须抽每日神谕方可一战。"},
+    {"lvl": 4, "name": "L4 黑天鹅风暴", "elem": "水", "max_hp": 550000, "atk": 45000, "reward": 50000, "desc": "因果律打击。必须合成神器+绑定高分道侣。"},
+    {"lvl": 5, "name": "L5 阿卡夏主脑", "elem": "金", "max_hp": 2500000, "atk": 150000, "reward": 200000, "desc": "统御世界线的神明，击碎它即可开启飞升轮回！"}
 ]
+
+ELEM_ADV = {"金":"木", "木":"土", "土":"水", "水":"火", "火":"金"}
 
 def render_html(html_str):
     st.markdown('\n'.join([line.lstrip() for line in str(html_str).split('\n')]), unsafe_allow_html=True)
@@ -168,12 +170,19 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .inspect-btn > button p { font-size: 11px !important; margin:0 !important; }
 .inspect-btn > button:hover { border-color: var(--primary) !important; color: var(--primary) !important; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,243,255,0.2) !important;}
 
-/* 战斗动作按钮 */
-.combat-btn > button { background: linear-gradient(180deg, #1a1a2e 0%, #0a0a14 100%) !important; border: 1px solid #444 !important; border-top: 4px solid var(--primary) !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
-.combat-btn > button:hover { border-color: var(--sp) !important; border-top-color: var(--sp) !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(255,170,0,0.2) !important;}
-.combat-btn > button p { color: #fff !important; font-weight: 900 !important; font-size: 14px !important; font-family: 'Noto Sans SC' !important; margin:0 !important;}
+/* 战斗动作按钮 - 绝对 TCG 质感 */
+.btn-atk > button { background: linear-gradient(180deg, #2a0808 0%, #110000 100%) !important; border: 1px solid #444 !important; border-top: 4px solid #ff3333 !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
+.btn-atk > button:hover { border-color: #ff3333 !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(255,51,51,0.3) !important;}
+.btn-def > button { background: linear-gradient(180deg, #08152a 0%, #000811 100%) !important; border: 1px solid #444 !important; border-top: 4px solid #3399ff !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
+.btn-def > button:hover { border-color: #3399ff !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(51,153,255,0.3) !important;}
+.btn-heal > button { background: linear-gradient(180deg, #082a15 0%, #001105 100%) !important; border: 1px solid #444 !important; border-top: 4px solid #33cc33 !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
+.btn-heal > button:hover { border-color: #33cc33 !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(51,204,51,0.3) !important;}
+.btn-ult > button { background: linear-gradient(180deg, #2a082a 0%, #110011 100%) !important; border: 1px solid #444 !important; border-top: 4px solid #ff33ff !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
+.btn-ult > button:hover { border-color: #ff33ff !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(255,51,255,0.3) !important;}
+
+.btn-atk > button p, .btn-def > button p, .btn-heal > button p, .btn-ult > button p { color: #fff !important; font-weight: 900 !important; font-size: 13px !important; font-family: 'Noto Sans SC' !important; margin:0 !important; line-height: 1.4 !important; white-space: pre-wrap !important; text-align: center;}
 .btn-cd > button { background: #111 !important; border-color: #333 !important; border-top: 4px solid #333 !important; opacity: 0.5 !important; cursor: not-allowed !important; filter: grayscale(1) !important; height: 80px !important; border-radius: 8px !important;}
-.btn-cd > button p { color: #666 !important; font-size: 13px !important;}
+.btn-cd > button p { color: #666 !important; font-size: 13px !important; white-space: pre-wrap !important; text-align: center;}
 
 /* 3D 翻转神谕卡 */
 .flip-card { background-color: transparent; perspective: 1200px; width: 100%; max-width: 320px; aspect-ratio: 63/88; margin: 0 auto; cursor: pointer; }
@@ -321,7 +330,7 @@ def calc_base_stats(hash_str, wx_dict, b_atk, b_def, b_hp):
     rng = np.random.RandomState(int(str(hash_str)[:8], 16))
     base_cp = int((f_atk * 1.2 + f_def * 0.8 + f_hp * 0.1) * rng.uniform(0.9, 1.2))
     
-    # 🚨 终极修复：正确返回 9 个参数，彻底消除 ValueError 
+    # 🚨 终极物理修复：正确返回 9 个参数，彻底消除 ValueError 
     return rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff
 
 def update_computed_stats(db):
@@ -418,26 +427,28 @@ def roll_d100(query, user_hash):
 
 def pull_daily_spell(user_hash):
     today_str = datetime.now().strftime("%Y-%m-%d")
-    seed = int(hashlib.md5((str(user_hash) + today_str).encode()).hexdigest()[:8], 16)
+    try: seed = int(hashlib.sha256((str(user_hash) + today_str).encode()).hexdigest()[:8], 16)
+    except Exception: seed = random.randint(1, 999999)
     return random.Random(seed).choice(SPELL_POOL), today_str
 
 # ==============================================================================
 # 🔮 [ ENTRY POINT ] 数据人生登录终端
 # ==============================================================================
 if not st.session_state["db"].get("booted", False):
-    r_user = f"0x{hashlib.md5(str(time.time()).encode()).hexdigest()[:6].upper()}"
+    try: r_user = f"0x{hashlib.sha256(str(time.time()).encode()).hexdigest()[:6].upper()}"
+    except Exception: r_user = "0xERROR"
     r_card = random.choice(list(DAY_MASTER_DICT.keys()))
     
     ENTRY_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA LIFE MATRIX V1000.9 <b class="up">▲ONLINE</b></span>
+        <span>DATA LIFE MATRIX V1000.MAX <b class="up">▲ONLINE</b></span>
         <span>BROADCAST: User {r_user} just pulled <b class="ur">★ SP {r_card} 主将卡</b> !</span>
         <span>COPYRIGHT: {COPYRIGHT} <b class="up">▲AUTHORIZED</b></span>
     </div></div>
     <div style="text-align: center; margin-bottom: 25px; margin-top:5vh;">
         <div style="color:var(--sp); font-family:'Orbitron', monospace; font-size:14px; letter-spacing:10px; margin-bottom:10px; text-shadow:0 0 10px var(--sp);">[ INSERT COIN TO PULL ]</div>
         <h1 class="hero-title" data-text="无名逆流·数据人生">无名逆流·数据人生</h1><br>
-        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.9</div>
+        <div style="color:var(--pink); font-family:'Orbitron', sans-serif; font-size:14px; font-weight:700; letter-spacing:10px; margin-top:10px;">INDUSTRIAL TCG V1000.MAX</div>
     </div>
     <div class="glass-panel" style="max-width: 680px; margin: 0 auto 30px auto; border-left: 4px solid var(--sp); padding: 35px; text-align:center;">
         <div style="color:var(--sp); font-size: 18px; font-weight:900; letter-spacing: 2px; margin-bottom:15px; text-shadow:0 0 10px var(--sp);">“如果命运是一场牌局，出生就是第一次抽卡。”</div>
@@ -496,7 +507,11 @@ if not st.session_state["db"].get("booted", False):
         except Exception: pass
         if not skills: skills = ["【先天】凡胎肉体 (+0 CP)"]
 
-        hash_id = hashlib.sha256((player_name + str(bdate) + str(btime)).encode()).hexdigest().upper()
+        try:
+            hash_seed = (player_name + str(bdate) + str(btime)).encode('utf-8')
+            hash_id = hashlib.sha256(hash_seed).hexdigest().upper()
+        except Exception: hash_id = "0000000000000000"
+            
         p_life = PAST_LIVES[int(hash_id[:8], 16) % len(PAST_LIVES)]
         dm_key = str(bazi.getDayGan())
         zodiac_idx = str(bazi.getYearZhi())
@@ -504,7 +519,7 @@ if not st.session_state["db"].get("booted", False):
         
         dm_base = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"])
         
-        # 🚨 解决 ValueError：严格解包 9 个变量！
+        # 🚨 完美解包 9 个变量！不再有 ValueError！
         rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff = calc_base_stats(hash_id, wx_scores, dm_base.get("base_atk", 1000), dm_base.get("base_def", 1000), dm_base.get("hp", 8000))
 
         db = st.session_state["db"]
@@ -533,7 +548,6 @@ if not st.session_state["db"].get("booted", False):
 # 🌟 [ TCG DASHBOARD ] 工业级大一统死循环大厅
 # ==============================================================================
 else:
-    # 强制全量计算，确保所有的 Buff、装备属性立刻体现在最高战力上！
     update_computed_stats(st.session_state["db"]) 
     db = st.session_state["db"]
     base, comp, shop, buffs, cb, ach, pet = db.get("player",{}), db.get("computed",{}), db.get("shop",{}), db.get("buffs",{}), db.get("combat",{}), db.get("achieve",{}), db.get("buffs",{}).get("pet_data",{})
@@ -541,7 +555,6 @@ else:
     fin_atk, fin_def, fin_hp, fin_cp, fin_crit = comp.get("atk",0), comp.get("def",0), comp.get("hp",0), comp.get("cp",0), comp.get("crit",0)
     player_name, hash_id, entropy = base.get('name', 'P1'), base.get('hash', '0000'), base.get('entropy', 0)
     
-    # 防止血量溢出
     if db.get("pve",{}).get("curr_hp",0) > fin_hp or (db.get("pve",{}).get("curr_hp",0) == 0 and db.get("pve",{}).get("idx",0) == 0): 
         db["pve"]["curr_hp"] = fin_hp
     
@@ -561,7 +574,7 @@ else:
 
     HEADER_HTML = f"""
     <div class="ticker-wrap"><div class="ticker">
-        <span>DATA-LIFE RPG: V1000.9 <b class="up">▲SYNCED</b></span>
+        <span>DATA-LIFE RPG: V1000.MAX <b class="up">▲SYNCED</b></span>
         <span>PLAYER: {player_name} <b class="up">▲ACTIVE</b></span>
         <span>CYBER_MERITS: {shop.get('creds', 0)} <b class="ur">★ LOADED</b></span>
         <span>PVP_RANK: {db.get('pvp',{}).get('tier', 'Unranked')} </span>
@@ -584,7 +597,6 @@ else:
     c_left, c_right = st.columns([1, 1.8], gap="large")
 
     with c_left:
-        # 显示战力增幅的特效
         atk_bonus = fin_atk - base.get("atk", 0)
         hp_bonus = fin_hp - base.get("hp", 0)
         def_bonus = fin_def - base.get("def", 0)
@@ -626,7 +638,6 @@ else:
         """
         render_html(TCG_CARD_HTML)
         
-        # 🚨 [核心视觉重构] 战力联动核算大盘
         f_atk_m = 1.1 if "荒坂" in base.get("faction", "") else 1.0
         eq_c = len(shop.get("relics", []))
         set_mul = 1.5 if eq_c >= 20 else (1.2 if eq_c >= 10 else (1.1 if eq_c >= 5 else 1.0))
@@ -646,7 +657,7 @@ else:
         render_html(calc_html)
 
     with c_right:
-        # 🗄️ 工业级战术大厅 8 大 Tabs 满血集结
+        # 🗄️ 工业级战术大厅 8 大 Tabs
         t_deck, t_oracle, t_syn, t_raid, t_shop, t_pvp, t_map, t_export = st.tabs(["🎴 战术手牌", "☯️ 命运神谕", "💞 灵魂契约", "⚔️ 矩阵深潜", "🛒 黑市炼金", "🏆 竞技天梯", "🌌 数据大盘", "💼 资产导出"])
 
         with t_deck:
@@ -667,7 +678,6 @@ else:
                 hand_html += '</div>'
                 render_html(hand_html)
                 
-                # 🚨 真实的抽出检视系统，包含详细的赛博命运解析
                 c_btn1, c_btn2, c_btn3, c_btn4 = st.columns(4)
                 with c_btn1:
                     st.markdown('<div class="inspect-btn">', unsafe_allow_html=True)
@@ -697,6 +707,7 @@ else:
                         "【时柱：外设端口 I/O】代表创造力分支与衍生结局 (46岁以后)。"
                     ]
                     
+                    # 🚨 终极安全语法：使用多行三引号，彻底消灭 SyntaxError
                     render_html(f"""
                     <div style="display:flex; justify-content:center; padding: 20px 0;">
                         <div class="inspect-reveal" style="border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(0,243,255,0.4); background: linear-gradient(180deg, #0a0c10 0%, #1a1a2e 100%); width:100%; max-width:400px; border-radius:16px; padding:25px; text-align:center; position:relative; overflow:hidden; animation: float-inspect 3s ease-in-out infinite;">
@@ -720,7 +731,6 @@ else:
 
                 render_html("<hr style='border-color:#333;'>")
                 
-                # Lore 满血呈现
                 _dm_i = DAY_MASTER_DICT.get(_db.get("player", {}).get("day_master", "甲"), DAY_MASTER_DICT["甲"])
                 c_d1, c_d2 = st.columns(2)
                 with c_d1:
@@ -753,7 +763,6 @@ else:
             c_o1, c_o2 = st.columns([1.1, 1], gap="large")
             with c_o1:
                 render_html("<div style='color:var(--sp); font-family:Orbitron; font-size:14px; font-weight:900; margin-bottom:15px;'>[ CYBER ORACLE ] 每日量子神谕</div>")
-                render_html("<div style='font-size:12px; color:#aaa; margin-bottom:15px;'>每天免费抽取一次。抽到的神谕将作为乘区<b>直接让你的实战面板暴涨！</b>打怪前必抽！</div>")
                 
                 @st_fragment
                 def render_oracle():
@@ -761,7 +770,7 @@ else:
                     _buffs = _db.get("buffs", {})
                     if not _buffs.get("oracle_drawn", False):
                         render_html("""<div class="glass-panel" style="text-align:center; padding:50px 20px; border-color:var(--sp); border-style:dashed;"><div style="font-size:45px; margin-bottom:15px; animation:blink 2s infinite;">📦</div><div style="color:var(--sp); font-family:'Orbitron'; font-size:16px; font-weight:900; letter-spacing:2px; margin-bottom:10px;">DAILY HEXAGRAM SEALED</div><div style="color:#aaa; font-size:12px;">盲盒处于叠加态。点击下方按钮坍缩今日命运乘区。</div></div>""")
-                        if st.button("⚡ 注入算力，抽取今日神谕 (PVE BUFF)", use_container_width=True):
+                        if st.button("⚡ 抽取今日神谕 (PVE BUFF)", use_container_width=True):
                             spell_card, _ = pull_daily_spell(hash_id)
                             _buffs["oracle_drawn"] = True
                             _buffs["oracle_data"] = {"name": spell_card["name"], "atk_mul": spell_card.get("buff_atk", 1.0), "def_mul": spell_card.get("buff_def", 1.0), "hp_mul": spell_card.get("buff_hp", 1.0), "desc": spell_card["desc"], "card": spell_card}
@@ -873,19 +882,22 @@ else:
                 _fin_atk, _fin_def, _fin_hp, _fin_cp, _fin_crit = get_final_combat_stats(_db)
                 
                 if rs.get("idx", 0) >= len(BOSS_ROSTER):
-                    boss_info = {"lvl": rs.get("idx",0)+1, "name": f"深渊魔影 层数 {rs.get('idx',0)-4}", "max_hp": int(1500000 * math.pow(1.5, rs.get("idx",0) - 4)), "atk": int(80000 * math.pow(1.2, rs.get("idx",0) - 4)), "reward": int(50000 * math.pow(1.1, rs.get("idx",0) - 4)), "desc": "阿卡夏深渊的无尽梦魇。"}
+                    boss_info = {"lvl": rs.get("idx",0)+1, "name": f"深渊魔影 层数 {rs.get('idx',0)-4}", "elem": "金", "max_hp": int(1500000 * math.pow(1.5, rs.get("idx",0) - 4)), "atk": int(80000 * math.pow(1.2, rs.get("idx",0) - 4)), "reward": int(50000 * math.pow(1.1, rs.get("idx",0) - 4)), "desc": "阿卡夏深渊的无尽梦魇。"}
                 else: boss_info = BOSS_ROSTER[rs.get("idx", 0)]
                 
                 if rs.get("boss_max", 0) != boss_info["max_hp"]: rs["boss_max"] = boss_info["max_hp"]; rs["boss_hp"] = boss_info["max_hp"]
                 boss_hp_pct = max(0, min(100, int((rs.get("boss_hp",0) / rs.get("boss_max",1)) * 100)))
                 my_hp, my_hp_pct = rs.get("curr_hp",0), max(0, min(100, int((rs.get("curr_hp",0) / max(1, _fin_hp)) * 100)))
                 
+                boss_elem = boss_info.get("elem", "金")
+                my_elem = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"])["element"]
+                
                 c_pve1, c_pve2 = st.columns([1.2, 1.5], gap="large")
                 with c_pve1:
                     render_html(f"""
                     <div class="glass-panel" style="text-align:center; border-color:var(--pink); padding:15px; margin-bottom:10px;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:Orbitron; font-weight:bold; font-size:12px;">
-                            <span style="color:var(--pink);">MATRIX_ICE</span> <span style="color:#fff;">VS</span> <span style="color:var(--primary);">PLAYER</span>
+                            <span style="color:var(--pink);">MATRIX_ICE ({boss_elem})</span> <span style="color:#fff;">VS</span> <span style="color:var(--primary);">PLAYER ({my_elem})</span>
                         </div>
                         <div style="font-size:45px; margin-bottom:5px; text-shadow:0 0 20px var(--pink); animation:blink 2s infinite;">👾</div>
                         <div style="color:var(--pink); font-family:'Orbitron'; font-weight:900; font-size:15px;">{boss_info["name"]}</div>
@@ -906,15 +918,20 @@ else:
                                 _db["shop"]["creds"] -= 500; _db["pve"]["curr_hp"] = _fin_hp
                                 _cb["cd_def"], _cb["cd_heal"], _cb["cd_ult"] = 0, 0, 0
                                 st.rerun()
-                            else: st.warning("功德不足！请去【竞技天梯】打榜或离线挖矿。")
+                            else: st.warning("功德不足！")
                     elif rs.get("boss_hp",0) > 0:
                         b1, b2 = st.columns(2); b3, b4 = st.columns(2)
                         
                         def handle_victory():
                             rs["boss_hp"] = 0; _db["shop"]["creds"] += boss_info["reward"]; _db["quests"]["kills"] += 1
                             st.toast(f"🔥 爽！击杀 Boss 爆出 {boss_info['reward']:,} 金币！", icon="💰")
-                            rs["logs"].append(f"<br><span style='color:var(--green); font-weight:bold;'>🏆 [VICTORY] 获得 {boss_info['reward']:,} 功德！去黑市抽装备吧！</span>")
+                            rs["logs"].append(f"<br><span style='color:var(--green); font-weight:bold;'>🏆 [VICTORY] 获得 {boss_info['reward']:,} 功德！</span>")
                         
+                        def get_elem_mod():
+                            if ELEM_ADV.get(my_elem) == boss_elem: return 1.5, f"【五行克制】{my_elem}克{boss_elem}！"
+                            elif ELEM_ADV.get(boss_elem) == my_elem: return 0.7, f"【属性被克】{boss_elem}克{my_elem}！"
+                            return 1.0, ""
+
                         def enemy_counter(dmg_taken):
                             boss_dmg = int(boss_info["atk"] * random.uniform(0.9, 1.1))
                             act_dmg = max(10, int(boss_dmg - (_fin_def * 3.0))) if _cb.get("cd_def", 0) == 3 else max(100, int(boss_dmg - (_fin_def * 0.6)))
@@ -929,36 +946,42 @@ else:
 
                         _bz = _db.get("player", {}).get("bazi_arr", ["?","?","?","?"])
                         with b1:
-                            st.markdown('<div class="combat-btn">', unsafe_allow_html=True)
+                            st.markdown('<div class="btn-atk">', unsafe_allow_html=True)
                             if st.button(f"🗡️ 普攻\n[{_bz[0]}]", use_container_width=True):
                                 adv_cd()
-                                dmg = int(_fin_atk * random.uniform(0.85, 1.15)) * (2 if random.randint(1,100)<=_fin_crit else 1)
-                                rs["boss_hp"] -= dmg; rs["logs"].append(f"<span style='color:var(--primary);'>⚔️ 基于 {_fin_atk:,} 面板攻击造成 {dmg:,} 伤害。</span>")
+                                e_mod, e_msg = get_elem_mod()
+                                dmg = int(_fin_atk * random.uniform(0.85, 1.15) * e_mod)
+                                if random.randint(1,100) <= _fin_crit:
+                                    dmg *= 2
+                                    rs["logs"].append(f"<span style='color:var(--ur); font-weight:bold;'>⚡ [CRIT] 暴击！{e_msg}造成 {dmg:,} 伤害！</span>")
+                                else:
+                                    rs["logs"].append(f"<span style='color:var(--primary);'>⚔️ [ATTACK] {e_msg}造成 {dmg:,} 伤害。</span>")
+                                rs["boss_hp"] -= dmg
                                 handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
                                 st.rerun()
                             st.markdown('</div>', unsafe_allow_html=True)
                         with b2:
-                            c_d = _cb.get("cd_def", 0); c_c = "btn-cd" if c_d > 0 else "combat-btn"
+                            c_d = _cb.get("cd_def", 0); c_c = "btn-cd" if c_d > 0 else "btn-def"
                             st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
                             if st.button(f"🛡️ 防御(CD:{c_d})\n[{_bz[1]}]" if c_d > 0 else f"🛡️ 绝对防御\n[{_bz[1]}]", disabled=(c_d > 0), use_container_width=True):
                                 adv_cd(); _cb["cd_def"] = 3; rs["logs"].append(f"<span style='color:var(--yellow);'>🛡️ 开启绝对防御！装甲 x3！</span>")
                                 enemy_counter(0); st.rerun()
                             st.markdown('</div>', unsafe_allow_html=True)
                         with b3:
-                            c_h = _cb.get("cd_heal", 0); c_c = "btn-cd" if c_h > 0 else "combat-btn"
+                            c_h = _cb.get("cd_heal", 0); c_c = "btn-cd" if c_h > 0 else "btn-heal"
                             st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
                             if st.button(f"💉 虹吸(CD:{c_h})\n[{_bz[2]}]" if c_h > 0 else f"💉 算力虹吸\n[{_bz[2]}]", disabled=(c_h > 0), use_container_width=True):
-                                adv_cd(); dmg = int(_fin_atk * 1.2); rs["boss_hp"] -= dmg; rs["curr_hp"] = min(_fin_hp, rs["curr_hp"] + int(dmg*0.8))
+                                adv_cd(); e_mod, e_msg = get_elem_mod(); dmg = int(_fin_atk * 1.2 * e_mod); rs["boss_hp"] -= dmg; rs["curr_hp"] = min(_fin_hp, rs["curr_hp"] + int(dmg*0.8))
                                 _cb["cd_heal"] = 4; rs["logs"].append(f"<span style='color:var(--green);'>💉 虹吸造成 {dmg:,} 伤害，回复大量HP！</span>")
                                 handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
                                 st.rerun()
                             st.markdown('</div>', unsafe_allow_html=True)
                         with b4:
-                            c_u = _cb.get("cd_ult", 0); c_c = "btn-cd" if c_u > 0 else "combat-btn"
+                            c_u = _cb.get("cd_ult", 0); c_c = "btn-cd" if c_u > 0 else "btn-ult"
                             st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
                             if st.button(f"💥 神权(CD:{c_u})\n[{_bz[3]}]" if c_u > 0 else f"💥 终极神权\n[{_bz[3]}]", disabled=(c_u > 0), use_container_width=True):
-                                adv_cd(); dmg = int(_fin_atk * 3.5); rs["boss_hp"] -= dmg
-                                _cb["cd_ult"] = 5; rs["logs"].append(f"<span style='color:var(--sp); font-weight:bold;'>💥 释放神权大招！造成 {dmg:,} 点极限伤害！</span>")
+                                adv_cd(); e_mod, e_msg = get_elem_mod(); dmg = int(_fin_atk * 3.5 * e_mod); rs["boss_hp"] -= dmg
+                                _cb["cd_ult"] = 5; rs["logs"].append(f"<span style='color:var(--sp); font-weight:bold;'>💥 释放神权大招！{e_msg}造成 {dmg:,} 点极限伤害！</span>")
                                 handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
                                 st.rerun()
                             st.markdown('</div>', unsafe_allow_html=True)
@@ -1125,8 +1148,7 @@ else:
         with t_export:
             @st_fragment
             def render_exports():
-                # 🚨 终极安全提取：必须在 Fragment 内重新取所有局部变量以防 NameError 报错！
-                local_db = st.session_state["db"]
+                local_db = st.session_state.get("db", {})
                 local_base = local_db.get("player", {})
                 local_shop = local_db.get("shop", {})
                 local_comp = local_db.get("computed", {})
@@ -1138,12 +1160,11 @@ else:
                 _bz = local_base.get('bazi_arr', ['?','?','?','?'])
                 _wx = local_base.get('wx', {})
                 
-                # 专门修复 past_life 的 NameError (强制提取，容错拉满)
                 _past_life = local_base.get('past_life', {})
                 _pl_title = _past_life.get('title', '【前世信息丢失】')
                 _pl_debt = _past_life.get('debt', '无')
                 
-                _f_atk, _f_def, _f_hp, _f_cp = local_comp.get("atk",0), local_comp.get("def",0), local_comp.get("hp",0), local_comp.get("cp",0)
+                _f_atk, _f_hp, _f_cp = local_comp.get("atk",0), local_comp.get("hp",0), local_comp.get("cp",0)
                 
                 _dm_info = DAY_MASTER_DICT.get(_dm_key, DAY_MASTER_DICT["甲"])
                 _dm_class = _dm_info.get("class_name", "Unknown").split('/')[0].strip()
@@ -1161,7 +1182,6 @@ else:
                             if not clean_sk: clean_sk = ["白板体质"]
                             sk_h = "".join([f"<span style='background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:2px 6px; margin:2px; font-size:9px; display:inline-block; font-family:Fira Code; border-radius:2px;'>{s}</span>" for s in reversed(clean_sk[-5:])])
                             
-                            # 🚨 终极防爆渲染：没有任何 Python f-string 冲突。彻底引入 components。
                             HTML_POSTER_RAW = """
                             <!DOCTYPE html><html><head><meta charset="utf-8">
                             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
