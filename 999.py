@@ -111,7 +111,7 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .ticker span { margin-right: 50px; } .ticker .hl { color: var(--primary); font-weight:bold; } .ticker .ur { color: var(--sp); text-shadow: 0 0 10px var(--sp); font-weight:bold; }
 @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-/* 🌟 主将实体卡牌 (Holo-Foil 2.0) */
+/* 🌟 主将实体卡牌 */
 .tcg-card-container { perspective: 1200px; display: flex; justify-content: center; margin-bottom: 20px; z-index: 50; position:relative;}
 .tcg-card { position: relative; width: 100%; max-width: 380px; aspect-ratio: 63 / 88; background: #0a0c10; border: 3px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(0,0,0,0.6); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease; overflow: hidden; transform-style: preserve-3d; display: flex; flex-direction: column; cursor: crosshair; }
 .tcg-card::after { content: ""; position: absolute; top: -50%; left: -150%; width: 150%; height: 200%; background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.8) 30%, rgba(0, 243, 255, 0.8) 40%, rgba(255, 0, 124, 0.6) 50%, transparent 60%); transform: skewX(-20deg); transition: all 0.6s ease; z-index: 99; pointer-events: none; mix-blend-mode: color-dodge; opacity: 0; }
@@ -143,7 +143,7 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .synergy-row .mul { color: var(--green); font-weight: bold; text-shadow: 0 0 5px var(--green); }
 .synergy-total { display: flex; justify-content: space-between; font-family: 'Orbitron'; font-size: 18px; color: var(--sp); font-weight: 900; margin-top: 10px; padding-top: 10px; border-top: 1px solid #444; text-shadow: 0 0 10px var(--sp); }
 
-/* 🌟 扇形手牌系统 (物理级悬停抽出特效) */
+/* 🌟 扇形手牌系统 */
 .hand-container { display: flex; justify-content: center; align-items: center; margin-top: 40px; height: 200px; position: relative; perspective: 1000px; margin-bottom:40px;}
 .hand-card { width: 120px; height: 165px; background: linear-gradient(180deg, rgba(20,20,30,0.95) 0%, #050608 100%); border: 2px solid #444; border-radius: 8px; position: absolute; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: -5px 10px 20px rgba(0,0,0,0.6); }
 .hand-card .hc-val { font-size: 35px; font-weight: 900; font-family: 'Noto Sans SC'; color: #fff; line-height: 1; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
@@ -170,7 +170,7 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .inspect-btn > button p { font-size: 11px !important; margin:0 !important; }
 .inspect-btn > button:hover { border-color: var(--primary) !important; color: var(--primary) !important; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,243,255,0.2) !important;}
 
-/* 战斗动作按钮 - 绝对 TCG 质感 */
+/* 战斗动作按钮 */
 .btn-atk > button { background: linear-gradient(180deg, #2a0808 0%, #110000 100%) !important; border: 1px solid #444 !important; border-top: 4px solid #ff3333 !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
 .btn-atk > button:hover { border-color: #ff3333 !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(255,51,51,0.3) !important;}
 .btn-def > button { background: linear-gradient(180deg, #08152a 0%, #000811 100%) !important; border: 1px solid #444 !important; border-top: 4px solid #3399ff !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
@@ -179,7 +179,6 @@ html, body, .stApp { background-color: var(--bg-dark) !important; font-family: '
 .btn-heal > button:hover { border-color: #33cc33 !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(51,204,51,0.3) !important;}
 .btn-ult > button { background: linear-gradient(180deg, #2a082a 0%, #110011 100%) !important; border: 1px solid #444 !important; border-top: 4px solid #ff33ff !important; height: 80px !important; transition: all 0.2s !important; border-radius: 8px !important; display:flex; flex-direction:column; justify-content:center;}
 .btn-ult > button:hover { border-color: #ff33ff !important; transform: translateY(-5px) !important; box-shadow: 0 15px 25px rgba(255,51,255,0.3) !important;}
-
 .btn-atk > button p, .btn-def > button p, .btn-heal > button p, .btn-ult > button p { color: #fff !important; font-weight: 900 !important; font-size: 13px !important; font-family: 'Noto Sans SC' !important; margin:0 !important; line-height: 1.4 !important; white-space: pre-wrap !important; text-align: center;}
 .btn-cd > button { background: #111 !important; border-color: #333 !important; border-top: 4px solid #333 !important; opacity: 0.5 !important; cursor: not-allowed !important; filter: grayscale(1) !important; height: 80px !important; border-radius: 8px !important;}
 .btn-cd > button p { color: #666 !important; font-size: 13px !important; white-space: pre-wrap !important; text-align: center;}
@@ -330,7 +329,6 @@ def calc_base_stats(hash_str, wx_dict, b_atk, b_def, b_hp):
     rng = np.random.RandomState(int(str(hash_str)[:8], 16))
     base_cp = int((f_atk * 1.2 + f_def * 0.8 + f_hp * 0.1) * rng.uniform(0.9, 1.2))
     
-    # 🚨 终极物理修复：正确返回 9 个参数，彻底消除 ValueError 
     return rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff
 
 def update_computed_stats(db):
@@ -374,7 +372,6 @@ def update_computed_stats(db):
     db["computed"]["crit"] = min(100, base.get("crit",0) + int(shop.get("b_atk",0) / 1000) + p_b.get("crit_bonus", 0))
 
 def get_final_combat_stats(db):
-    """兜底防护，专门防止 PVE 旧缓存报错！"""
     update_computed_stats(db)
     c = db.get("computed", {})
     return c.get("atk",0), c.get("def",0), c.get("hp",0), c.get("cp",0), c.get("crit",0)
@@ -519,7 +516,6 @@ if not st.session_state["db"].get("booted", False):
         
         dm_base = DAY_MASTER_DICT.get(dm_key, DAY_MASTER_DICT["甲"])
         
-        # 🚨 完美解包 9 个变量！不再有 ValueError！
         rarity, r_col, base_cp, f_atk, f_def, f_hp, f_crit, entropy, reso_buff = calc_base_stats(hash_id, wx_scores, dm_base.get("base_atk", 1000), dm_base.get("base_def", 1000), dm_base.get("hp", 8000))
 
         db = st.session_state["db"]
@@ -638,19 +634,30 @@ else:
         """
         render_html(TCG_CARD_HTML)
         
+        # 🚨 终极安全提取：提前抓出所有变量，彻底杜绝 f-string 语法冲突！
         f_atk_m = 1.1 if "荒坂" in base.get("faction", "") else 1.0
         eq_c = len(shop.get("relics", []))
         set_mul = 1.5 if eq_c >= 20 else (1.2 if eq_c >= 10 else (1.1 if eq_c >= 5 else 1.0))
         
+        base_atk_val = base.get('atk',0) + shop.get('b_atk',0)
+        pet_name_val = pet.get('name', '无')
+        pet_mul_val = pet.get('atk_mul', 1.0)
+        oracle_name_val = buffs.get('oracle_data', {}).get('name', '无')
+        oracle_mul_val = buffs.get('oracle_data', {}).get('atk_mul', 1.0)
+        syn_name_val = buffs.get('syn_data', {}).get('name', '孤狼模式')
+        syn_mul_val = buffs.get('syn_data', {}).get('atk_mul', 1.0)
+        ach_name_val = ach.get('equipped', {}).get('name', '无')
+        ach_mul_val = ach.get('equipped', {}).get('mul', 1.0)
+        
         calc_html = f"""
         <div class="synergy-core-box">
             <div class="synergy-core-title"><span>>> BATTLE SYNERGY CORE</span><span>万物联动核算矩阵</span></div>
-            <div class="synergy-row"><span>> 出厂基底 + 黑市装备总和:</span> <span class="val">{base.get('atk',0) + shop.get('b_atk',0):,} ATK</span></div>
+            <div class="synergy-row"><span>> 出厂基底 + 黑市装备总和:</span> <span class="val">{base_atk_val:,} ATK</span></div>
             <div class="synergy-row"><span>> 阵营契约 & 装备套装共鸣:</span> <span class="mul">x {f_atk_m * set_mul:.2f}</span></div>
-            <div class="synergy-row"><span>> 伴生机械灵宠 ({pet.get('name', '无')}):</span> <span class="mul">x {pet.get('atk_mul', 1.0):.2f}</span></div>
-            <div class="synergy-row"><span>> 赛博命运神谕 ({buffs.get('oracle_data',{{}}).get('name','')}):</span> <span class="mul">x {buffs.get('oracle_data',{{}}).get('atk_mul', 1.0):.2f}</span></div>
-            <div class="synergy-row"><span>> 灵魂合盘道侣 ({buffs.get('syn_data',{{}}).get('name','')}):</span> <span class="mul" style="color:var(--sp);">x {buffs.get('syn_data',{{}}).get('atk_mul', 1.0):.2f}</span></div>
-            <div class="synergy-row"><span>> 荣耀称号加成 ({ach.get('equipped',{{}}).get('name','')}):</span> <span class="mul" style="color:var(--green);">x {ach.get('equipped',{{}}).get('mul',1.0):.2f}</span></div>
+            <div class="synergy-row"><span>> 伴生机械灵宠 ({pet_name_val}):</span> <span class="mul">x {pet_mul_val:.2f}</span></div>
+            <div class="synergy-row"><span>> 赛博命运神谕 ({oracle_name_val}):</span> <span class="mul">x {oracle_mul_val:.2f}</span></div>
+            <div class="synergy-row"><span>> 灵魂合盘道侣 ({syn_name_val}):</span> <span class="mul" style="color:var(--sp);">x {syn_mul_val:.2f}</span></div>
+            <div class="synergy-row"><span>> 荣耀称号加成 ({ach_name_val}):</span> <span class="mul" style="color:var(--green);">x {ach_mul_val:.2f}</span></div>
             <div class="synergy-total"><span>> 实战爆杀最终攻击力:</span> <span style="font-size:24px;">{fin_atk:,}</span></div>
         </div>
         """
@@ -707,7 +714,6 @@ else:
                         "【时柱：外设端口 I/O】代表创造力分支与衍生结局 (46岁以后)。"
                     ]
                     
-                    # 🚨 终极安全语法：使用多行三引号，彻底消灭 SyntaxError
                     render_html(f"""
                     <div style="display:flex; justify-content:center; padding: 20px 0;">
                         <div class="inspect-reveal" style="border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(0,243,255,0.4); background: linear-gradient(180deg, #0a0c10 0%, #1a1a2e 100%); width:100%; max-width:400px; border-radius:16px; padding:25px; text-align:center; position:relative; overflow:hidden; animation: float-inspect 3s ease-in-out infinite;">
@@ -844,17 +850,16 @@ else:
                     if "cur_sync" in st.session_state:
                         sync = st.session_state["cur_sync"]
                         
-                        # 🚨 终极安全语法：使用三引号彻底杜绝 SyntaxError！
                         render_html(f"""
-                        <div class='glass-panel card-reveal' style='border-left:4px solid {sync["color"]}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'>
+                        <div class='glass-panel card-reveal' style='border-left:4px solid {sync.get("color", "#fff")}; text-align:center; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);'>
                             <div style='font-family:Orbitron; font-size:12px; color:#888; margin-bottom:5px;'>SYNC RATE</div>
-                            <div class='heart-pulse' style='font-size:40px; color:{sync["color"]};'>{sync["icon"]}</div>
-                            <div style='font-size:45px; color:{sync["color"]}; font-weight:900; margin-bottom:5px;'>{sync["score"]}%</div>
-                            <div style='color:#fff; font-size:12px;'>{sync["sd"]}</div>
+                            <div class='heart-pulse' style='font-size:40px; color:{sync.get("color", "#fff")};'>{sync.get("icon", "")}</div>
+                            <div style='font-size:45px; color:{sync.get("color", "#fff")}; font-weight:900; margin-bottom:5px;'>{sync.get("score", 0)}%</div>
+                            <div style='color:#fff; font-size:12px;'>{sync.get("sd", "")}</div>
                         </div>
                         """)
                         
-                        if sync['score'] >= 60:
+                        if sync.get('score', 0) >= 60:
                             if st.button("🤝 签订契约 (拉入助战)", use_container_width=True):
                                 _db["buffs"]["syn_linked"] = True
                                 _db["buffs"]["syn_data"] = {"name": f"{sync['node']}系道侣", "atk_mul": sync['mul'], "def_mul": sync['mul'], "hp_mul": sync['mul'], "cp_bonus": sync['score']*200}
@@ -878,7 +883,6 @@ else:
                 rs = _db.get("pve", {})
                 _cb = _db.get("combat", {})
                 
-                # 🚨 安全获取实战数据，彻底杜绝 NameError
                 _fin_atk, _fin_def, _fin_hp, _fin_cp, _fin_crit = get_final_combat_stats(_db)
                 
                 if rs.get("idx", 0) >= len(BOSS_ROSTER):
@@ -918,7 +922,7 @@ else:
                                 _db["shop"]["creds"] -= 500; _db["pve"]["curr_hp"] = _fin_hp
                                 _cb["cd_def"], _cb["cd_heal"], _cb["cd_ult"] = 0, 0, 0
                                 st.rerun()
-                            else: st.warning("功德不足！")
+                            else: st.warning("功德不足！请去【竞技天梯】打榜或离线挖矿。")
                     elif rs.get("boss_hp",0) > 0:
                         b1, b2 = st.columns(2); b3, b4 = st.columns(2)
                         
@@ -972,7 +976,7 @@ else:
                             st.markdown(f'<div class="{c_c}">', unsafe_allow_html=True)
                             if st.button(f"💉 虹吸(CD:{c_h})\n[{_bz[2]}]" if c_h > 0 else f"💉 算力虹吸\n[{_bz[2]}]", disabled=(c_h > 0), use_container_width=True):
                                 adv_cd(); e_mod, e_msg = get_elem_mod(); dmg = int(_fin_atk * 1.2 * e_mod); rs["boss_hp"] -= dmg; rs["curr_hp"] = min(_fin_hp, rs["curr_hp"] + int(dmg*0.8))
-                                _cb["cd_heal"] = 4; rs["logs"].append(f"<span style='color:var(--green);'>💉 虹吸造成 {dmg:,} 伤害，回复大量HP！</span>")
+                                _cb["cd_heal"] = 4; rs["logs"].append(f"<span style='color:var(--green);'>💉 {e_msg}虹吸造成 {dmg:,} 伤害，回复大量HP！</span>")
                                 handle_victory() if rs["boss_hp"] <= 0 else enemy_counter(dmg)
                                 st.rerun()
                             st.markdown('</div>', unsafe_allow_html=True)
@@ -1242,7 +1246,7 @@ else:
 pragma solidity ^0.8.20;
 import "@tcg-matrix/contracts/token/ERC721.sol";
 
-contract Karma_TCG_V1000 is ERC721 {{
+contract Karma_TCG_VMAX is ERC721 {{
     // > MINT_TARGET : {_pname}
     // > CARD_RARITY : {_rarity} (CP: {_f_cp})
     // > HASH_ID     : 0x{_hash}
